@@ -45,11 +45,11 @@
 					<li>
                         <input type="text" name="piccode" v-model="piccode" @blur="check_piccode" :placeholder="piccode_ph" id="pic_code" class="msg_input">
                         <img :src="image_code_url" @click="generate_image_code" alt="圖形驗證碼" class="pic_code">
-                        <span v-show="error_piccode" class="error_tip">請輸入四位數字驗證碼</span>
+                        <span v-show="error_piccode" class="error_tip">[[ error_piccode_tip ]]</span>
                     </li>
 					<li>
 						<input type="text" name="sms_code" v-model="sms_code" @blur="check_sms_code" :placeholder="sms_code_ph" id="msg_code" class="msg_input">
-						<a class="get_msg_code">[[ sms_code_tip ]]</a>
+						<a @click="send_sms_code" class="get_msg_code">[[ sms_code_tip ]]</a>
 						<span v-show="error_sms_code" class="error_tip">[[ error_sms_code_tip ]]</span>
 					</li>
 					<li class="agreement">

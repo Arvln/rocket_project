@@ -41,6 +41,40 @@ let vm = new Vue({
       this.generate_image_code();
     },
     methods:{
+        //生成圖形驗證碼
+        send_sms_code(){
+           //前端校驗參數
+           this.check_mobile();
+           this.check_piccode();
+           if (this.error_mobile === true || this.error_piccode === true){
+               return;
+           }
+           let url = this.api.SMScodeUrl + this.mobile + '/?img_code=' +this.piccode + '&uuid=' + this.uuid ;
+           axios.get(url ,{
+               responseType:'json'
+           }).then(response=>{
+               if (response.data.code === '0'){
+                   let num = 120;
+                   let t = setInterval(()=>{
+                       if (num === 1){
+                          clearInterval(t);
+                          this.sms_code_tip = '重新獲取';
+                          this.generate_image_code();
+                       } else {
+                          num -= 1;
+                          this.sms_code_tip = num + 's後重新獲取';
+                       }
+                   },1000)
+               } else {
+                   if (response.data.code === '4001'){
+                       this.error_piccode_tip = response.data.errmsg;
+                       this.error_piccode = true;
+                   }
+               }
+           }).catch(error=>{
+               console.log(error.response);
+           })
+        },
         //封裝生成圖形驗證碼函數
         generate_image_code(){
            this.uuid = generateUUID();
@@ -111,6 +145,7 @@ let vm = new Vue({
         },
         check_piccode(){
             if (this.piccode.length != 4){
+                this.error_piccode_tip = '請輸入4位數字或字母的圖形驗證碼';
                 this.error_piccode = true;
             } else {
                 this.error_piccode = false;
