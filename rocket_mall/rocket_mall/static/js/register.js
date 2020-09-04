@@ -35,6 +35,7 @@ let vm = new Vue({
         api: api,
         uuid: '',
         image_code_url: '',
+        send_flag: false,
     },
     mounted(){
       //頁面刷新時，生成圖形驗證碼
@@ -43,10 +44,16 @@ let vm = new Vue({
     methods:{
         //生成圖形驗證碼
         send_sms_code(){
+           //前端避免惡意用戶頻繁獲取簡訊驗證碼
+           if (this.send_flag === true){
+               return;
+           }
+           this.send_flag = true;
            //前端校驗參數
            this.check_mobile();
            this.check_piccode();
            if (this.error_mobile === true || this.error_piccode === true){
+               this.send_flag = false;
                return;
            }
            let url = this.api.SMScodeUrl + this.mobile + '/?img_code=' +this.piccode + '&uuid=' + this.uuid ;
@@ -59,6 +66,7 @@ let vm = new Vue({
                        if (num === 1){
                           clearInterval(t);
                           this.sms_code_tip = '重新獲取';
+                          this.send_flag = false;
                           this.generate_image_code();
                        } else {
                           num -= 1;
@@ -69,10 +77,15 @@ let vm = new Vue({
                    if (response.data.code === '4001'){
                        this.error_piccode_tip = response.data.errmsg;
                        this.error_piccode = true;
+                       this.send_flag = false;
+                   } else {
+                       this.error_sms_code_tip = response.data.errmsg;
+                       this.error_sms_code = true ;
                    }
                }
            }).catch(error=>{
                console.log(error.response);
+               this.send_flag = false;
            })
         },
         //封裝生成圖形驗證碼函數

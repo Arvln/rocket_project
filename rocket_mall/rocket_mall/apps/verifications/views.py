@@ -33,8 +33,13 @@ class SMScodeView(View):
         #校驗參數，參數錯誤將無法順利通過提取和比對圖形驗證碼邏輯，此處暫不校驗
         if not all([img_code_client ,uuid ]):
             return HttpResponseForbidden('缺少必傳參數')
-        #提取圖形驗證碼
+
+        #檢查用戶是否頻繁獲取簡訊驗證碼
         conn = get_redis_connection('verify_code')
+        send_flag = conn.get('send_flag_%s' %mobile )
+        if send_flag:
+            return JsonResponse({'code':RETCODE.SMSCODEERR ,'errmsg':'獲取簡訊驗證碼過於頻繁' })
+        #提取圖形驗證碼
         img_code_server = conn.get('img_%s' %uuid )
         if img_code_server is None:
             return JsonResponse({'code':RETCODE.IMAGECODEERR ,'errmsg':'圖形驗證碼已失效' })
@@ -48,7 +53,8 @@ class SMScodeView(View):
         sms_code = '%06d' %random.randint(0 ,999999 )
         #保存簡訊驗證碼
         conn.setex('sms_%s' %mobile ,constants.SMS_CODE_EXPIRES ,sms_code )
+        conn.setex('send_flag_%s' % mobile, constants.SMS_CODE_TIME_INTERVAL, 1)  # 記下獲取時間
         #發送簡訊驗證碼
-        send(mobile ,sms_code ,constants.SMS_CODE_EXPIRES // 60 )
+        #send(mobile ,sms_code ,constants.SMS_CODE_EXPIRES // 60 )
         # 返回響應
         return JsonResponse({'code':RETCODE.OK ,'errmsg':'OK'})
