@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'users',  # 用戶模塊
+    'contents', #首頁模塊
 ]
 
 MIDDLEWARE = [

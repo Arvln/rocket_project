@@ -19,5 +19,8 @@ from django.conf.urls import url
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    # 用戶模塊
     url(r'^', include(('users.urls', 'users'), namespace='users')),
+    # 首頁模塊
+    url(r'^', include(('contents.urls', 'contents'), namespace='contents')),
 ]
