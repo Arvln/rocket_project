@@ -33,8 +33,19 @@ let vm = new Vue({
         sms_code_ph: '請輸入簡訊驗證碼',
 
         api: api,
+        uuid: '',
+        image_code_url: '',
+    },
+    mounted(){
+      //頁面刷新時，生成圖形驗證碼
+      this.generate_image_code();
     },
     methods:{
+        //封裝生成圖形驗證碼函數
+        generate_image_code(){
+           this.uuid = generateUUID();
+           this.image_code_url = this.api.ImagecodeUrl + this.uuid + '/';
+        },
         check_username(){
             let re = /^[a-zA-Z0-9_-]{5,20}$/;
             if (re.test(this.username)){

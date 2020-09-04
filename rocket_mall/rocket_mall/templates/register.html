@@ -44,7 +44,7 @@
 					</li>
 					<li>
                         <input type="text" name="piccode" v-model="piccode" @blur="check_piccode" :placeholder="piccode_ph" id="pic_code" class="msg_input">
-                        <img src="{{ static('images/pic_code.jpg') }}" alt="圖形驗證碼" class="pic_code">
+                        <img :src="image_code_url" @click="generate_image_code" alt="圖形驗證碼" class="pic_code">
                         <span v-show="error_piccode" class="error_tip">請輸入四位數字驗證碼</span>
                     </li>
 					<li>
@@ -86,6 +86,7 @@
 		<p>電話：02-****6666    台北市*******66號</p>
 	</div>
     <script type="text/javascript" src="{{ static('js/api.js') }}"></script>
+    <script type="text/javascript" src="{{ static('js/common.js') }}"></script>
 	<script type="text/javascript" src="{{ static('js/register.js') }}"></script>
 </body>
 </html>

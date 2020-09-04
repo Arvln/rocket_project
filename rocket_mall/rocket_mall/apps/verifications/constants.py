@@ -1,0 +1,2 @@
+#圖形驗證碼期限(秒)
+IMAGE_CODE_EXPIRES = 300

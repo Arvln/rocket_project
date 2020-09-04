@@ -23,4 +23,6 @@ urlpatterns = [
     url(r'^', include(('users.urls', 'users'), namespace='users')),
     # 首頁模塊
     url(r'^', include(('contents.urls', 'contents'), namespace='contents')),
+    # 驗證模塊
+    url(r'^', include(('verifications.urls', 'verifications'))),
 ]

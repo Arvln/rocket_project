@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'users',  # 用戶模塊
     'contents', #首頁模塊
+    'verifications', # 驗證模塊
 ]
 
 MIDDLEWARE = [
@@ -116,6 +117,13 @@ CACHES = {
     "session": { #session
         "BACKEND": "django_redis.cache.RedisCache",
         "LOCATION": "redis://:123@172.19.0.2:6379/1", # :password@
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    },
+    "verify_code": { #verify_code
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://:123@172.19.0.2:6379/2", # :password@
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }
