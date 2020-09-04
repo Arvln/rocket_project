@@ -172,6 +172,21 @@ let vm = new Vue({
             } else {
                 this.error_sms_code = false;
             }
+            if (this.error_sms_code === false){
+                let url = this.api.CheckSMScodeUrl + this.mobile + '/?sms_code=' + this.sms_code ;
+                axios.get(url ,{
+                    responseType:'json'
+                }).then(response=>{
+                    if (response.data.code === '4008'){
+                        this.error_sms_code_tip = response.data.errmsg;
+                        this.error_sms_code = true;
+                    } else {
+                        this.error_sms_code = false;
+                    }
+                }).catch(error=>{
+                    console.log(error.response);
+                })
+            }
         },
         check_allow(){
             if (!this.allow){

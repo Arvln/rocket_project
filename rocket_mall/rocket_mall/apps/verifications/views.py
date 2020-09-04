@@ -7,7 +7,7 @@ from django_redis import get_redis_connection
 from verifications import constants
 from utils.response_code import RETCODE
 from verifications.sms import send
-import random
+import random ,logging
 
 # Create your views here.
 
@@ -22,6 +22,8 @@ class ImagecodeView(View):
         conn.setex('img_%s' %uuid ,constants.IMAGE_CODE_EXPIRES ,text )
         # 返回響應
         return HttpResponse(image ,content_type='image/jpg')
+
+logger = logging.getLogger('django')
 
 class SMScodeView(View):
     """簡訊驗證碼"""
@@ -51,10 +53,27 @@ class SMScodeView(View):
             return JsonResponse({'code':RETCODE.IMAGECODEERR ,'errmsg':'請確認圖形驗證碼是否輸入正確'})
         #生成簡訊驗證碼
         sms_code = '%06d' %random.randint(0 ,999999 )
+        logger.info(sms_code)
         #保存簡訊驗證碼
-        conn.setex('sms_%s' %mobile ,constants.SMS_CODE_EXPIRES ,sms_code )
-        conn.setex('send_flag_%s' % mobile, constants.SMS_CODE_TIME_INTERVAL, 1)  # 記下獲取時間
+        pl = conn.pipeline() #提高redis查詢效率
+        pl.setex('sms_%s' %mobile ,constants.SMS_CODE_EXPIRES ,sms_code )
+        pl.setex('send_flag_%s' % mobile, constants.SMS_CODE_TIME_INTERVAL, 1)  # 記下獲取時間
+        pl.execute()
         #發送簡訊驗證碼
-        #send(mobile ,sms_code ,constants.SMS_CODE_EXPIRES // 60 )
+        send(mobile ,sms_code ,constants.SMS_CODE_EXPIRES // 60 )
         # 返回響應
         return JsonResponse({'code':RETCODE.OK ,'errmsg':'OK'})
+
+class CheckSMScodeView(View):
+    """校驗簡訊驗證碼"""
+    def get(self ,request ,mobile ):
+
+        sms_code_client = request.GET.get('sms_code')
+        conn = get_redis_connection('verify_code')
+        sms_code_server = conn.get('sms_%s' %mobile )
+        if sms_code_server is None:
+            return JsonResponse({'code':RETCODE.SMSCODEERR ,'errmsg':'簡訊驗證碼已失效' })
+        if sms_code_server.decode() != sms_code_client:
+            return JsonResponse({'code':RETCODE.SMSCODEERR ,'errmsg':'請確認簡訊驗證碼輸入正確' })
+
+        return JsonResponse({'code':RETCODE.OK ,'errmsg':'OK' })

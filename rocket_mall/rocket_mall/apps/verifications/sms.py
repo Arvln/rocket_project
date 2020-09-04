@@ -3,7 +3,7 @@ from twilio.rest import Client
 
 def send(mobile ,verify_sms ,min ):
     account_sid = 'AC834631b579159bac3e70d87b0a5e0824'      #ACCOUNT SID
-    auth_token = 'ab21851a2dcd6c3a59ff4f39f6fae4de'     #AUTH TOKEN
+    auth_token = 'a17d9f336fc2fbb2285c7b2f1b12f47f'     #AUTH TOKEN
     client = Client(account_sid, auth_token)
     #send message
     mobile_client = mobile[1:]

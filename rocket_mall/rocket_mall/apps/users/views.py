@@ -7,6 +7,7 @@ from django.http import HttpResponseForbidden ,JsonResponse
 
 from users.models import User
 from utils.response_code import RETCODE
+from django_redis import get_redis_connection
 import re
 
 # Create your views here.
@@ -24,11 +25,12 @@ class RegisterView(View):
         password = request.POST.get('password')
         password2 = request.POST.get('password2')
         mobile = request.POST.get('mobile')
+        sms_code_client = request.POST.get('sms_code')
         allow = request.POST.get('allow')
         #校驗參數，保障後端安全
         #參數是否齊全
         #參數是否合規
-        if not all(['username','password','password2','mobile','allow']):
+        if not all([username,password,password2,mobile,sms_code_client,allow]):
             return HttpResponseForbidden('缺少必傳參數')
         if not re.match('^[a-zA-Z0-9_-]{5,20}$' ,username ):
             return HttpResponseForbidden('請輸入5~20個字符的用戶名稱')
@@ -38,6 +40,10 @@ class RegisterView(View):
             return HttpResponseForbidden('請檢查與原先輸入的密碼是否相符')
         if not re.match('^09\d{8}$' ,mobile ):
             return HttpResponseForbidden('您輸入的手機號碼格式不正確')
+        conn = get_redis_connection('verify_code')
+        sms_code_server = conn.get('sms_%s' %mobile )
+        if sms_code_server.decode() != sms_code_client:
+            return HttpResponseForbidden('請確認簡訊驗證碼是否輸入正確')
         if allow != 'on':
             return HttpResponseForbidden('請勾選同意RockeT使用合約')
         #實現業務邏輯
