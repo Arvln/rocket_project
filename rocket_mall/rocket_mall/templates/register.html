@@ -1,0 +1,91 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+	<title>RockeT|個人註冊</title>
+	<link rel="stylesheet" type="text/css" href="{{ static('css/reset.css') }}">
+	<link rel="stylesheet" type="text/css" href="{{ static('css/main.css') }}">
+	<script type="text/javascript" src="{{ static('js/vue-2.6.12.js') }}"></script>
+    <script type="text/javascript" src="{{ static('js/axios-0.18.0.min.js') }}"></script>
+</head>
+<body>
+    <div id="app">
+	<div class="register_con">
+		<div class="l_con fl">
+			<a href="index.html" class="reg_logo"><img src="{{ static('images/logo.png') }}"></a>
+			<div class="reg_slogan">歡迎註冊</div>
+			<div class="reg_banner"></div>
+		</div>
+
+		<div class="r_con fr">
+			<div class="reg_title clearfix">
+				<h1>填寫基本資訊</h1>
+				<a href="login.html">已有帳號? 請登錄></a>
+			</div>
+			<div class="reg_form clearfix">
+				<form method="post" class="register_form" @submit="on_submit" v-cloak>
+                {{ csrf_input }}
+				<ul>
+					<li>
+						<input type="text" name="username" v-model="username" @blur="check_username" :placeholder="username_ph" id="user_name">
+						<span v-show="error_username" class="error_tip">[[ error_username_tip ]]</span>
+					</li>
+					<li>
+						<input type="password" name="password" v-model="password" @blur="check_password" :placeholder="password_ph" id="pwd">
+						<span v-show="error_password" class="error_tip">請輸入8位到12位的密碼</span>
+					</li>
+					<li>
+						<input type="password" name="password2" v-model="password2" @blur="check_password2" :placeholder="password2_ph" id="cpwd">
+						<span v-show="error_password2" class="error_tip">請檢查與原先輸入的密碼是否相符</span>
+					</li>
+					<li>
+						<input type="text" name="mobile" v-model="mobile" @blur="check_mobile" :placeholder="mobile_ph" id="phone">
+						<span v-show="error_mobile" class="error_tip">[[ error_mobile_tip ]]</span>
+					</li>
+					<li>
+                        <input type="text" name="piccode" v-model="piccode" @blur="check_piccode" :placeholder="piccode_ph" id="pic_code" class="msg_input">
+                        <img src="{{ static('images/pic_code.jpg') }}" alt="圖形驗證碼" class="pic_code">
+                        <span v-show="error_piccode" class="error_tip">請輸入四位數字驗證碼</span>
+                    </li>
+					<li>
+						<input type="text" name="sms_code" v-model="sms_code" @blur="check_sms_code" :placeholder="sms_code_ph" id="msg_code" class="msg_input">
+						<a class="get_msg_code">[[ sms_code_tip ]]</a>
+						<span v-show="error_sms_code" class="error_tip">[[ error_sms_code_tip ]]</span>
+					</li>
+					<li class="agreement">
+						<input type="checkbox" name="allow" v-model="allow" @change="check_allow" id="allow_agreement" checked="checked">
+						<label>同意「RockeT使用合約」</label>
+						<span v-show="error_allow" class="error_tip">請勾選同意RockeT使用合約</span>
+
+                        {% if register_errmsg %}
+                            <span class="error_tip">{{ register_errmsg }}</span>
+                        {% endif %}
+                    </li>
+					<li class="reg_sub">
+						<input type="submit" value="立即註冊">
+					</li>
+				</ul>
+				</form>
+			</div>
+
+		</div>
+
+	</div>
+    </div>
+	<div class="footer no-mp">
+		<div class="foot_link">
+			<a href="#">關於我們</a>
+			<span>|</span>
+			<a href="#">聯絡我們</a>
+			<span>|</span>
+			<a href="#">招募人才</a>
+			<span>|</span>
+			<a href="#">友站網址</a>
+		</div>
+		<p>CopyRight © 2020 台北美多商業股份有限公司 All Rights Reserved</p>
+		<p>電話：02-****6666    台北市*******66號</p>
+	</div>
+    <script type="text/javascript" src="{{ static('js/api.js') }}"></script>
+	<script type="text/javascript" src="{{ static('js/register.js') }}"></script>
+</body>
+</html>
