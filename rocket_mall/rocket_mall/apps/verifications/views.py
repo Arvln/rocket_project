@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from django.views import View
 from django.http import HttpResponse ,JsonResponse ,HttpResponseForbidden
 
@@ -6,8 +5,8 @@ from verifications.libs.captcha.captcha import captcha
 from django_redis import get_redis_connection
 from verifications import constants
 from utils.response_code import RETCODE
-from verifications.sms import send
 import random ,logging
+from celery_tasks.sms.tasks import send_sms_code
 
 # Create your views here.
 
@@ -60,7 +59,8 @@ class SMScodeView(View):
         pl.setex('send_flag_%s' % mobile, constants.SMS_CODE_TIME_INTERVAL, 1)  # 記下獲取時間
         pl.execute()
         #發送簡訊驗證碼
-        send(mobile ,sms_code ,constants.SMS_CODE_EXPIRES // 60 )
+        #celery執行發簡訊異步任務
+        send_sms_code.delay(mobile ,sms_code )
         # 返回響應
         return JsonResponse({'code':RETCODE.OK ,'errmsg':'OK'})
 
