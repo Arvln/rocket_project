@@ -1,0 +1,149 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <title>RockeT|物超所值配送最快</title>
+    <link rel="stylesheet" type="text/css" href="{{ static('css/reset.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ static('css/main.css') }}">
+    <script type="text/javascript" src="{{ static('js/vue-2.6.12.js') }}"></script>
+    <script type="text/javascript" src="{{ static('js/axios-0.18.0.min.js') }}"></script>
+</head>
+<body>
+<div id="app" v-cloak>
+<div class="header_con">
+        <div class="header">
+            <div class="welcome fl">歡迎光臨RockeT</div>
+            <div class="fr">
+                <div class="login_btn fl">
+                    歡迎您：<em>[[ username ]]</em>
+                    <span>|</span>
+                    <a href="{{ url('users:logout') }}">登出</a>
+                </div>
+                <div class="user_link fl">
+                    <span>|</span>
+                    <a href="{{ url('users:info') }}">用戶中心</a>
+                    <span>|</span>
+                    <a href="cart.html">我的購物車</a>
+                    <span>|</span>
+                    <a href="user_center_order.html">我的訂單</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="search_bar clearfix">
+        <a href="index.html" class="logo fl"><img src="{{ static('images/logo.png') }}"></a>
+        <div class="sub_page_name fl">|&nbsp;&nbsp;&nbsp;&nbsp;用戶中心</div>
+        <form method="get" action="/search.html" class="search_con fr mt40">
+            <input type="text" class="input_text fl" name="q" placeholder="搜尋商品">
+            <input type="submit" class="input_btn fr" name="" value="搜尋">
+        </form>
+    </div>
+
+    <div class="main_con clearfix">
+        <div class="left_menu_con clearfix">
+            <h3>用戶中心</h3>
+            <ul>
+                <li><a href="{{ url('users:info') }}" class="active">· 個人資訊</a></li>
+                <li><a href="user_center_order.html">· 我的訂單</a></li>
+                <li><a href="user_center_order.html">· 收貨地址</a></li>
+                <li><a href="user_center_pass.html">· 修改密碼</a></li>
+            </ul>
+        </div>
+        <div class="right_content clearfix">
+            <div class="info_con clearfix" v-cloak>
+                <h3 class="common_title2">基本資訊</h3>
+                <ul class="user_info_list">
+                    <li><span>用戶名稱：</span>Arvin1995</li>
+                    <li><span>手機號碼：</span>0988613235</li>
+                    <li>
+                        <span>Email：</span>
+                        <div v-if="set_email">
+                            <input v-model="email" @blur="check_email" type="email" name="email" class="email">
+                            <input @click="save_email" type="button" name="" value="保 存">
+                            <input @click="cancel_email" type="reset" name="" value="取 消">
+                            <div v-show="error_email" class="error_email_tip">Email格式不正確</div>
+                        </div>
+                        <div v-else>
+                            <input v-model="email" type="email" name="email" class="email" readonly>
+                            <div v-if="email_active">
+                                已验证
+                            </div>
+                            <div v-else>
+                                待验证<input @click="save_email" :disabled="send_email_btn_disabled" type="button" :value="send_email_tip">
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <h3 class="common_title2">最新查詢</h3>
+            <div class="has_view_list">
+                    <ul class="goods_type_list clearfix">
+                        <li>
+                            <a href="detail.html"><img src="{{ static('images/goods/goods003.jpg') }}"></a>
+                            <h4><a href="detail.html">品名</a></h4>
+                            <div class="operate">
+                                <span class="prize">￥2699.00</span>
+                                <span class="unit">台</span>
+                                <a href="#" class="add_goods" title="加入購物車"></a>
+                            </div>
+                        </li>
+                        <li>
+                            <a href="detail.html"><img src="{{ static('images/goods/goods004.jpg') }}"></a>
+                            <h4><a href="detail.html">360手機 N6 Pro 全網通</a></h4>
+                            <div class="operate">
+                                <span class="prize">￥2699.00</span>
+                                <span class="unit">台</span>
+                                <a href="#" class="add_goods" title="加入購物車"></a>
+                            </div>
+                        </li>
+                        <li>
+                            <a href="detail.html"><img src="{{ static('images/goods/goods005.jpg') }}"></a>
+                            <h4><a href="detail.html">360手機 N6 Pro 全網通</a></h4>
+                            <div class="operate">
+                                <span class="prize">￥2699.00</span>
+                                <span class="unit">台</span>
+                                <a href="#" class="add_goods" title="加入購物車"></a>
+                            </div>
+                        </li>
+                        <li>
+                            <a href="detail.html"><img src="{{ static('images/goods/goods006.jpg') }}"></a>
+                            <h4><a href="detail.html">360手機 N6 Pro 全網通</a></h4>
+                            <div class="operate">
+                                <span class="prize">￥2699.00</span>
+                                <span class="unit">台</span>
+                                <a href="#" class="add_goods" title="加入購物車"></a>
+                            </div>
+                        </li>
+                        <li>
+                            <a href="detail.html"><img src="{{ static('images/goods/goods007.jpg') }}"></a>
+                            <h4><a href="detail.html">360手機 N6 Pro 全網通</a></h4>
+                            <div class="operate">
+                                <span class="prize">￥2699.00</span>
+                                <span class="unit">台</span>
+                                <a href="#" class="add_goods" title="加入購物車"></a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+    </div>
+    <div class="footer">
+        <div class="foot_link">
+			<a href="#">客服中心</a>
+			<span>|</span>
+			<a href="#">關於羅奇</a>
+			<span>|</span>
+			<a href="#">人才招募</a>
+			<span>|</span>
+			<a href="#">物流合作</a>
+		</div>
+		<p>CopyRight © 2020 RockeT. All Rights Reserved</p>
+		<p>電話：02-****6666    台北市*******66號</p>
+    </div>
+    </div>
+    <!-- 後端傳遞給jinja2模板的數據再傳給vue.js -->
+    <script type="text/javascript" src="{{ static('js/common.js') }}"></script>
+    <script type="text/javascript" src="{{ static('js/user_center_info.js') }}"></script>
+</body>
+</html>

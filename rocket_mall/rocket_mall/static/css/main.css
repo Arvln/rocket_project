@@ -646,7 +646,9 @@ html,body{height:100%}
 
 .login_title{height:60px;width:308px;margin:10px auto;border-bottom:1px solid #e0e0e0;}
 
-.login_title a{width:308px;line-height:20px;font-size:20px;color:#5e5e5e;text-align:center;float:left;margin-top:20px;}
+.login_title a{width:308px;line-height:20px;font-size:20px;color:#ff5757;text-align:center;float:left;margin-top:20px;}
+
+.login_tip a{width:370px;line-height:20px;font-size:10px;color:#ff5757;text-align:center;float:left;margin-top:20px;}
 /* .login_title a:first-child{border-right:1px solid #e0e0e0} */
 .login_title a.cur{color:#e3101e}
 .form_input{width:308px;height:210px;margin:20px auto;position:relative;display:none;}
@@ -654,9 +656,9 @@ html,body{height:100%}
 .bar_code_con{width:167px;height:172px;margin:0px auto;}
 .bar_code_tip{text-align:center;margin-top:10px;font-size:12px;}
 .third_party{border-top:1px solid #e0e0e0;margin-top:30px}
-.google_login{float:left;height: 80px;width: 80px;margin-left:41px;margin-top:7px;background:url(../images/google.jpeg) left 7px no-repeat;}
-.apple_login{float:left;height: 80px;width: 80px;margin-left:41px;margin-top:7px;background:url(../images/apple.jpg) left 7px no-repeat;}
-.facebook_login{float:left;height: 80px;width: 80px;margin-left:41px;margin-top:7px;background:url(../images/facebook.jpeg) left 7px no-repeat;}
+.google_login{float:left;height: 55px;width: 55px;margin-left:51px;margin-top:7px;background:url(../images/google.jpeg) left 7px no-repeat;}
+.apple_login{float:left;height: 55px;width: 55px;margin-left:51px;margin-top:7px;background:url(../images/apple.jpg) left 7px no-repeat;}
+.facebook_login{float:left;height: 55px;width: 55px;margin-left:51px;margin-top:7px;background:url(../images/facebook.jpeg) left 7px no-repeat;}
 .weixin_login{background-position:left -35px;}
 .register_btn{background:url(../images/icons02.png) left 9px no-repeat;float:right;margin-right:15px}
 
@@ -696,7 +698,7 @@ html,body{height:100%}
 .r_con{width:420px;overflow:hidden;}
 .reg_title{width:380px;height:50px;float:left;margin-left:30px;border-bottom:1px solid #e0e0e0}
 .reg_title h1{height:50px;line-height:50px;float:left;font-size:24px;color:#a8a8a8;font-weight:bold;}
-.reg_title a{float:right;height:20px;line-height:20px;font-size:16px;color:#c40000;padding-right:20px;margin-top:15px}
+.reg_title a{float:right;height:20px;line-height:20px;font-size:16px;color:#e3101e;padding-right:20px;margin-top:15px}
 
 .reg_form{width:380px;margin:30px 0 0 30px;float:left;position:relative;}
 .reg_form li{height:70px;}

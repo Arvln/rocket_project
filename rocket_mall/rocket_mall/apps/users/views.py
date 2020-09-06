@@ -1,4 +1,5 @@
-from django.contrib.auth import login ,authenticate
+from django.contrib.auth import login ,logout
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views import View
@@ -10,6 +11,7 @@ from users.models import User
 from utils.response_code import RETCODE
 from django_redis import get_redis_connection
 from users.utils import LoginBackend
+from verifications import constants
 
 # Create your views here.
 
@@ -56,7 +58,10 @@ class RegisterView(View):
         #實現狀態保持
         login(request ,user )
         #返回響應:重定向到首頁
-        return redirect(reverse('contents:index'))
+        #網頁右上角刷新登入狀態，將用戶登入資訊保存在cookie
+        response = redirect(reverse('contents:index'))
+        response.set_cookie('username', user.username, constants.LOGIN_COOKIE_EXPIRES)
+        return response
 
 class UsercountView(View):
 
@@ -103,8 +108,16 @@ class LoginView(View):
         else:
             # 狀態保持使用默認時限
             request.session.set_expiry(None)
-        # 返回響應
-        return redirect(reverse('contents:index'))
+        #返回響應:重定向到next或首頁
+        #網頁右上角刷新登入狀態，將用戶登入資訊保存在cookie
+        #檢查是否有指定登入後跳轉頁面
+        next = request.GET.get('next')
+        if next:
+            response = redirect(next)
+        else:
+            response = redirect(reverse('contents:index'))
+        response.set_cookie('username' ,user.username ,constants.LOGIN_COOKIE_EXPIRES )
+        return response
 
 class CheckusermsgView(View):
     """獲取登入用戶"""
@@ -119,3 +132,21 @@ class CheckusermsgView(View):
         if type(res) == JsonResponse:
             return res
         return JsonResponse({'code':RETCODE.OK ,'errmsg':'OK'})
+
+class LogoutView(View):
+    """用戶退出登入"""
+    def get(self ,request ):
+
+        #用戶退出登入
+        logout(request)
+        #清除cookie登入信息
+        response = redirect(reverse('contents:index'))
+        response.delete_cookie('username')
+        #返回響應:重定向首頁
+        return response
+
+class UserInfoView(LoginRequiredMixin ,View):
+    """用戶中心"""
+    def get(self ,request ):
+
+        return render(request ,'user_center_info.html' )

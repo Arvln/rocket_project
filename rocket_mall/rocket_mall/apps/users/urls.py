@@ -9,6 +9,10 @@ urlpatterns = [
     url(r'^api/mobiles/count/(?P<mobile>09[\d]{8})/$', views.MobilecountView.as_view()),
     #用戶登入後端接口
     url(r'^api/login/$' ,views.LoginView.as_view() ,name='login' ),
-    #校驗登入用戶接口
+    #校驗登入用戶後端接口
     url(r'^api/user_msg/login/$' ,views.CheckusermsgView.as_view() ),
+    #退出登入後端接口
+    url(r'^api/logout/$' ,views.LogoutView.as_view() ,name='logout' ),
+    #用戶中心後端接口
+    url(r'^api/info/$' ,views.UserInfoView.as_view() ,name='info' ),
 ]

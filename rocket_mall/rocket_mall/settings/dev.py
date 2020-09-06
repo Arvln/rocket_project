@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 from pathlib import Path
 import sys
+from django.shortcuts import redirect
+from django.urls import reverse
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
@@ -221,3 +223,6 @@ AUTH_USER_MODEL = 'users.User'
 
 #指定自定義用戶認證後端
 AUTHENTICATION_BACKENDS = ['users.utils.LoginBackend']
+
+#判斷用戶是否登入後，指定未登入用戶重定向的地址
+LOGIN_URL = '/api/login/'

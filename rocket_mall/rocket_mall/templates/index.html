@@ -16,10 +16,11 @@
         <div class="header">
             <div class="welcome fl">歡迎光臨RockeT</div>
             <div class="fr">
+
                 <div v-if="username" class="login_btn fl">
                     歡迎您：<em>[[ username ]]</em>
                     <span>|</span>
-                    <a href="logout.html" class="quit">退出</a>
+                    <a href="{{ url('users:logout') }}" class="quit">登出</a>
                 </div>
                 <div v-else class="login_btn fl">
                     <a href="{{ url('users:login') }}">登入</a>
@@ -29,7 +30,7 @@
 
                 <div class="user_link fl">
                     <span>|</span>
-                    <a href="info.html">用戶中心</a>
+                    <a href="{{ url('users:info') }}">用戶中心</a>
                     <span>|</span>
                     <a href="cart.html">我的購物車</a>
                     <span>|</span>
