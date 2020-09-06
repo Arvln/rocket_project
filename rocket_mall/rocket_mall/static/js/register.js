@@ -25,12 +25,12 @@ let vm = new Vue({
         error_sms_code_tip: '',
         sms_code_tip: '獲取簡訊驗證碼',
 
-        username_ph: '用戶名稱',
-        password_ph: '設置密碼',
-        password2_ph: '確認密碼',
-        mobile_ph: '建議使用常用手機號碼',
-        piccode_ph: '請輸入圖形驗證碼',
-        sms_code_ph: '請輸入簡訊驗證碼',
+        default_username: '用戶名稱',
+        default_password: '設置密碼',
+        default_password2: '確認密碼',
+        default_mobile: '建議使用常用手機號碼',
+        default_piccode: '請輸入圖形驗證碼',
+        default_sms_code: '請輸入簡訊驗證碼',
 
         api: api,
         uuid: '',

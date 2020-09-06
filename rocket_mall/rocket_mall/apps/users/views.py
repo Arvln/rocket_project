@@ -1,14 +1,15 @@
-from django.contrib.auth import login
+from django.contrib.auth import login ,authenticate
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views import View
 from django.db import DatabaseError
 from django.http import HttpResponseForbidden ,JsonResponse
+import re
 
 from users.models import User
 from utils.response_code import RETCODE
 from django_redis import get_redis_connection
-import re
+from users.utils import LoginBackend
 
 # Create your views here.
 
@@ -74,3 +75,47 @@ class MobilecountView(View):
         count = User.objects.filter(mobile=mobile).count()
         #返回響應
         return JsonResponse({'code':RETCODE.OK ,'errmsg':'OK' ,'count':count })
+
+class LoginView(View):
+    """用戶登入"""
+    def get(self ,request ):
+        """提供登入頁面"""
+        return render(request ,'login.html' )
+
+    def post(self ,request ):
+        """接收登入資料"""
+        #接收參數
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        remembered = request.POST.get('remembered')
+        #認證用戶
+        res = LoginBackend.authenticate(self ,request ,username=username ,password=password )
+        if type(res) == User:
+            user = res
+        else:
+            return res
+        # 狀態保持
+        login(request ,user )
+        # 使用remembered來實現狀態保持週期(記住登入)
+        if remembered != 'on':
+            #狀態保持在瀏覽器會話結束後銷毀
+            request.session.set_expiry(0)
+        else:
+            # 狀態保持使用默認時限
+            request.session.set_expiry(None)
+        # 返回響應
+        return redirect(reverse('contents:index'))
+
+class CheckusermsgView(View):
+    """獲取登入用戶"""
+    def get(self ,request ):
+
+        #接收參數
+        username = request.GET.get('username')
+        password = request.GET.get('password')
+        # 認證用戶
+        res = LoginBackend.authenticate(self ,request ,username ,password=password )
+        # 返回響應
+        if type(res) == JsonResponse:
+            return res
+        return JsonResponse({'code':RETCODE.OK ,'errmsg':'OK'})

@@ -218,3 +218,6 @@ LOGGING = {
 
 #指定自定義用戶模型類
 AUTH_USER_MODEL = 'users.User'
+
+#指定自定義用戶認證後端
+AUTHENTICATION_BACKENDS = ['users.utils.LoginBackend']

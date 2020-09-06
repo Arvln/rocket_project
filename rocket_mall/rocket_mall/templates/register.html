@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
 	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-	<title>RockeT|個人註冊</title>
+	<title>RockeT|物超所值配送最快</title>
 	<link rel="stylesheet" type="text/css" href="{{ static('css/reset.css') }}">
 	<link rel="stylesheet" type="text/css" href="{{ static('css/main.css') }}">
 	<script type="text/javascript" src="{{ static('js/vue-2.6.12.js') }}"></script>
@@ -27,28 +27,28 @@
                 {{ csrf_input }}
 				<ul>
 					<li>
-						<input type="text" name="username" v-model="username" @blur="check_username" :placeholder="username_ph" id="user_name">
+						<input type="text" name="username" v-model="username" @keyup="check_username" @blur="check_username" :placeholder="default_username" id="user_name">
 						<span v-show="error_username" class="error_tip">[[ error_username_tip ]]</span>
 					</li>
 					<li>
-						<input type="password" name="password" v-model="password" @blur="check_password" :placeholder="password_ph" id="pwd">
+						<input type="password" name="password" v-model="password" @keyup="check_password" @blur="check_password" :placeholder="default_password" id="pwd">
 						<span v-show="error_password" class="error_tip">請輸入8位到12位的密碼</span>
 					</li>
 					<li>
-						<input type="password" name="password2" v-model="password2" @blur="check_password2" :placeholder="password2_ph" id="cpwd">
+						<input type="password" name="password2" v-model="password2" @keyup="check_password2" @blur="check_password2" :placeholder="default_password2" id="cpwd">
 						<span v-show="error_password2" class="error_tip">請檢查與原先輸入的密碼是否相符</span>
 					</li>
 					<li>
-						<input type="text" name="mobile" v-model="mobile" @blur="check_mobile" :placeholder="mobile_ph" id="phone">
+						<input type="text" name="mobile" v-model="mobile" @keyup="check_mobile" @blur="check_mobile" :placeholder="default_mobile" id="phone">
 						<span v-show="error_mobile" class="error_tip">[[ error_mobile_tip ]]</span>
 					</li>
 					<li>
-                        <input type="text" name="piccode" v-model="piccode" @blur="check_piccode" :placeholder="piccode_ph" id="pic_code" class="msg_input">
+                        <input type="text" name="piccode" v-model="piccode" @keyup="check_piccode" @blur="check_piccode" :placeholder="default_piccode" id="pic_code" class="msg_input">
                         <img :src="image_code_url" @click="generate_image_code" alt="圖形驗證碼" class="pic_code">
                         <span v-show="error_piccode" class="error_tip">[[ error_piccode_tip ]]</span>
                     </li>
 					<li>
-						<input type="text" name="sms_code" v-model="sms_code" @blur="check_sms_code" :placeholder="sms_code_ph" id="msg_code" class="msg_input">
+						<input type="text" name="sms_code" v-model="sms_code" @keyup="check_sms_code" @blur="check_sms_code" :placeholder="default_sms_code" id="msg_code" class="msg_input">
 						<a @click="send_sms_code" class="get_msg_code">[[ sms_code_tip ]]</a>
 						<span v-show="error_sms_code" class="error_tip">[[ error_sms_code_tip ]]</span>
 					</li>
@@ -74,15 +74,15 @@
     </div>
 	<div class="footer no-mp">
 		<div class="foot_link">
-			<a href="#">關於我們</a>
+			<a href="#">客服中心</a>
 			<span>|</span>
-			<a href="#">聯絡我們</a>
+			<a href="#">關於羅奇</a>
 			<span>|</span>
-			<a href="#">招募人才</a>
+			<a href="#">人才招募</a>
 			<span>|</span>
-			<a href="#">友站網址</a>
+			<a href="#">物流合作</a>
 		</div>
-		<p>CopyRight © 2020 台北羅奇商業股份有限公司 All Rights Reserved</p>
+		<p>CopyRight © 2020 RockeT. All Rights Reserved</p>
 		<p>電話：02-****6666    台北市*******66號</p>
 	</div>
     <script type="text/javascript" src="{{ static('js/api.js') }}"></script>

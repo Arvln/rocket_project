@@ -77,3 +77,4 @@ class CheckSMScodeView(View):
             return JsonResponse({'code':RETCODE.SMSCODEERR ,'errmsg':'請確認簡訊驗證碼輸入正確' })
 
         return JsonResponse({'code':RETCODE.OK ,'errmsg':'OK' })
+

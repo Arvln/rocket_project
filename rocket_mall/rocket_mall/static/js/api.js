@@ -5,5 +5,7 @@ const api = {
     MobilecountUrl: ApiRootUrl + 'mobiles/count/', //手機號碼數量查詢接口
     ImagecodeUrl: ApiRootUrl + 'image_codes/', //獲取圖形驗證碼接口
     SMScodeUrl: ApiRootUrl + 'sms_codes/', //獲取簡訊驗證碼接口
-    CheckSMScodeUrl: ApiRootUrl + 'sms_codes/verify/' //校驗簡訊驗證碼接口
+    CheckSMScodeUrl: ApiRootUrl + 'sms_codes/verify/', //校驗簡訊驗證碼接口
+    LoginUrl: ApiRootUrl + 'login/', //用戶登入接口
+    CheckuserUrl: ApiRootUrl + 'user_msg/login/', //校驗登入用戶接口
 }
