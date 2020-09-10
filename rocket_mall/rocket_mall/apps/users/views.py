@@ -37,6 +37,9 @@ class RegisterView(View):
             return HttpResponseForbidden('缺少必傳參數')
         if not re.match('^[a-zA-Z0-9_-]{5,20}$' ,username ):
             return HttpResponseForbidden('請輸入5~20個字符的用戶名稱')
+        count = User.objects.filter(username=username).count()
+        if count == 1:
+            return HttpResponseForbidden('該用戶名稱已存在')
         if not re.match('^[a-zA-Z0-9_-]{8,12}$', password):
             return HttpResponseForbidden('請輸入8位到12位的密碼')
         if password != password2:

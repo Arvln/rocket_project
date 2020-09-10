@@ -16,7 +16,7 @@ let vm = new Vue({
        error_login: false,
        error_login_tip: '',
 
-        api: api,
+       api: api,
     },
     methods:{
         //檢查用戶名稱
@@ -63,6 +63,18 @@ let vm = new Vue({
             ){
                window.event.returnValue = false;
             }
+        },
+        //line登入
+        line_login(){
+            let next = get_query_string('next') || '/' ;
+            let url = this.api.LineLoginUrl + '?next=' + next ;
+            axios.get(url ,{
+                responseType: 'json'
+            }).then(response=>{
+                location.href = response.data.login_url ;
+            }).catch(error=>{
+                console.log(error.response) ;
+            })
         },
     },
 })

@@ -25,4 +25,6 @@ urlpatterns = [
     url(r'^', include(('contents.urls', 'contents'), namespace='contents')),
     # 驗證模塊
     url(r'^', include(('verifications.urls', 'verifications'))),
+    # 第三方登錄模塊
+    url(r'^', include(('oauth.urls', 'oauth') ,namespace='oauth')),
 ]

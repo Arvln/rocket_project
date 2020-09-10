@@ -7,6 +7,7 @@ var vm = new Vue({
         //user_id: sessionStorage.user_id || localStorage.user_id,
         //token: sessionStorage.token || localStorage.token,
         username: getCookie('username'),
+        photo_url: getCookie('photo_url'),
         cart_total_count: 0, // 购物车总数量
         cart: [], // 购物车数据,
         f1_tab: 1, // 1F 标签页控制

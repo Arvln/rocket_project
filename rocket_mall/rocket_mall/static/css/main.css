@@ -656,9 +656,10 @@ html,body{height:100%}
 .bar_code_con{width:167px;height:172px;margin:0px auto;}
 .bar_code_tip{text-align:center;margin-top:10px;font-size:12px;}
 .third_party{border-top:1px solid #e0e0e0;margin-top:30px}
-.google_login{float:left;height: 55px;width: 55px;margin-left:51px;margin-top:7px;background:url(../images/google.jpeg) left 7px no-repeat;}
-.apple_login{float:left;height: 55px;width: 55px;margin-left:51px;margin-top:7px;background:url(../images/apple.jpg) left 7px no-repeat;}
-.facebook_login{float:left;height: 55px;width: 55px;margin-left:51px;margin-top:7px;background:url(../images/facebook.jpeg) left 7px no-repeat;}
+.google_login{float:left;height: 55px;width: 55px;margin-left:51px;margin-top:7px;border: none;outline:none;background:url(../images/google.jpeg) left 7px no-repeat;}
+.line_picture{float:left;height: 55px;width: 55px;margin-left:185px;margin-top:50px;margin-bottom:20px;border: none;outline:none;}
+.line_login{float:left;height: 55px;width: 55px;margin-left:45px;margin-top:10px;border: none;outline:none;background:url(../images/line.jpg) left 7px no-repeat;}
+.facebook_login{float:left;height: 55px;width: 55px;margin-left:55px;margin-top:7px;border: none;outline:none;background:url(../images/facebook.jpeg) left 7px no-repeat;}
 .weixin_login{background-position:left -35px;}
 .register_btn{background:url(../images/icons02.png) left 9px no-repeat;float:right;margin-right:15px}
 
