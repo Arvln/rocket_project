@@ -233,3 +233,16 @@ Line_ChannelID = '1654901419'
 
 #line專案app的Channel_secret
 Line_Channel_secret = '73639c8afde4343fbcdcf782f04be2a7'
+
+#郵件參數
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_POST = 587
+EMAIL_HOST_USER = 'aidansky0989@gmail.com'
+EMAIL_HOST_PASSWORD = 'aidan34781'
+EMAIL_FROM = '羅奇商城<aidansky0989@gmail.com>'
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
+
+#郵箱驗證鏈接
+EMAIL_VERIFY_URL = 'http://192.168.126.130:8000/api/email/verification/get/'

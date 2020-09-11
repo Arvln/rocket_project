@@ -15,7 +15,7 @@
             <div class="welcome fl">歡迎光臨RockeT</div>
             <div class="fr">
                 <div class="login_btn fl">
-                    歡迎您：<em>[[ username ]]</em>
+                    <em>[[ username ]]</em>
                     <span>|</span>
                     <a href="{{ url('users:logout') }}">登出</a>
                 </div>
@@ -54,23 +54,23 @@
             <div class="info_con clearfix" v-cloak>
                 <h3 class="common_title2">基本資訊</h3>
                 <ul class="user_info_list">
-                    <li><span>用戶名稱：</span>Arvin1995</li>
-                    <li><span>手機號碼：</span>0988613235</li>
+                    <li><span>用戶名稱：</span>[[ username ]]</li>
+                    <li><span>手機號碼：</span>[[ mobile ]]</li>
                     <li>
                         <span>Email：</span>
                         <div v-if="set_email">
-                            <input v-model="email" @blur="check_email" type="email" name="email" class="email">
+                            <input v-model="email" @blur="check_email" @keyup="check_email" type="email" name="email" :placeholder="default_email" class="msg_input">
                             <input @click="save_email" type="button" name="" value="保 存">
                             <input @click="cancel_email" type="reset" name="" value="取 消">
-                            <div v-show="error_email" class="error_email_tip">Email格式不正確</div>
+                            <div v-show="error_email" class="error_tip">[[ error_email_tip ]]</div>
                         </div>
                         <div v-else>
                             <input v-model="email" type="email" name="email" class="email" readonly>
                             <div v-if="email_active">
-                                已验证
+                                已驗證
                             </div>
                             <div v-else>
-                                待验证<input @click="save_email" :disabled="send_email_btn_disabled" type="button" :value="send_email_tip">
+                                待驗證<input @click="save_email" :disabled="send_email_btn_disabled" type="button" :value="send_email_tip">
                             </div>
                         </div>
                     </li>
@@ -142,7 +142,14 @@
 		<p>電話：02-****6666    台北市*******66號</p>
     </div>
     </div>
-    <!-- 後端傳遞給jinja2模板的數據再傳給vue.js -->
+    <!-- 後端傳遞給jinja2模板的數據轉成String類型再傳給vue.js -->
+    <script type="text/javascript">
+        let username = "{{ username }}" ;
+        let mobile = "{{ mobile }}" ;
+        let email = "{{ email }}" ;
+        let email_active = "{{ email_active }}" ;
+    </script>
+    <script type="text/javascript" src="{{ static('js/api.js') }}"></script>
     <script type="text/javascript" src="{{ static('js/common.js') }}"></script>
     <script type="text/javascript" src="{{ static('js/user_center_info.js') }}"></script>
 </body>

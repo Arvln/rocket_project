@@ -1,71 +1,72 @@
-var vm = new Vue({
+let vm = new Vue({
     el: '#app',
-    delimiters: ['[[', ']]'],
-    data: {
-        //user_id: sessionStorage.user_id || localStorage.user_id,
-        //token: sessionStorage.token || localStorage.token,
-        //username: getCookie('username'),
-        username: '',
-        mobile: '',
-        email: '',
-        email_active: '',
+    delimiters: ['[[' ,']]' ],
+    data:{
+        //接收jinja2傳遞的數據
+        username: username ,
+        mobile: mobile ,
+        email: email ,
+        email_active: email_active ,
 
-        set_email: false,
-        email_error: false,
+        //渲染的判斷依據
+        set_email: true ,
 
-        send_email_btn_disabled: false,
-        send_email_tip: '重新发送验证邮件',
-        histories: []
+        //提示訊息
+        default_email: '建議使用常用Email' ,
+        error_email: false ,
+        error_email_tip: '' ,
+        send_email_tip: '重新發送驗證Email' ,
+        send_email_btn_disabled: false ,
+
+        api: api ,
     },
     mounted(){
-        //
-        this.email_active = (this.email_active == 'True') ? true : false;
-        //
-        this.set_email = (this.email == '') ? true : false;
-        //
-        //this.browse_histories();
+        //頁面刷新時，檢查Email是否存在
+        this.set_email = (this.email === '') ? true : false ;
+        //頁面刷新時，檢查Email是否驗證
+        this.email_active = (this.email_active == 'True') ? true : false ;
     },
-    methods: {
-        // 退出
-        logout: function(){
-            sessionStorage.clear();
-            localStorage.clear();
-            location.href = '/login.html';
-        },
-        // 保存email
-        save_email(){
-            // 檢查email格式
-            var re = /^\w+((-\w+)|(\.\w+)|(\+\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z]+$/;
-            if(re.test(this.email)) {
-                this.email_error = false;
+    methods:{
+        //檢查Email格式
+        check_email(){
+            let re = /^[\w.-]+@[\w-]+(.[\w_-]+)+$/ ;
+            if (re.test(this.email)){
+                this.error_email = false ;
             } else {
-                this.email_error = true;
-                return;
+                this.error_email_tip = '請確認Email格式是否正確' ;
+                this.error_email = true ;
             }
-            var url = '/emails/';
-            //非get請求在後端進行csrf認證
-            axios.put(url , {
-                email: this.email
-                }, {
-                    headers: {
-                        'X-CSRFTOKEN': getCookie('csrftoken')
-                    },
-                    responseType: 'json'
-                })
-                .then(response => {
-                    if (response.data.code == '0'){
-                        this.set_email = false;
-                        this.send_email_btn_disabled = true;
-                        this.send_email_tip = '已发送验证邮件';
-                    } else if (response.data.code == '4101'){
-                        location.href = '/login/?next=/info/';
-                    } else{
-                        console.log(response);
+        },
+        //保存Email格式
+        save_email(){
+            let url = this.api.EmailUrl ;
+            axios.put(url ,{
+                'email': this.email ,
+            },{
+                headers : {
+                    'X-CSRFToken':getCookie('csrftoken')
+                },
+                responseType: 'json' ,
+            }).then(response=>{
+                if (response.data.code === '0'){
+                    this.set_email = false ;
+                    this.send_email_tip = '已發送驗證Email' ;
+                    this.send_email_btn_disabled = true ;
+                } else {
+                    if (response.data.code === '4101'){
+                        location.href = this.api.LoginUrl ;
+                    } else {
+                        console.log(response.data.errmsg) ;
                     }
-                })
-                .catch(error => {
-                    console.log(error.response);
-                });
+                }
+            }).catch(error=>{
+                console.log(error.response) ;
+            })
+        },
+        //不保存Email格式
+        cancel_email(){
+            this.email = '' ;
+            this.error_email = false ;
         },
     }
-});
+})

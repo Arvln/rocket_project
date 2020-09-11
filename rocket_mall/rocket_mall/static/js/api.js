@@ -10,4 +10,5 @@ const api = {
     CheckuserUrl: ApiRootUrl + 'login_info/get/', //校驗登入用戶接口
     LineLoginUrl: ApiRootUrl + 'line/login_url/get/', //獲取line用戶登入授權頁面接口
     LineRegisterUrl: ApiRootUrl + 'line/login/', //按照授權結果，進行line用戶登入接口
+    EmailUrl: ApiRootUrl + 'email/put/' //更新用戶Email接口
 }

@@ -6,6 +6,7 @@ from django.db import models
 class User(AbstractUser):
     """加入需求的手機號碼字段"""
     mobile = models.CharField(max_length=10 ,unique=True ,blank=True ,verbose_name='手機號碼')
+    email_active = models.BooleanField(default=False ,verbose_name='Email驗證狀態' )
 
     class Meta:
        db_table = 'tb_user' #定義表名

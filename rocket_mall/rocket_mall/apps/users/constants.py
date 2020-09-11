@@ -1,0 +1,3 @@
+#驗證郵件有效期(秒)
+
+VERIFY_EMAIL_TOKEN_EXPIRES = 60 * 60 * 24

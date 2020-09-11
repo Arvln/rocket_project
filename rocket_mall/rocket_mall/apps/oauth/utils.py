@@ -5,13 +5,14 @@ import requests ,json
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer ,BadData
 from . import constants
 
+headers = {
+    'Content - Type': 'application / x - www - form - urlencoded',
+    'Referer': 'http://192.168.126.130:8000/api/line/login/',
+    'User-Agent': 'Mozilla / 5.0(X11;Linuxx86_64) AppleWebKit / 537.36(KHTML, likeGecko) Chrome / 85.0.4183.83Safari / 537.36}',
+}
+
 def get_id_token(code):
     """請求id_token"""
-    headers = {
-        'Content - Type': 'application / x - www - form - urlencoded' ,
-        'Referer': 'http://192.168.126.130:8000/api/line/login/' ,
-        'User-Agent': 'Mozilla / 5.0(X11;Linuxx86_64) AppleWebKit / 537.36(KHTML, likeGecko) Chrome / 85.0.4183.83Safari / 537.36}' ,
-    }
     url = 'https://api.line.me/oauth2/v2.1/token'
     redirect_url = 'http://192.168.126.130:8000' + reverse('oauth:line_login')
     form_data = {
@@ -28,11 +29,6 @@ def get_id_token(code):
 
 def get_profile_information(id_token ,state ):
     """驗證並解碼id_token"""
-    headers = {
-        'Content - Type': 'application / x - www - form - urlencoded',
-        'Referer': 'http://192.168.126.130:8000/api/line/login/',
-        'User-Agent': 'Mozilla / 5.0(X11;Linuxx86_64) AppleWebKit / 537.36(KHTML, likeGecko) Chrome / 85.0.4183.83Safari / 537.36}',
-    }
     url = 'https://api.line.me/oauth2/v2.1/verify'
     form_data = {
         'id_token':id_token ,

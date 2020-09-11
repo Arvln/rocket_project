@@ -16,4 +16,8 @@ urlpatterns = [
     url(r'^api/logout/$' ,views.LogoutView.as_view() ,name='logout' ),
     #用戶中心後端接口
     url(r'^api/user_center_info/get/$' ,views.UserInfoView.as_view() ,name='info' ),
+    #更新用戶Email後端接口
+    url(r'^api/email/put/$' ,views.EmailView.as_view() ),
+    #驗證用戶Email後端接口
+    url(r'^api/email/verification/get/$' ,views.VerifyEmailView.as_view() ),
 ]

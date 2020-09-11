@@ -4,14 +4,16 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views import View
 from django.db import DatabaseError
-from django.http import HttpResponseForbidden ,JsonResponse
-import re
+from django.http import HttpResponseForbidden ,JsonResponse ,HttpResponseBadRequest ,HttpResponseServerError
+import re ,json ,logging
 
 from users.models import User
 from utils.response_code import RETCODE
 from django_redis import get_redis_connection
-from users.utils import LoginBackend
+from users.utils import LoginBackend ,generate_verify_email_url ,check_verify_email_url
+from utils.views import LoginRequiredJsonMixin
 from verifications import constants
+from celery_tasks.email.tasks import send_verify_mail
 
 # Create your views here.
 
@@ -151,5 +153,59 @@ class LogoutView(View):
 class UserInfoView(LoginRequiredMixin ,View):
     """用戶中心"""
     def get(self ,request ):
+        #如果LoginRequiredMixin判斷用戶已登錄，request.user取出用戶模型類對象
+        context = {
+            'username':request.user.username ,
+            'mobile':request.user.mobile ,
+            'email':request.user.email ,
+            'email_active':request.user.email_active ,
+        }
 
-        return render(request ,'user_center_info.html' )
+        return render(request ,'user_center_info.html' ,context )
+
+logger = logging.getLogger('django')
+
+class EmailView(LoginRequiredJsonMixin ,View):
+    """更新用戶Email"""
+    def put(self ,request ):
+        #提取參數
+        json_dict = json.loads(request.body)
+        email = json_dict.get('email')
+        #校驗參數
+        if not re.match('^[\w.-]+@[\w-]+(.[\w_-]+)+$' ,email ):
+            return HttpResponseForbidden('請確認Email格式是否正確')
+        #實現主體業務邏輯:保存Email
+        try:
+            request.user.email = email
+            request.user.save()
+        except Exception as e:
+            logger.error(e)
+            return JsonResponse({'code':RETCODE.DBERR ,'errmsg':'新增Email失敗' })
+        #為將保存Email和驗證Email作解耦，採用celery發送驗證Email
+        user = request.user
+        verify_url = generate_verify_email_url(user)
+        send_verify_mail.delay(email ,verify_url )
+        #返回響應
+        return JsonResponse({'code':RETCODE.OK ,'errmsg':'OK' })
+
+class VerifyEmailView(View):
+    """驗證用戶Email"""
+    def get(self ,request ):
+
+        #提取參數
+        token = request.GET.get('token')
+        #校驗參數
+        if not token:
+            return HttpResponseForbidden('缺少必傳參數')
+        #提取token中用戶資訊
+        user = check_verify_email_url(token)
+        if not user:
+            return HttpResponseBadRequest('token已失效')
+        #驗證用戶Email
+        try:
+            user.email_active = True
+            user.save()
+        except Exception as e:
+            return HttpResponseServerError('驗證用戶失敗，請再試一次')
+        # 返回響應
+        return redirect(reverse('users:info'))
