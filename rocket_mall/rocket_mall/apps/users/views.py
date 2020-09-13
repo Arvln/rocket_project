@@ -7,15 +7,18 @@ from django.db import DatabaseError
 from django.http import HttpResponseForbidden ,JsonResponse ,HttpResponseBadRequest ,HttpResponseServerError
 import re ,json ,logging
 
-from users.models import User
+from users.models import User ,Address
 from utils.response_code import RETCODE
 from django_redis import get_redis_connection
 from users.utils import LoginBackend ,generate_verify_email_url ,check_verify_email_url
 from utils.views import LoginRequiredJsonMixin
-from verifications import constants
+from . import constants
 from celery_tasks.email.tasks import send_verify_mail
 
 # Create your views here.
+
+#創建日誌輸出器
+logger = logging.getLogger('django')
 
 class RegisterView(View):
     """用戶註冊類視圖"""
@@ -163,8 +166,6 @@ class UserInfoView(LoginRequiredMixin ,View):
 
         return render(request ,'user_center_info.html' ,context )
 
-logger = logging.getLogger('django')
-
 class EmailView(LoginRequiredJsonMixin ,View):
     """更新用戶Email"""
     def put(self ,request ):
@@ -209,3 +210,30 @@ class VerifyEmailView(View):
             return HttpResponseServerError('驗證用戶失敗，請再試一次')
         # 返回響應
         return redirect(reverse('users:info'))
+
+class AddressView(LoginRequiredJsonMixin ,View):
+    """用戶收貨地址頁面"""
+    def get(self ,request ):
+
+        #獲取當前用戶未刪除的地址訊息
+        address_model_list = Address.objects.filter(user=request.user ,is_deleted=False )
+        #構造響應數據
+        address_list = []
+        for address in address_model_list:
+            address_dict = {
+                'title':address.title ,
+                'receiver':address.receiver ,
+                'mobile':address.mobile ,
+                'email':address.email ,
+                'area':address.area.name ,
+                'city':address.city.name ,
+                'district':address.district.name ,
+                'place':address.place ,
+            }
+            address_list.append(address_dict)
+        context = {
+            'addresses':address_list ,
+            'default_address_id':request.user.default_address_id ,
+        }
+        #返回響應
+        return render(request ,'user_center_site.html' ,context )

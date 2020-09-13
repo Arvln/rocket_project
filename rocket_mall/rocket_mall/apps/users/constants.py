@@ -1,3 +1,8 @@
-#驗證郵件有效期(秒)
+#cookie保存時限
+LOGIN_COOKIE_EXPIRES = 3600 * 24 *14
 
+#驗證郵件有效期(秒)
 VERIFY_EMAIL_TOKEN_EXPIRES = 60 * 60 * 24
+
+#用戶地址數量上限
+USER_ADDRESS_COUNTS_LIMIT = 20

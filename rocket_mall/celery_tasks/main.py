@@ -1,6 +1,9 @@
 #Celery的入口
 from celery import Celery
 
+#celery -A celery_tasks.main worker -l info -c 20    開20個進程
+#celery -A celery_tasks.main worker -l info -P eventlet -c 1000    eventlet庫開1000個協程
+
 #celery環境配置，讀取django配置文件dev.py
 import os
 if not os.getenv('DJANGO_SETTINGS_MODULE'):

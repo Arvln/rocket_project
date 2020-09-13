@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'contents', #首頁模塊
     'verifications', # 驗證模塊
     'oauth', # 第三方登錄模塊
+    'areas' # 收貨地址模塊
 ]
 
 MIDDLEWARE = [
@@ -158,9 +159,11 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+#LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'zh-Hant'
 
-TIME_ZONE = 'UTC'
+#TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Taipei'
 
 USE_I18N = True
 
@@ -226,7 +229,7 @@ AUTH_USER_MODEL = 'users.User'
 AUTHENTICATION_BACKENDS = ['users.utils.LoginBackend']
 
 #判斷用戶是否登入後，指定未登入用戶重定向的地址
-LOGIN_URL = '/api/login_info/post/'
+LOGIN_URL = '/api/login_info/'
 
 #line專案app的ChannelID
 Line_ChannelID = '1654901419'
