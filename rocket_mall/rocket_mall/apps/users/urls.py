@@ -23,11 +23,11 @@ urlpatterns = [
     #獲取用戶收貨地址頁面後端接口
     url(r'^api/addresses/get/$' ,views.AddressView.as_view() ,name='address' ),
     #新增用戶收貨地址後端接口
-    #url(r'^api/addresses/post/$' ,views.AddressCreateView.as_view() ),
+    url(r'^api/addresses/post/$' ,views.AddressCreateView.as_view() ),
     #修改或刪除用戶收貨地址後端接口
-    #url(r'^api/addresses/put_delete/(?P<address_id>\d+)/$' ,views.UpdateDestroyAddressView.as_view() ),
+    url(r'^api/addresses/put_delete/(?P<address_id>\d+)/$' ,views.UpdateDestroyAddressView.as_view() ),
     #設置默認地址後端接口
-    #url(r'^api/addresses/default/put/(?P<address_id>\d+)/$' ,views.DefaultAddressView.as_view() ),
+    url(r'^api/addresses/default/put/(?P<address_id>\d+)/$' ,views.DefaultAddressView.as_view() ),
     #修改地址標題後端接口
-    #url(r'^api/addresses/title/put/(?P<address_id>\d+)/$' ,views.UpdateAddressTitleView.as_view() ),
+    url(r'^api/addresses/title/put/(?P<address_id>\d+)/$' ,views.UpdateAddressTitleView.as_view() ),
 ]

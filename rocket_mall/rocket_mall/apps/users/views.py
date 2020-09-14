@@ -221,6 +221,7 @@ class AddressView(LoginRequiredJsonMixin ,View):
         address_list = []
         for address in address_model_list:
             address_dict = {
+                'id':address.id ,
                 'title':address.title ,
                 'receiver':address.receiver ,
                 'mobile':address.mobile ,
@@ -237,3 +238,156 @@ class AddressView(LoginRequiredJsonMixin ,View):
         }
         #返回響應
         return render(request ,'user_center_site.html' ,context )
+
+class AddressCreateView(LoginRequiredJsonMixin ,View):
+    """新增用戶收貨地址"""
+    def post(self ,request ):
+
+        # 提取參數
+        json_dict = json.loads(request.body.decode())
+        title = json_dict.get('title')
+        receiver = json_dict.get('receiver')
+        mobile = json_dict.get('mobile')
+        email = json_dict.get('email')
+        area_id = json_dict.get('area_id')
+        city_id = json_dict.get('city_id')
+        district_id = json_dict.get('district_id')
+        place = json_dict.get('place')
+        # 校驗參數
+        if not all([title ,receiver ,mobile ,area_id ,city_id ,district_id ,place]):
+            return HttpResponseForbidden('缺少必傳參數')
+        if not re.match('^09[\d]{8}$' ,mobile ):
+            return HttpResponseForbidden('您輸入的手機號碼格式不正確')
+        if email:
+            if not re.match('^[\w.-]+@[\w-]+(.[\w_-]+)+$' ,email ):
+                return HttpResponseForbidden('請確認Email格式是否正確')
+        # 實現主體業務邏輯:新增用戶收貨地址
+        try:
+            address = Address.objects.create(
+                user = request.user ,
+                title = title ,
+                receiver = receiver ,
+                mobile = mobile ,
+                email = email ,
+                area_id = area_id ,
+                city_id = city_id ,
+                district_id = district_id ,
+                place = place ,
+            )
+            #用戶初次新增地址，預設當前地址為默認地址
+            if request.user.default_address is None:
+                request.user.default_address = address
+                request.user.save()
+        except Exception as e:
+            logger.error(e)
+            return JsonResponse({'code':RETCODE.DBERR ,'errmsg':'新增用戶地址失敗' })
+        # 構造響應數據
+        address_dict = {
+            'id':address.id ,
+            'title':address.title ,
+            'receiver':address.receiver ,
+            'mobile':address.mobile ,
+            'email':address.email ,
+            'area':address.area.name ,
+            'city':address.city.name ,
+            'district':address.district.name ,
+            'place':address.place ,
+        }
+        # 返回響應
+        return JsonResponse({'code':RETCODE.OK ,'errmsg':'OK' ,'address':address_dict })
+
+class UpdateDestroyAddressView(LoginRequiredJsonMixin ,View):
+    """修改或刪除用戶收貨地址"""
+    def put(self ,request ,address_id ):
+
+        #獲取參數
+        json_dict = json.loads(request.body.decode())
+        title = json_dict.get('title')
+        receiver = json_dict.get('receiver')
+        mobile = json_dict.get('mobile')
+        email = json_dict.get('email')
+        area_id = json_dict.get('area_id')
+        city_id = json_dict.get('city_id')
+        district_id = json_dict.get('district_id')
+        place = json_dict.get('place')
+        #校驗參數
+        if not all([title ,receiver ,mobile ,area_id ,city_id ,district_id ,place]):
+            return HttpResponseForbidden('缺少必傳參數')
+        if not re.match('^09[\d]{8}$' ,mobile ):
+            return HttpResponseForbidden('您輸入的手機號碼格式不正確')
+        if email:
+            if not re.match('^[\w.-]+@[\w-]+(.[\w_-]+)+$' ,email ):
+                return HttpResponseForbidden('請確認Email格式是否正確')
+        # 實現主體業務邏輯:修改用戶送貨地址
+        try:
+            Address.objects.filter(id=address_id).update(
+                title=title ,
+                receiver=receiver ,
+                mobile=mobile ,
+                email=email ,
+                area_id=area_id ,
+                city_id=city_id ,
+                district_id=district_id ,
+                place=place ,
+            )
+            address = Address.objects.get(id=address_id)
+        except Exception as e:
+            logger.error(e)
+            return JsonResponse({'code':RETCODE.DBERR ,'errmsg':'修改用戶地址失敗' })
+        # 構造響應數據
+        address_dict = {
+            'id': address.id ,
+            'title': address.title ,
+            'receiver': address.receiver ,
+            'mobile': address.mobile ,
+            'email': address.email ,
+            'area': address.area.name ,
+            'city': address.city.name ,
+            'district': address.district.name ,
+            'place': address.place ,
+        }
+        # 返回響應
+        return JsonResponse({'code':RETCODE.OK ,'errmsg':'OK' ,'address':address_dict })
+
+    def delete(self ,request ,address_id ):
+
+        #實現主體業務邏輯:邏輯刪除
+        try:
+            Address.objects.filter(id=address_id).update(is_deleted=True)
+        except Exception as e:
+            logger.error(e)
+            return JsonResponse({'code':RETCODE.DBERR ,'errmsg':'刪除用戶地址失敗' })
+        return JsonResponse({'code':RETCODE.OK ,'errmsg':'刪除用戶地址成功'})
+
+class DefaultAddressView(LoginRequiredJsonMixin ,View):
+    """設置默認地址"""
+    def put(self ,request ,address_id ):
+
+        # 實現主體業務邏輯:將用戶默認地址設為當前地址
+        try:
+            request.user.default_address_id = address_id
+            request.user.save()
+        except Exception as e:
+            logger.error(e)
+            return JsonResponse({'code':RETCODE.DBERR ,'errmsg':'修改用戶默認地址失敗' })
+        # 返回響應
+        return JsonResponse({'code':RETCODE.OK ,'errmsg':'修改用戶默認地址成功'})
+
+class UpdateAddressTitleView(LoginRequiredJsonMixin ,View):
+    """修改地址標題"""
+    def put(self ,request ,address_id ):
+
+        # 提取參數
+        json_dict = json.loads(request.body.decode())
+        title = json_dict.get('title')
+        # 校驗參數
+        if not title:
+            return HttpResponseForbidden('缺少title')
+        # 實現主體業務邏輯:保存用戶取貨地址標題
+        try:
+            Address.objects.filter(id=address_id).update(title=title)
+        except Exception as e:
+            logger.error(e)
+            return JsonResponse({'code':RETCODE.DBERR ,'errmsg':'修改用戶地址標題失敗' })
+        # 返回響應
+        return JsonResponse({'code':RETCODE.OK ,'errmsg':'修改用戶地址標題成功' })

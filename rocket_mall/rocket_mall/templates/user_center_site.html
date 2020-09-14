@@ -55,33 +55,39 @@
 		<div class="left_menu_con clearfix">
 			<h3>用户中心</h3>
 			<ul>
-				<li><a href="user_center_info.html">· 個人資訊</a></li>
+				<li><a href="{{ url('users:info') }}">· 個人資訊</a></li>
 				<li><a href="user_center_order.html">· 我的訂單</a></li>
-				<li><a href="user_center_site.html" class="active">· 收貨地址</a></li>
+				<li><a class="active">· 收貨地址</a></li>
 				<li><a href="user_center_pass.html">· 修改密碼</a></li>
 			</ul>
 		</div>
 		<div class="right_content clearfix" v-cloak>
 			<div class="site_top_con">
-				<a>新增收貨地址</a>
-				<span>您已創建<b>2</b>個收貨地址，最多可創建<b>20</b>個</span>
+				<a @click="show_add_site">新增收貨地址</a>
+				<span>您已創建<b>[[ addresses.length ]]</b>個收貨地址，最多可創建<b>20</b>個</span>
 			</div>
 			<div class="site_con"v-for="(address ,index ) in addresses" v-cloak>
 				<div class="site_title">
+                    <div v-if="edit_title_index===index">
+                        <input type="text" v-model="input_title" name="">
+                        <input type="button" @click="save_title" name="" value="保 存">
+                        <input type="reset" @click="cancel_title" name="" value="取 消">
+                    </div>
 					<h3>[[ address.title ]]</h3>
-					<a href="javascript:;" class="edit_icon"></a>
-					<span class="del_site">×</span>
+					<a @click="show_edit_title(index)" class="edit_icon"></a>
+                    <em v-if="address.id===default_address_id">默認地址</em>
+					<span @click="show_delete_site(index)" class="del_site">×</span>
 				</div>
 				<ul class="site_list">
-					<li><span>收貨人</span><b>[[ address.receiver ]]</b></li>
-					<li><span>手機號碼</span><b>[[ address.mobile ]]</b></li>
-					<li><span>Email</span><b>[[ address.email ]]</b></li>
-					<li><span>所在地區</span><b>[[ address.area ]][[ address.city ]][[ address.district ]]</b></li>
-					<li><span>收貨地址</span><b>[[ address.place ]]</b></li>
+					<li><span>收貨人</span><b>&emsp;[[ address.receiver ]]</b></li>
+					<li><span>手機號碼</span><b>&emsp;[[ address.mobile ]]</b></li>
+					<li><span>Email</span><b>&emsp;[[ address.email ]]</b></li>
+					<li><span>所在地區</span><b>&emsp;[[ address.area ]][[ address.city ]][[ address.district ]]</b></li>
+					<li><span>收貨地址</span><b>&emsp;[[ address.place ]]</b></li>
 				</ul>
 				<div class="down_btn">
-					<a href="javascript:;" class="set_default">设为默认</a>
-					<a href="javascript:;" class="edit_icon">编辑</a>
+					<a @click="set_default(index)" v-if="address.id!=default_address_id" class="set_default">設為默認</a>
+					<a @click="show_edit_site(index)" class="edit_icon">编辑</a>
 				</div>
 			</div>
 		</div>
@@ -100,7 +106,7 @@
 		<p>電話：02-****6666    台北市*******66號</p>
 	</div>
 
-	<div class="pop_con" v-cloak>
+	<div v-show="is_show_edit" class="pop_con" v-cloak>
 		<div class="site_con site_pop">
 				<div class="site_pop_title">
 					<h3>新增收貨地址</h3>
@@ -136,25 +142,23 @@
 						<input type="text" v-model="form_address.place" @blur="check_place" @keyup="check_place" name="place" :placeholder="default_place">
                         <span v-show="error_place">請輸入地址</span>
 					</div>
-					<input type="button" name="" value="新 增" class="info_submit">
-					<input type="reset" name="" value="取 消" class="info_submit info_reset">
+					<input type="button" @click="save_address" name="" :value="add_title" class="info_submit">
+					<input type="reset" @click="is_show_edit=false" name="" value="取 消" class="info_submit info_reset">
 				</form>
 		</div>
 		<div class="mask"></div>
 	</div>
 
-{#	<div class="pop_con2">#}
-{#		<div class="confirm_pop">#}
-{#				<div class="confirm_pop_title">#}
-{#					<h3>确认删除</h3>#}
-{#					<a href="javascript:;">×</a>#}
-{#				</div>#}
-{#				<p>您确认删除当前地址吗？</p>#}
-{#				<input type="button" value="确 定" class="confirm_submit" />#}
-{#				<input type="button" value="取 消" class="confirm_submit confirm_cancel"  />#}
-{#		</div>#}
-{#		<div class="mask"></div>#}
-{#	</div>#}
+    <div class="pop_con" v-show="is_show_delete" v-cloak>
+		<div class="confirm_pop">
+                <div class="site_pop_title">
+					<h3>確認刪除當前地址?</h3>
+				</div>
+				<input type="button" @click="delete_address" value="確 定" class="pop_submit" />
+				<input type="button" @click="is_show_delete=false" value="取 消" class="pop_submit info_reset"  />
+		</div>
+		<div class="mask"></div>
+	</div>
 	</div>
     <script type="text/javascript">
         let addresses = {{ addresses | safe }} ;
