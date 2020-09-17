@@ -31,7 +31,7 @@ SECRET_KEY = '7+imyuf^#q^+z)yu#vd$!zsg)e*-19znv-2y7yq2n9wt@52u0+'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1','192.168.126.130']
+ALLOWED_HOSTS = ['127.0.0.1','192.168.126.130','www.rocketmall.gq']
 
 
 # Application definition
@@ -47,7 +47,8 @@ INSTALLED_APPS = [
     'contents', #首頁模塊
     'verifications', # 驗證模塊
     'oauth', # 第三方登錄模塊
-    'areas' # 收貨地址模塊
+    'areas', # 收貨地址模塊
+    'goods', # 商品模塊
 ]
 
 MIDDLEWARE = [

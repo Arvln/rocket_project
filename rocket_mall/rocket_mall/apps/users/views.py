@@ -243,7 +243,12 @@ class AddressCreateView(LoginRequiredJsonMixin ,View):
     """新增用戶收貨地址"""
     def post(self ,request ):
 
-        # 提取參數
+        #判斷用戶新增地址是否已達上限
+        #addresses_count = Address.objects.filter(user=request.user).count()
+        addresses_count = request.user.addresses.count()
+        if addresses_count > constants.USER_ADDRESS_COUNTS_LIMIT :
+            return JsonResponse({'code':RETCODE.THROTTLINGERR ,'errmsg':'新增地址數量已達上限' })
+        #提取參數
         json_dict = json.loads(request.body.decode())
         title = json_dict.get('title')
         receiver = json_dict.get('receiver')
@@ -253,7 +258,7 @@ class AddressCreateView(LoginRequiredJsonMixin ,View):
         city_id = json_dict.get('city_id')
         district_id = json_dict.get('district_id')
         place = json_dict.get('place')
-        # 校驗參數
+        #校驗參數
         if not all([title ,receiver ,mobile ,area_id ,city_id ,district_id ,place]):
             return HttpResponseForbidden('缺少必傳參數')
         if not re.match('^09[\d]{8}$' ,mobile ):
@@ -261,7 +266,7 @@ class AddressCreateView(LoginRequiredJsonMixin ,View):
         if email:
             if not re.match('^[\w.-]+@[\w-]+(.[\w_-]+)+$' ,email ):
                 return HttpResponseForbidden('請確認Email格式是否正確')
-        # 實現主體業務邏輯:新增用戶收貨地址
+        #實現主體業務邏輯:新增用戶收貨地址
         try:
             address = Address.objects.create(
                 user = request.user ,
@@ -281,7 +286,7 @@ class AddressCreateView(LoginRequiredJsonMixin ,View):
         except Exception as e:
             logger.error(e)
             return JsonResponse({'code':RETCODE.DBERR ,'errmsg':'新增用戶地址失敗' })
-        # 構造響應數據
+        #構造響應數據
         address_dict = {
             'id':address.id ,
             'title':address.title ,
@@ -293,7 +298,7 @@ class AddressCreateView(LoginRequiredJsonMixin ,View):
             'district':address.district.name ,
             'place':address.place ,
         }
-        # 返回響應
+        #返回響應
         return JsonResponse({'code':RETCODE.OK ,'errmsg':'OK' ,'address':address_dict })
 
 class UpdateDestroyAddressView(LoginRequiredJsonMixin ,View):

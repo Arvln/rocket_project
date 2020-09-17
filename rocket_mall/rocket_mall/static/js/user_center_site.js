@@ -20,6 +20,7 @@ let vm = new Vue({
         districts: [] ,
         addresses: [] ,
         default_address_id: default_address_id ,
+        address_limit: 20 ,
         add_title: '' ,
         input_title: '' ,
 
@@ -139,17 +140,21 @@ let vm = new Vue({
         },
         //展示新增表單彈窗時
         show_add_site() {
-            this.is_show_edit = true;
-            this.clear_all_errors();
-            this.form_address.title = '';
-            this.form_address.receiver = '';
-            this.form_address.mobile = '';
-            this.form_address.email = '';
-            this.form_address.area_id = '';
-            this.form_address.city_id = '';
-            this.form_address.district_id = '';
-            this.form_address.place = '';
-            this.add_title = '新 增';
+            if (this.addresses.length > this.address_limit ){
+                alert('新增地址數量已達上限') ;
+            } else {
+                this.is_show_edit = true;
+                this.clear_all_errors();
+                this.form_address.title = '';
+                this.form_address.receiver = '';
+                this.form_address.mobile = '';
+                this.form_address.email = '';
+                this.form_address.area_id = '';
+                this.form_address.city_id = '';
+                this.form_address.district_id = '';
+                this.form_address.place = '';
+                this.add_title = '新 增';
+            }
         },
         //清空所有錯誤訊息
         clear_all_errors() {
@@ -238,12 +243,12 @@ let vm = new Vue({
                console.log(error.response) ;
            })
         },
-        //
+        //展示確認刪除彈框時
         show_delete_site(index){
             this.is_show_delete = true ;
             this.delete_address_index = index ;
         },
-        //
+        //邏輯刪除地址
         delete_address(){
             let url = this.api.ModifyRemoveAddressUrl + this.addresses[this.delete_address_index].id + '/' ;
             axios.delete(url ,{

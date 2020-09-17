@@ -64,7 +64,7 @@
 		<div class="right_content clearfix" v-cloak>
 			<div class="site_top_con">
 				<a @click="show_add_site">新增收貨地址</a>
-				<span>您已創建<b>[[ addresses.length ]]</b>個收貨地址，最多可創建<b>20</b>個</span>
+				<span>您已創建<b>[[ addresses.length ]]</b>個收貨地址，最多可創建<b>[[ address_limit ]]</b>個</span>
 			</div>
 			<div class="site_con"v-for="(address ,index ) in addresses" v-cloak>
 				<div class="site_title">
