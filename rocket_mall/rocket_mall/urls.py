@@ -31,4 +31,6 @@ urlpatterns = [
     url(r'^', include(('areas.urls' , 'areas'))),
     # 商品模塊
     url(r'^', include(('goods.urls', 'goods') ,namespace='goods')),
+    # 商品搜索模塊:haystack
+    url(r'^search/', include(('haystack.urls'))),
 ]

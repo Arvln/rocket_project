@@ -18,7 +18,7 @@ class ListView(View):
         # 校驗category_id
         try:
             category = GoodsCategory.objects.get(id=category_id)
-        except Exception as e:
+        except Exception:
             return HttpResponseForbidden('商品類別不存在')
         # 獲取商品分類
         categories = get_categories()
@@ -68,7 +68,7 @@ class HotGoodsView(View):
         # 查詢銷量最高的前兩個上架商品
         try:
             skus = SKU.objects.filter(category_id=category_id, is_launched=True).order_by('-sales')[:2]
-        except Exception as e:
+        except Exception:
             return HttpResponseForbidden('商品類別不存在')
         # 構造響應數據
         hot_skus = []

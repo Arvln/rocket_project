@@ -11,7 +11,7 @@
     <script type="text/javascript" src="{{ static('js/jquery-1.12.4.min.js') }}"></script>
 </head>
 <body>
-<div id="app">
+    <div id="app" v-cloak>
 	<div class="header_con">
         <div class="header" v-cloak>
             <div class="welcome fl">歡迎光臨RockeT</div>
@@ -83,93 +83,29 @@
         </div>
     </div>
 
-	<div class="navbar_con">
-		<div class="navbar">
-			<div class="sub_menu_con fl">
-				<h1 class="fl">商品分类</h1>
-				<ul class="sub_menu">
-					{% for group in categories.values() %}
-                        <li>
-                        <div class="level1">
-                            {% for channel in group.channels %}
-                                <a href="{{ channel.url }}">{{ channel.name }}</a>
-                            {% endfor %}
-                        </div>
-                        <div class="level2">
-                            {% for cat2 in group.sub_cats %}
-                            <div class="list_group">
-                                <div class="group_name fl">{{ cat2.name }} &gt;</div>
-                                <div class="group_detail fl">
-                                    {% for cat3 in cat2.sub_cats %}
-                                        <a href="/api/list/{{ cat3.id }}/1/">{{ cat3.name }}</a>
-                                    {% endfor %}
-                                </div>
-                            </div>
-                            {% endfor %}
-                        </div>
-                    </li>
-                    {% endfor %}
-				</ul>
-			</div>
-
-
-			<ul class="navlist fl">
-				<li><a href="">現領購物金</a></li>
-				<li class="interval">|</li>
-				<li><a href="">免運省荷包</a></li>
-				<li class="interval">|</li>
-				<li><a href="">羅奇團購趣</a></li>
-			</ul>
-		</div>
-	</div>
-
-	<div class="breadcrumb">
-        <a href="javascript:;">{{ breadcrumb.cat1.name }}</a>
-        <span>></span>
-        <a href="javascript:;">{{ breadcrumb.cat2.name }}</a>
-        <span>></span>
-        <a href="javascript:;">{{ breadcrumb.cat3.name }}</a>
-	</div>
-
-	<div class="main_wrap clearfix">
-		<div class="l_wrap fl clearfix">
-			<div class="new_goods">
-				<h3>暢銷商品</h3>
-				<ul>
-					<li v-for="sku in hot_skus">
-						<a :href="sku.url"><img :src="sku.default_image_url"></a>
-						<h4><a :href="sku.url">[[ sku.name ]]</a></h4>
-						<div class="price">$[[ sku.price ]]</div>
-					</li>
-				</ul>
-			</div>
-		</div>
-
-		<div class="r_wrap fr clearfix">
-			<div class="sort_bar">
-				<a href="{{ url('goods:list' ,args=(category_id,1)) }}?sort=default" {% if sort=="default" %}class="active"{% endif %}>最新上架</a>
-				<a href="{{ url('goods:list' ,args=(category_id,1)) }}?sort=price" {% if sort=="price" %}class="active"{% endif %}>價格最低</a>
-				<a href="{{ url('goods:list' ,args=(category_id,1)) }}?sort=hot" {% if sort=="hot" %}class="active"{% endif %}>人氣最高</a>
-			</div>
-
-			<ul class="goods_type_list clearfix">
-                {% for sku in page_skus %}
+    <div class="main_wrap clearfix">
+        <div class=" clearfix">
+            <ul class="goods_type_list clearfix">
+                {% for sku in page %}
                     <li>
-                        <a href="detail.html"><img src="{{ sku.default_image_url }}"></a>
-                        <h4><a href="detail.html">{{ sku.name }}</a></h4>
+                        <a href="detail.html"><img src="{{ sku.object.default_image_url }}"></a>
+                        <h4><a href="detail.html">{{ sku.object.name }}</a></h4>
                         <div class="operate">
-                            <span class="price">${{ sku.price }}</span>
+                            <span class="price">${{ sku.object.price }}</span>
+                            <span>{{ sku.object.comments }}則評論</span>
                             <span class="unit">台</span>
                             <a href="#" class="add_goods" title="加入购物车"></a>
                         </div>
                     </li>
+                {% else %}
+                    <p>沒有找到您要查詢的商品</p>
                 {% endfor %}
-			</ul>
-			<div class="pagenation">
+            </ul>
+            <div class="pagenation">
                 <div id="pagination" class="page"></div>
             </div>
-		</div>
-	</div>
+        </div>
+    </div>
 
 	<div class="footer">
 		<div class="foot_link">
@@ -184,23 +120,19 @@
 		<p>CopyRight © 2020 RockeT. All Rights Reserved</p>
 		<p>電話：02-****6666    台北市*******66號</p>
 	</div>
-	</div>
-    <script type="text/javascript">
-        let category_id = {{ category_id }} ;
-    </script>
-	<script type="text/javascript" src="{{ static('js/api.js') }}"></script>
+    </div>
+    <script type="text/javascript" src="{{ static('js/api.js') }}"></script>
 	<script type="text/javascript" src="{{ static('js/common.js') }}"></script>
-	<script type="text/javascript" src="{{ static('js/list.js') }}"></script>
-	<script type="text/javascript" src="{{ static('js/jquery.pagination.min.js') }}"></script>
-	<script>
+    <script type="text/javascript" src="{{ static('js/search.js') }}"></script>
+    <script type="text/javascript" src="{{ static('js/jquery.pagination.min.js') }}"></script>
+    <script>
         $(function () {
             $('#pagination').pagination({
-                currentPage: {{ page_num }},    //當前所在頁碼
-                totalPage: {{ total_page }},    //總頁數
+                currentPage: {{ page.number }},
+                totalPage: {{ paginator.num_pages }},
                 callback:function (current) {
-{#                    // location.href = '/api/list/117/1/?sort=default';#} //拍照手機
-{#                    // location.href = '/api/list/157/1/?sort=default';#} //筆記型電腦
-                         location.href = '/api/list/{{ category_id }}/' + current + '/?sort={{ sort }}';
+                    // location.href = '/search/?q=iphone&amp;page=1';
+                    location.href = '/search/?q={{ query }}&page=' + current;
                 }
             })
         });

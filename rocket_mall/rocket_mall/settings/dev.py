@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'oauth', # 第三方登錄模塊
     'areas', # 收貨地址模塊
     'goods', # 商品模塊
+    'haystack',
 ]
 
 MIDDLEWARE = [
@@ -256,3 +257,18 @@ DEFAULT_FILE_STORAGE = 'rocket_mall.utils.fastdfs.fdfs_storage.FastdfsStorage'
 
 #fastdfs容器
 FASTDFS_BASE_URL = 'http://172.20.0.3:8888/'
+
+#haystack
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.elasticsearch_backend.ElasticsearchSearchEngine',
+        'URL': 'http://172.21.0.2:9200/', #Elasticsearch服務器ip地址，端口固定為9200
+        'INDEX_NAME': 'rocket_mall', #Elasticsearch建立的索引庫的名稱
+    },
+}
+
+#當添加、修改、刪除數據時，自動生成索引
+HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
+
+#haystack分頁每頁條數
+HAYSTACK_SEARCH_RESULTS_PER_PAGE = 5
