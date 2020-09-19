@@ -1,0 +1,208 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+	<title>美多商城-商品列表</title>
+	<link rel="stylesheet" type="text/css" href="{{ static('css/jquery.pagination.css') }}">
+	<link rel="stylesheet" type="text/css" href="{{ static('css/reset.css') }}">
+	<link rel="stylesheet" type="text/css" href="{{ static('css/main.css') }}">
+	<script type="text/javascript" src="{{ static('js/vue-2.6.12.js') }}"></script>
+    <script type="text/javascript" src="{{ static('js/axios-0.18.0.min.js') }}"></script>
+    <script type="text/javascript" src="{{ static('js/jquery-1.12.4.min.js') }}"></script>
+</head>
+<body>
+<div id="app">
+	<div class="header_con">
+        <div class="header" v-cloak>
+            <div class="welcome fl">歡迎光臨RockeT</div>
+            <div class="fr">
+                <div v-if="username" class="login_btn fl">
+                    <em>[[ username ]]</em>
+                    <span>|</span>
+                    <a href="{{ url('users:logout') }}">登出</a>
+                </div>
+                <div v-else class="login_btn fl">
+                    <a href="{{ url('users:login') }}">登入</a>
+                    <span>|</span>
+                    <a href="{{ url('users:register') }}">註冊</a>
+                </div>
+                <div class="user_link fl">
+                    <span>|</span>
+                    <a href="{{ url('users:info') }}">用戶中心</a>
+                    <span>|</span>
+                    <a href="cart.html">我的購物車</a>
+                    <span>|</span>
+                    <a href="#">我的訂單</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+	<div class="search_bar clearfix">
+        <a href="index.html" class="logo fl"><img src="{{ static('images/logo.png') }}"></a>
+        <div class="search_wrap fl">
+            <form method="get" action="/search.html" class="search_con">
+                <input type="text" class="input_text fl" name="q" placeholder="搜索商品">
+                <input type="submit" class="input_btn fr" name="" value="搜索">
+            </form>
+            <ul class="search_suggest fl">
+                <li><a href="#">造型悠遊卡</a></li>
+                <li><a href="#">懶人沙發</a></li>
+                <li><a href="#">碎花洋裝</a></li>
+                <li><a href="#">人氣月餅禮盒</a></li>
+            </ul>
+        </div>
+
+        <div class="guest_cart fr">
+            <a href="#" class="cart_name fl">我的購物車</a>
+            <div class="goods_count fl" id="show_count">15</div>
+
+            <ul class="cart_goods_show">
+                <li>
+                    <img src="{{ static('images/goods/goods001.jpg') }}" alt="商品图片">
+                    <h4>商品名称手机</h4>
+                    <div>4</div>
+                </li>
+                <li>
+                    <img :src="photo_url" alt="商品图片">
+                    <h4>商品名称手机</h4>
+                    <div>5</div>
+                </li>
+                <li>
+                    <img src="{{ static('images/goods/goods003.jpg') }}" alt="商品图片">
+                    <h4>商品名称手机</h4>
+                    <div>6</div>
+                </li>
+                <li>
+                    <img src="{{ static('images/goods/goods003.jpg') }}" alt="商品图片">
+                    <h4>商品名称手机</h4>
+                    <div>6</div>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+	<div class="navbar_con">
+		<div class="navbar">
+			<div class="sub_menu_con fl">
+				<h1 class="fl">商品分类</h1>
+				<ul class="sub_menu">
+					{% for group in categories.values() %}
+                        <li>
+                        <div class="level1">
+                            {% for channel in group.channels %}
+                                <a href="{{ channel.url }}">{{ channel.name }}</a>
+                            {% endfor %}
+                        </div>
+                        <div class="level2">
+                            {% for cat2 in group.sub_cats %}
+                            <div class="list_group">
+                                <div class="group_name fl">{{ cat2.name }} &gt;</div>
+                                <div class="group_detail fl">
+                                    {% for cat3 in cat2.sub_cats %}
+                                        <a href="/api/list/{{ cat3.id }}/1/">{{ cat3.name }}</a>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </li>
+                    {% endfor %}
+				</ul>
+			</div>
+
+
+			<ul class="navlist fl">
+				<li><a href="">現領購物金</a></li>
+				<li class="interval">|</li>
+				<li><a href="">免運省荷包</a></li>
+				<li class="interval">|</li>
+				<li><a href="">羅奇團購趣</a></li>
+			</ul>
+		</div>
+	</div>
+
+	<div class="breadcrumb">
+        <a href="javascript:;">{{ breadcrumb.cat1.name }}</a>
+        <span>></span>
+        <a href="javascript:;">{{ breadcrumb.cat2.name }}</a>
+        <span>></span>
+        <a href="javascript:;">{{ breadcrumb.cat3.name }}</a>
+	</div>
+
+	<div class="main_wrap clearfix">
+		<div class="l_wrap fl clearfix">
+			<div class="new_goods">
+				<h3>暢銷商品</h3>
+				<ul>
+					<li v-for="sku in hot_skus">
+						<a :href="sku.url"><img :src="sku.default_image_url"></a>
+						<h4><a :href="sku.url">[[ sku.name ]]</a></h4>
+						<div class="price">[[ sku.price ]]</div>
+					</li>
+				</ul>
+			</div>
+		</div>
+
+		<div class="r_wrap fr clearfix">
+			<div class="sort_bar">
+				<a href="{{ url('goods:list' ,args=(category_id,1)) }}?sort=default" {% if sort=="default" %}class="active"{% endif %}>最新上架</a>
+				<a href="{{ url('goods:list' ,args=(category_id,1)) }}?sort=price" {% if sort=="price" %}class="active"{% endif %}>價格最低</a>
+				<a href="{{ url('goods:list' ,args=(category_id,1)) }}?sort=hot" {% if sort=="hot" %}class="active"{% endif %}>人氣最高</a>
+			</div>
+
+			<ul class="goods_type_list clearfix">
+                {% for sku in page_skus %}
+                    <li>
+                        <a href="detail.html"><img src="{{ sku.default_image_url }}"></a>
+                        <h4><a href="detail.html">{{ sku.name }}</a></h4>
+                        <div class="operate">
+                            <span class="price">{{ sku.price }}</span>
+                            <span class="unit">台</span>
+                            <a href="#" class="add_goods" title="加入购物车"></a>
+                        </div>
+                    </li>
+                {% endfor %}
+			</ul>
+			<div class="pagenation">
+                <div id="pagination" class="page"></div>
+            </div>
+		</div>
+	</div>
+
+	<div class="footer">
+		<div class="foot_link">
+			<a href="#">客服中心</a>
+			<span>|</span>
+			<a href="#">關於羅奇</a>
+			<span>|</span>
+			<a href="#">人才招募</a>
+			<span>|</span>
+			<a href="#">物流合作</a>
+		</div>
+		<p>CopyRight © 2020 RockeT. All Rights Reserved</p>
+		<p>電話：02-****6666    台北市*******66號</p>
+	</div>
+	</div>
+    <script type="text/javascript">
+        let category_id = {{ category_id }} ;
+    </script>
+	<script type="text/javascript" src="{{ static('js/api.js') }}"></script>
+	<script type="text/javascript" src="{{ static('js/common.js') }}"></script>
+	<script type="text/javascript" src="{{ static('js/list.js') }}"></script>
+	<script type="text/javascript" src="{{ static('js/jquery.pagination.min.js') }}"></script>
+	<script>
+        $(function () {
+            $('#pagination').pagination({
+                currentPage: {{ page_num }},    //當前所在頁碼
+                totalPage: {{ total_page }},    //總頁數
+                callback:function (current) {
+{#                    // location.href = '/api/list/117/1/?sort=default';#} //拍照手機
+{#                    // location.href = '/api/list/157/1/?sort=default';#} //筆記型電腦
+                         location.href = '/api/list/{{ category_id }}/' + current + '/?sort={{ sort }}';
+                }
+            })
+        });
+    </script>
+</body>
+</html>

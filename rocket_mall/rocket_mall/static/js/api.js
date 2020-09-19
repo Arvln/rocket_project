@@ -16,4 +16,5 @@ const api = {
     ModifyRemoveAddressUrl: ApiRootUrl + 'addresses/put_delete/', //修改或刪除用戶收貨地址接口
     DefaultAddressUrl: ApiRootUrl + 'addresses/default/put/', //設置默認地址接口
     AddressTitleUrl: ApiRootUrl + 'addresses/title/put/', //修改地址標題接口
+    HotGoodUrl: ApiRootUrl + 'hot_good/get/', //查詢暢銷商品的接口
 }

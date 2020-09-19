@@ -234,7 +234,7 @@ class AddressView(LoginRequiredJsonMixin ,View):
             address_list.append(address_dict)
         context = {
             'addresses':address_list ,
-            'default_address_id':request.user.default_address_id ,
+            'default_address_id':request.user.default_address_id or '0' , #地址清空後用字串0占位
         }
         #返回響應
         return render(request ,'user_center_site.html' ,context )

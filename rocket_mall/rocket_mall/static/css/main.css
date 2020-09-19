@@ -153,7 +153,7 @@ html,body{height:100%}
 .navbar .subnav_con:hover .subnav{display:block;}
 
 
-.navlist{margin-left:34px;}
+.navlist{margin-left:55px;}
 .navlist li{float:left;line-height:30px;}
 .navlist li a{color:#666;font-size:14px}
 .navlist li a:hover{color:#ff8800}

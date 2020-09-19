@@ -29,4 +29,6 @@ urlpatterns = [
     url(r'^', include(('oauth.urls', 'oauth') ,namespace='oauth')),
     # 用戶收貨地址模塊
     url(r'^', include(('areas.urls' , 'areas'))),
+    # 商品模塊
+    url(r'^', include(('goods.urls', 'goods') ,namespace='goods')),
 ]

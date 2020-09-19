@@ -250,3 +250,9 @@ EMAIL_USE_SSL = False
 
 #郵箱驗證鏈接
 EMAIL_VERIFY_URL = 'http://192.168.126.130:8000/api/email/verification/get/'
+
+#指定自定義文件存儲類
+DEFAULT_FILE_STORAGE = 'rocket_mall.utils.fastdfs.fdfs_storage.FastdfsStorage'
+
+#fastdfs容器
+FASTDFS_BASE_URL = 'http://172.20.0.3:8888/'
