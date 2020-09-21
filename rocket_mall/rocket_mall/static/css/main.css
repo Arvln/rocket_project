@@ -593,8 +593,8 @@ html,body{height:100%}
 .goods_detail_list h3{font-size:24px;line-height:24px;color:#666;font-weight:normal;}
 .goods_detail_list p{color:#666;line-height:40px;}
 .price_bar{height:72px;background-color:#fff5f5;line-height:72px;}
-.price_bar .show_pirze{font-size:20px;color:#ff3e3e;padding-left:20px}
-.price_bar .show_pirze em{font-style:normal;font-size:36px;padding-left:10px}
+.price_bar .show_pirce{font-size:20px;color:#ff3e3e;padding-left:20px}
+.price_bar .show_pirce em{font-style:normal;font-size:36px;padding-left:10px}
 .price_bar .show_unit{padding-left:150px}
 .price_bar .goods_judge{float:right;border-left:1px solid #999;height:20px;line-height:20px;margin-right:20px;padding-left:20px;margin-top:40px;}
 .price_bar .goods_judge:hover{text-decoration:underline}

@@ -17,4 +17,6 @@ const api = {
     DefaultAddressUrl: ApiRootUrl + 'addresses/default/put/', //設置默認地址接口
     AddressTitleUrl: ApiRootUrl + 'addresses/title/put/', //修改地址標題接口
     HotGoodUrl: ApiRootUrl + 'hot_good/get/', //查詢暢銷商品的接口
+    DetailVisitUrl: ApiRootUrl + 'guest/', //統計分類商品訪問量的接口
+    UserBrowseHistoryUrl: ApiRootUrl + 'browse_histories/', //保存用戶商品瀏覽紀錄的接口
 }

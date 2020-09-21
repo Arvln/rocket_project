@@ -14,6 +14,7 @@ from users.utils import LoginBackend ,generate_verify_email_url ,check_verify_em
 from utils.views import LoginRequiredJsonMixin
 from . import constants
 from celery_tasks.email.tasks import send_verify_mail
+from goods.models import SKU
 
 # Create your views here.
 
@@ -396,3 +397,49 @@ class UpdateAddressTitleView(LoginRequiredJsonMixin ,View):
             return JsonResponse({'code':RETCODE.DBERR ,'errmsg':'修改用戶地址標題失敗' })
         # 返回響應
         return JsonResponse({'code':RETCODE.OK ,'errmsg':'修改用戶地址標題成功' })
+
+class UserBrowseHistory(LoginRequiredJsonMixin ,View):
+    """用戶瀏覽紀錄"""
+    def get(self ,request ):
+        """獲取用戶瀏覽紀錄"""
+
+        redis_conn = get_redis_connection('history')
+        user = request.user
+        #取出用戶瀏覽商品列表
+        sku_ids = redis_conn.lrange('history_%s' % user.id ,0 ,-1 )
+        #構造響應數據
+        skus = []
+        for sku_id in sku_ids:
+            sku = SKU.objects.get(id=sku_id)
+            skus.append({
+                'id':sku.id ,
+                'name':sku.name ,
+                'price':sku.price ,
+                'comments':sku.comments ,
+                'default_image_url':sku.default_image_url ,
+            })
+        return JsonResponse({'code':RETCODE.OK ,'errmsg':'OK' ,'skus':skus })
+
+    def post(self ,request ):
+        """保存用戶瀏覽紀錄"""
+
+        #接收參數
+        sku_id = json.loads(request.body.decode()).get('sku_id')
+        #校驗參數
+        try:
+            SKU.objects.get(id=sku_id)
+        except Exception:
+            return HttpResponseForbidden('該商品不存在')
+        #保存瀏覽商品紀錄:存到redis三號庫，以list存儲
+        redis_conn = get_redis_connection('history')
+        pl = redis_conn.pipeline()
+        #先去重
+        user = request.user
+        pl.lrem('history_%s' % user.id ,0 ,sku_id )
+        #再保存
+        pl.lpush('history_%s' % user.id ,sku_id )
+        #再擷取
+        pl.ltrim('history_%s' % user.id ,0 ,4 )
+        pl.execute()
+        #返回響應
+        return JsonResponse({'code':RETCODE.OK ,'errmsg':'OK' })

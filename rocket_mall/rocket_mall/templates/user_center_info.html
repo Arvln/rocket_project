@@ -79,48 +79,13 @@
             <h3 class="common_title2">最新查詢</h3>
             <div class="has_view_list">
                     <ul class="goods_type_list clearfix">
-                        <li>
-                            <a href="detail.html"><img src="{{ static('images/goods/goods003.jpg') }}"></a>
-                            <h4><a href="detail.html">品名</a></h4>
+                        <li v-for="history in histories">
+                            <a :href="history.url"><img :src="history.default_image_url"></a>
+                            <h4><a :href="history.url">[[ history.name ]]</a></h4>
                             <div class="operate">
-                                <span class="prize">￥2699.00</span>
+                                <span class="price">$[[ history.price ]]</span>
                                 <span class="unit">台</span>
-                                <a href="#" class="add_goods" title="加入購物車"></a>
-                            </div>
-                        </li>
-                        <li>
-                            <a href="detail.html"><img src="{{ static('images/goods/goods004.jpg') }}"></a>
-                            <h4><a href="detail.html">360手機 N6 Pro 全網通</a></h4>
-                            <div class="operate">
-                                <span class="prize">￥2699.00</span>
-                                <span class="unit">台</span>
-                                <a href="#" class="add_goods" title="加入購物車"></a>
-                            </div>
-                        </li>
-                        <li>
-                            <a href="detail.html"><img src="{{ static('images/goods/goods005.jpg') }}"></a>
-                            <h4><a href="detail.html">360手機 N6 Pro 全網通</a></h4>
-                            <div class="operate">
-                                <span class="prize">￥2699.00</span>
-                                <span class="unit">台</span>
-                                <a href="#" class="add_goods" title="加入購物車"></a>
-                            </div>
-                        </li>
-                        <li>
-                            <a href="detail.html"><img src="{{ static('images/goods/goods006.jpg') }}"></a>
-                            <h4><a href="detail.html">360手機 N6 Pro 全網通</a></h4>
-                            <div class="operate">
-                                <span class="prize">￥2699.00</span>
-                                <span class="unit">台</span>
-                                <a href="#" class="add_goods" title="加入購物車"></a>
-                            </div>
-                        </li>
-                        <li>
-                            <a href="detail.html"><img src="{{ static('images/goods/goods007.jpg') }}"></a>
-                            <h4><a href="detail.html">360手機 N6 Pro 全網通</a></h4>
-                            <div class="operate">
-                                <span class="prize">￥2699.00</span>
-                                <span class="unit">台</span>
+                                <span>[[ history.comments ]]則評論</span>
                                 <a href="#" class="add_goods" title="加入購物車"></a>
                             </div>
                         </li>

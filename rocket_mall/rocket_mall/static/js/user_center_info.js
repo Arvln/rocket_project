@@ -18,6 +18,9 @@ let vm = new Vue({
         send_email_tip: '重新發送驗證Email' ,
         send_email_btn_disabled: false ,
 
+        //用戶瀏覽紀錄
+        histories:[] ,
+        ApiRootUrl: ApiRootUrl ,
         api: api ,
     },
     mounted(){
@@ -25,6 +28,8 @@ let vm = new Vue({
         this.set_email = (this.email === '') ? true : false ;
         //頁面刷新時，檢查Email是否驗證
         this.email_active = (this.email_active == 'True') ? true : false ;
+        //獲取用戶瀏覽紀錄
+        this.browse_histories() ;
     },
     methods:{
         //檢查Email格式
@@ -67,6 +72,20 @@ let vm = new Vue({
         cancel_email(){
             this.email = '' ;
             this.error_email = false ;
+        },
+        //獲取用戶瀏覽紀錄
+        browse_histories() {
+            let url = this.api.UserBrowseHistoryUrl ;
+            axios.get(url ,{
+                responseType: 'json' ,
+            }).then(response=>{
+                this.histories = response.data.skus ;
+                for (let i=0 ;i<this.histories.length ;i++ ){
+                    this.histories[i].url = this.ApiRootUrl + 'detail/' +this.histories[i].id + '/' ;
+                }
+            }).catch(error=>{
+                console.log(error.response) ;
+            })
         },
     }
 })

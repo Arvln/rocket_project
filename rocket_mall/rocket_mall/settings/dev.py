@@ -135,6 +135,13 @@ CACHES = {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }
     },
+    "history": { #history
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://:123@172.19.0.2:6379/3", # :password@
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    },
 }
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 SESSION_CACHE_ALIAS = "session"

@@ -30,4 +30,6 @@ urlpatterns = [
     url(r'^api/addresses/default/put/(?P<address_id>\d+)/$' ,views.DefaultAddressView.as_view() ),
     #修改地址標題後端接口
     url(r'^api/addresses/title/put/(?P<address_id>\d+)/$' ,views.UpdateAddressTitleView.as_view() ),
+    #保存用戶商品瀏覽紀錄的後端接口
+    url(r'^api/browse_histories/$' ,views.UserBrowseHistory.as_view() ),
 ]
