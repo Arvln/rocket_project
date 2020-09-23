@@ -2,10 +2,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
 	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-	<title>美多商城-商品详情</title>
+	<title>RockeT|物超所值配送最快</title>
 	<link rel="stylesheet" type="text/css" href="{{ static('css/reset.css') }}">
 	<link rel="stylesheet" type="text/css" href="{{ static('css/main.css') }}">
-	<script type="text/javascript" src="{{ static('js/common.js') }}"></script>
 	<script type="text/javascript" src="{{ static('js/vue-2.6.12.js') }}"></script>
     <script type="text/javascript" src="{{ static('js/axios-0.18.0.min.js') }}"></script>
 </head>
@@ -29,7 +28,7 @@
                     <span>|</span>
                     <a href="{{ url('users:info') }}">用戶中心</a>
                     <span>|</span>
-                    <a href="cart.html">我的購物車</a>
+                    <a href="{{ url('carts:info') }}">我的購物車</a>
                     <span>|</span>
                     <a href="user_center_order.html">我的訂單</a>
                 </div>
@@ -53,7 +52,7 @@
         </div>
 
 		<div class="guest_cart fr">
-            <a href="/carts/" class="cart_name fl">我的购物车</a>
+            <a @click="get_carts" class="cart_name fl">我的購物車</a>
             <div class="goods_count fl" id="show_count">[[ cart_total_count ]]</div>
             <ul class="cart_goods_show">
                 <li v-for="cart in carts">
@@ -145,7 +144,7 @@
             {% endfor %}
 			<div class="total">總 價&emsp;&emsp;<em>$[[ sku_amount ]]</em></div>
 			<div class="operate_btn">
-				<a href="javascript:;" class="add_cart" id="add_cart">加入购物车</a>
+				<a @click="add_carts" class="add_cart" id="add_cart">加入購物車</a>
 			</div>
 		</div>
 	</div>

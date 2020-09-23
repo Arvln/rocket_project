@@ -18,5 +18,7 @@ const api = {
     AddressTitleUrl: ApiRootUrl + 'addresses/title/put/', //修改地址標題接口
     HotGoodUrl: ApiRootUrl + 'hot_good/get/', //查詢暢銷商品的接口
     DetailVisitUrl: ApiRootUrl + 'guest/', //統計分類商品訪問量的接口
-    UserBrowseHistoryUrl: ApiRootUrl + 'browse_histories/', //保存用戶商品瀏覽紀錄的接口
+    UserBrowseHistoryUrl: ApiRootUrl + 'browse_histories/', //保存用戶商品瀏覽紀錄的接口\
+    CartsUrl: ApiRootUrl + 'carts/', //獲取、新增、修改、刪除購物車資訊的接口
+    CartsSelectAllUrl: ApiRootUrl + 'carts/selection/', //購物車全選的接口
 }

@@ -1,11 +1,11 @@
 let vm = new Vue({
     el: '#app',
-    //修改Vue變量的讀取語法，避免和jinja2模板語法沖突
+    //修改Vue變量的讀取語法，避免和jinja2模板語法衝突
     delimiters: ['[[', ']]'],
     data: {
         username: getCookie('username') ,
         hot_skus: [],
-        //sku_id: sku_id,
+        sku_id: sku_id,
         sku_count: 1,
         sku_price: sku_price,
         sku_amount: 0,
@@ -17,32 +17,20 @@ let vm = new Vue({
             service: false
         },
         comments: [],
-        score_classes: {
-            1: 'stars_one',
-            2: 'stars_two',
-            3: 'stars_three',
-            4: 'stars_four',
-            5: 'stars_five',
-        },
-        cart_total_count: 0, // 购物车总数量
-        carts: [], // 购物车数据,
-        sku_id: sku_id ,
+        cart_total_count: 0 ,
+        carts: [] ,
         api: api ,
     },
     mounted(){
         //獲取暢銷商品數據
         this.get_hot_goods();
 
-        // 保存用户浏览记录
+        //保存用戶瀏覽紀錄
         this.save_browse_histories();
 
-        // 获取购物车数据
+        //獲取購物車數據
         this.get_carts();
 
-        // 获取商品评价信息
-        this.get_goods_comment();
-
-        this.username = getCookie('username');
     },
     watch: {
         //監聽商品數據變化
@@ -50,7 +38,7 @@ let vm = new Vue({
             handler(newValue){
                 this.sku_amount = (newValue * this.sku_price).toFixed(2);
             },
-            immediate: true
+            immediate: true ,
         }
     },
     methods: {
@@ -60,7 +48,7 @@ let vm = new Vue({
                 this.sku_count++ ;
             } else {
                 this.sku_count = 5 ;
-                alert('已達購買上限!') ;
+                alert('商品已達購買上限!') ;
             }
             this.sku_amount = (this.sku_count * this.sku_price).toFixed(2) ;
         },
@@ -143,68 +131,37 @@ let vm = new Vue({
                 console.log(error.response) ;
             })
         },
-        // 加入购物车
-        add_cart(){
-            var url = this.host + '/carts/';
-            axios.post(url, {
-                sku_id: parseInt(this.sku_id),
-                count: this.sku_count
-            }, {
-                headers: {
-                    'X-CSRFToken': getCookie('csrftoken')
+        //加入購物車
+        add_carts(){
+            let url = this.api.CartsUrl ;
+            axios.post(url ,{
+                sku_id:parseInt(this.sku_id) ,
+                count:this.sku_count ,
+            },{
+                headers:{
+                    'X-CSRFToken':getCookie('csrftoken') ,
                 },
-                responseType: 'json',
-                withCredentials: true
+                responseType:'json' ,
+            }).then(response=>{
+                if (response.data.code === '0'){
+                    console.log(response.data) ;
+                } else {
+                    alert(response.data.errmsg) ;
+                }
+            }).catch(error=>{
+                console.log(error.response) ;
             })
-                .then(response => {
-                    if (response.data.code == '0') {
-                        alert('添加购物车成功');
-                        this.cart_total_count += this.sku_count;
-                    } else { // 参数错误
-                        alert(response.data.errmsg);
-                    }
-                })
-                .catch(error => {
-                    console.log(error.response);
-                })
         },
-        // 获取购物车数据
+        //獲取購物車數據
         get_carts(){
-            var url = this.host + '/carts/simple/';
+            let url = this.api.CartsUrl;
             axios.get(url, {
                 responseType: 'json',
+            }).then(response => {
+
+            }).catch(error => {
+                console.log(error.response);
             })
-                .then(response => {
-                    this.carts = response.data.cart_skus;
-                    this.cart_total_count = 0;
-                    for (var i = 0; i < this.carts.length; i++) {
-                        if (this.carts[i].name.length > 25) {
-                            this.carts[i].name = this.carts[i].name.substring(0, 25) + '...';
-                        }
-                        this.cart_total_count += this.carts[i].count;
-                    }
-                })
-                .catch(error => {
-                    console.log(error.response);
-                })
-        },
-        // 获取商品评价信息
-        get_goods_comment(){
-            if (this.sku_id) {
-                var url = this.hots + '/comment/' + this.sku_id + '/';
-                axios.get(url, {
-                    responseType: 'json'
-                })
-                    .then(response => {
-                        this.comments = response.data.goods_comment_list;
-                        for (var i = 0; i < this.comments.length; i++) {
-                            this.comments[i].score_class = this.score_classes[this.comments[i].score];
-                        }
-                    })
-                    .catch(error => {
-                        console.log(error.response);
-                    });
-            }
         },
     }
 });

@@ -1,0 +1,123 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <title>RockeT|物超所值配送最快</title>
+    <link rel="stylesheet" type="text/css" href="{{ static('css/reset.css') }}">
+	<link rel="stylesheet" type="text/css" href="{{ static('css/main.css') }}">
+	<script type="text/javascript" src="{{ static('js/vue-2.6.12.js') }}"></script>
+    <script type="text/javascript" src="{{ static('js/axios-0.18.0.min.js') }}"></script>
+</head>
+<body>
+    <div id="app" v-cloak>
+    <div class="header_con">
+		<div class="header">
+            <div class="welcome fl">歡迎光臨RockeT</div>
+            <div class="fr">
+                <div v-if="username" class="login_btn fl">
+                    <em>[[ username ]]</em>
+                    <span>|</span>
+                    <a href="{{ url('users:logout') }}" class="quit">登出</a>
+                </div>
+                <div v-else class="login_btn fl">
+                    <a href="{{ url('users:login') }}">登入</a>
+                    <span>|</span>
+                    <a href="{{ url('users:register') }}">註冊</a>
+                </div>
+                <div class="user_link fl">
+                    <span>|</span>
+                    <a href="{{ url('users:info') }}">用戶中心</a>
+                    <span>|</span>
+                    <a href="{{ url('carts:info') }}">我的購物車</a>
+                    <span>|</span>
+                    <a href="user_center_order.html">我的訂單</a>
+                </div>
+            </div>
+        </div>
+	</div>
+
+    <div class="search_bar clearfix">
+		<a href="index.html" class="logo fl"><img src="{{ static('') }}images/logo.png"></a>
+		<div class="search_wrap fl">
+            <form method="get" action="/search/" class="search_con">
+                <input type="text" class="input_text fl" name="q" placeholder="搜索商品">
+                <input type="submit" class="input_btn fr" name="" value="搜索">
+            </form>
+            <ul class="search_suggest fl">
+                <li><a href="#">造型悠遊卡</a></li>
+                <li><a href="#">懶人沙發</a></li>
+                <li><a href="#">碎花洋裝</a></li>
+                <li><a href="#">人氣月餅禮盒</a></li>
+            </ul>
+        </div>
+
+		<div class="guest_cart fr">
+            <a href="#" class="cart_name fl">我的購物車</a>
+            <div class="goods_count fl" id="show_count">[[ total_count ]]</div>
+            <ul class="cart_goods_show">
+                <li v-for="cart in carts">
+                    <img :src="cart.default_image_url" alt="商品图片">
+                    <h4>[[ cart.name ]]</h4>
+                    <div>[[ cart.count ]]</div>
+                </li>
+            </ul>
+		</div>
+	</div>
+
+    <div class="total_count">全部商品<em>[[ total_count ]]</em>件</div>
+    <ul class="cart_list_th clearfix">
+        <li class="col01">商品名稱</li>
+        <li class="col03">單價</li>
+        <li class="col04">數量</li>
+        <li class="col05">總計</li>
+        <li class="col06">操作</li>
+    </ul>
+
+    <ul class="cart_list_td clearfix" v-for="(cart,index) in carts">
+        <li class="col01"><input type="checkbox" name="" v-model="cart.selected" @change="update_selected(index)">
+        </li>
+        <li class="col02"><img :src="cart.default_image_url"></li>
+        <li class="col03">[[ cart.name ]]</li>
+        <li class="col05">[[ cart.price ]]元</li>
+        <li class="col06">
+            <div class="num_add">
+                <a @click="on_minus(index)" class="minus fl">-</a>
+                <input v-model="cart.count" @blur="on_input(index)" type="text" class="num_show fl">
+                <a @click="on_add(index)" class="add fl">+</a>
+            </div>
+        </li>
+        <li class="col07">[[ cart.amount ]]元</li>
+        <li class="col08"><a @click="on_delete(index)">删除</a></li>
+    </ul>
+
+    <ul class="settlements">
+        <li class="col01"><input type="checkbox" name="" @change="on_selected_all" v-model="selected_all"></li>
+        <li class="col02">全選</li>
+        <li class="col03">購買總金額(不含運費)<span>$</span><em>[[ total_selected_amount ]]</em><br>共計<b>[[ total_selected_count
+            ]]</b>件商品
+        </li>
+        <li class="col04"><a href="place_order.html">去買單</a></li>
+
+    </ul>
+    <div class="footer">
+		<div class="foot_link">
+			<a href="#">客服中心</a>
+			<span>|</span>
+			<a href="#">關於羅奇</a>
+			<span>|</span>
+			<a href="#">人才招募</a>
+			<span>|</span>
+			<a href="#">物流合作</a>
+		</div>
+		<p>CopyRight © 2020 RockeT. All Rights Reserved</p>
+		<p>電話：02-****6666    台北市*******66號</p>
+	</div>
+    </div>
+    <script>
+        let carts = {{ cart_skus | safe }} ;
+    </script>
+    <script type="text/javascript" src="{{ static('js/api.js') }}"></script>
+    <script type="text/javascript" src="{{ static('js/common.js') }}"></script>
+    <script type="text/javascript" src="{{ static('js/cart.js') }}"></script>
+</body>
+</html>

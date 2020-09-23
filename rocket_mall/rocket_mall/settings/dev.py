@@ -49,7 +49,8 @@ INSTALLED_APPS = [
     'oauth', # 第三方登錄模塊
     'areas', # 收貨地址模塊
     'goods', # 商品模塊
-    'haystack',
+    'haystack', # haystack
+    'carts' , # 購物車模塊
 ]
 
 MIDDLEWARE = [
@@ -138,6 +139,13 @@ CACHES = {
     "history": { #history
         "BACKEND": "django_redis.cache.RedisCache",
         "LOCATION": "redis://:123@172.19.0.2:6379/3", # :password@
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    },
+    "cart": { #cart
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://:123@172.19.0.2:6379/4", # :password@
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }
