@@ -70,9 +70,9 @@ class CartsView(View):
         else:
             #用戶已登入操作redis
             redis_conn = get_redis_connection('cart')
-            #查詢hash數據
+            #查詢hash數據:Field(sku_id)/Value(count)
             redis_dict = redis_conn.hgetall('carts_%s' %user.id )
-            #查詢set數據
+            #查詢set數據:已勾選的商品sku_id
             redis_set = redis_conn.smembers('selected_%s' %user.id )
             #按照未登錄用戶的cookie字典資料結構重構數據，方便後續統一處理
             cart_dict = {}
@@ -99,6 +99,11 @@ class CartsView(View):
         context = {
             'cart_skus':cart_skus ,
         }
+        #判斷請求頁面的響應方式
+        request_from = request.GET.get('carts')
+        if request_from:
+            return JsonResponse({'code':RETCODE.OK ,'errmsg':'OK' ,'cart_skus':cart_skus })
+
         return render(request ,'cart.html' ,context )
 
     def post(self ,request ):

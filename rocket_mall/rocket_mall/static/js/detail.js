@@ -145,6 +145,7 @@ let vm = new Vue({
             }).then(response=>{
                 if (response.data.code === '0'){
                     console.log(response.data) ;
+                    this.get_carts() ;
                 } else {
                     alert(response.data.errmsg) ;
                 }
@@ -154,11 +155,19 @@ let vm = new Vue({
         },
         //獲取購物車數據
         get_carts(){
-            let url = this.api.CartsUrl;
+            let url = this.api.CartsUrl ;
             axios.get(url, {
+                params: {
+                    carts:'detail' ,
+                },
                 responseType: 'json',
             }).then(response => {
-
+                this.carts = response.data.cart_skus ;
+                let count = 0 ;
+                for (let i=0; i<this.carts.length ;i++){
+                    count += this.carts[i].count ;
+                }
+                this.cart_total_count = count ;
             }).catch(error => {
                 console.log(error.response);
             })

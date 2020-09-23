@@ -10,7 +10,6 @@ from goods.models import GoodsCategory ,SKU ,SKUSpecification ,GoodsVisitCount
 from contents.utils import get_categories
 from goods.utils import get_breadcrumb
 from utils.response_code import RETCODE
-from goods.constants import CSRF_TOKEN_EXPIRES
 # Create your views here.
 
 

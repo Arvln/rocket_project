@@ -4,12 +4,13 @@ from django.urls import reverse
 from django.http import JsonResponse ,HttpResponseServerError ,HttpResponseForbidden
 from django.views import View
 from settings.dev import Line_ChannelID
+import logging ,re
 
 from oauth.utils import get_id_token ,get_profile_information ,generate_access_token ,check_access_token
 from oauth.models import OAuthLineUser
 from users.models import User
 from . import constants
-import logging ,re
+from carts.utils import merge_carts_cookies_redis
 
 # Create your views here.
 
@@ -72,6 +73,9 @@ class LineRegisterView(View):
             #將用戶登入資訊寫入到cookies
             response.set_cookie('username' ,oauth_line_user.user.username ,constants.LOGIN_COOKIE_EXPIRES )
             response.set_cookie('photo_url' ,oauth_line_user.photo_url ,constants.LOGIN_COOKIE_EXPIRES )
+
+            #用戶登錄成功後，同樣商品將cookies購物車數據覆蓋寫入redis
+            response = merge_carts_cookies_redis(request, oauth_line_user, response)
             #返回響應
             return response
 
@@ -118,5 +122,8 @@ class LineRegisterView(View):
         #將用戶登入資訊寫入到cookies
         response.set_cookie('username' ,username ,constants.LOGIN_COOKIE_EXPIRES )
         response.set_cookie('photo_url' ,photo_url ,constants.LOGIN_COOKIE_EXPIRES )
+
+        #用戶登錄成功後，同樣商品將cookies購物車數據覆蓋寫入redis
+        response = merge_carts_cookies_redis(request, user, response)
         #返回響應
         return response

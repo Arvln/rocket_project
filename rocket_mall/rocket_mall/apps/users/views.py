@@ -15,6 +15,7 @@ from utils.views import LoginRequiredJsonMixin
 from . import constants
 from celery_tasks.email.tasks import send_verify_mail
 from goods.models import SKU
+from carts.utils import merge_carts_cookies_redis
 
 # Create your views here.
 
@@ -118,14 +119,18 @@ class LoginView(View):
             # 狀態保持使用默認時限
             request.session.set_expiry(None)
         #返回響應:重定向到next或首頁
-        #網頁右上角刷新登入狀態，將用戶登入資訊保存在cookie
         #檢查是否有指定登入後跳轉頁面
         next = request.GET.get('next')
         if next:
             response = redirect(next)
         else:
             response = redirect(reverse('contents:index'))
+        #網頁右上角刷新登入狀態，將用戶登入資訊保存在cookie
         response.set_cookie('username' ,user.username ,constants.LOGIN_COOKIE_EXPIRES )
+
+        #用戶登錄成功後，同樣商品將cookies購物車數據覆蓋寫入redis
+        response = merge_carts_cookies_redis(request ,user ,response )
+        #返回響應
         return response
 
 class CheckusermsgView(View):
