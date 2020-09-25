@@ -39,7 +39,7 @@ def check_params(request):
     if not all([sku_id, count]):
         return HttpResponseForbidden('缺少必傳參數')
     try:
-        SKU.objects.get(id=sku_id)
+        sku = SKU.objects.get(id=sku_id)
     except Exception:
         return HttpResponseForbidden('該商品不存在')
     try:
@@ -49,7 +49,7 @@ def check_params(request):
     if not isinstance(selected, bool):
         return HttpResponseForbidden('selected有誤')
 
-    return sku_id ,count ,selected
+    return sku_id ,count ,selected ,sku
 
 def merge_carts_cookies_redis(request ,user ,response ):
     """合併cookies和redis中的購物車數據"""

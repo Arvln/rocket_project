@@ -9,7 +9,7 @@ const api = {
     LoginUrl: ApiRootUrl + 'login_info/', //用戶登入接口
     CheckuserUrl: ApiRootUrl + 'login_info/get/', //校驗登入用戶接口
     LineLoginUrl: ApiRootUrl + 'line/login_url/get/', //獲取line用戶登入授權頁面接口
-    LineRegisterUrl: ApiRootUrl + 'line/login/', //按照授權結果，進行line用戶登入接口
+    LineRegisterUrl: ApiRootUrl + 'line/login/', //使用Authorization Code，進行line用戶登入程序的接口
     EmailUrl: ApiRootUrl + 'email/put/', //更新用戶Email接口
     AreaUrl: ApiRootUrl + 'areas/get/', //獲取用戶所在地區接口
     AddressUrl: ApiRootUrl +'addresses/post/', //新增用戶收貨地址接口
@@ -21,4 +21,8 @@ const api = {
     UserBrowseHistoryUrl: ApiRootUrl + 'browse_histories/', //保存用戶商品瀏覽紀錄的接口\
     CartsUrl: ApiRootUrl + 'carts/', //獲取、新增、修改、刪除購物車資訊的接口
     CartsSelectAllUrl: ApiRootUrl + 'carts/selection/', //購物車全選的接口
+    OrderInfoUrl: ApiRootUrl + 'orders/info/', //返回訂單結算頁面的接口
+    OrderSettlementUrl: ApiRootUrl + 'orders/settlement/', //查詢訂單結算數據的接口
+    OrderSubmitUrl: ApiRootUrl +'orders/submission/' , //提交訂單的接口
+    OrderSeccessUrl: ApiRootUrl + 'orders/seccess/' , //提交訂單成功頁面或查詢訂單數據的接口
 }

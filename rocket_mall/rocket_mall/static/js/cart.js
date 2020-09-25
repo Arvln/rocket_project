@@ -114,10 +114,14 @@ let vm = new Vue({
                 responseType:'json' ,
                 withCredentials:true ,
             }).then(response=>{
-                Vue.set(this.carts ,index ,response.data.cart_sku ) ;
-                //重新計算
-                this.compute_total_count();
-                this.compute_total_selected_amount_count();
+                if (response.data.code === '0'){
+                    Vue.set(this.carts ,index ,response.data.cart_sku ) ;
+                    //重新計算
+                    this.compute_total_count() ;
+                    this.compute_total_selected_amount_count() ;
+                } else {
+                    alert(response.data.errmsg) ;
+                }
             }).catch(error=>{
                 console.log(error.response) ;
             })
@@ -187,6 +191,13 @@ let vm = new Vue({
             }).catch(error => {
                 console.log(error.response) ;
             })
+        },
+        check_payment(){
+            if(this.total_selected_amount>0){
+                location.href = this.api.OrderInfoUrl ;
+            } else {
+                alert('請先選擇結帳商品') ;
+            }
         },
     }
 });

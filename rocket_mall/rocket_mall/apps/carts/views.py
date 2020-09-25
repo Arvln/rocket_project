@@ -109,7 +109,7 @@ class CartsView(View):
     def post(self ,request ):
         """新增購物車數據"""
         #接收並校驗參數
-        sku_id ,count ,selected = check_params(request)
+        sku_id ,count ,selected ,sku = check_params(request)
         #判斷用戶是否登錄
         try:
             user = User.objects.get(id=request.user.id)
@@ -120,15 +120,22 @@ class CartsView(View):
                 cart_dict = get_cookie_cart_dict(cart_str)
             else:
                 cart_dict = {}
+            #商品原購買數量
             if sku_id in cart_dict:
                 origin_count = cart_dict[sku_id]['count']
-                count += origin_count
-            #需求:單品購買量最多5件
+            else:
+                origin_count = 0
+            #需求:單品購買量最多5件且小於當前商品庫存量，否則購物車數據不變
+            count += origin_count
             if count > 5:
                 count = origin_count
                 response = JsonResponse({'code':RETCODE.SESSIONERR ,'errmsg':'商品已達購買上限'})
+            elif count > sku.stock:
+                count = origin_count
+                response = JsonResponse({'code':RETCODE.SESSIONERR ,'errmsg':'商品庫存不足'})
             else:
                 response = JsonResponse({'code': RETCODE.OK, 'errmsg': 'OK'})
+
             cart_dict[sku_id] = {
                 'count': count,
                 'selected': selected,
@@ -139,25 +146,30 @@ class CartsView(View):
         else:
             #用戶已登入操作redis
             redis_conn = get_redis_connection('cart')
+            #商品原購買數量
             try:
                 origin_count = int(redis_conn.hget('carts_%s' %user.id ,sku_id ))
             except:
                 origin_count = 0
+            #需求:單品購買量最多5件且小於當前商品庫存量，否則購物車數據不變
             if origin_count+count > 5:
                 return JsonResponse({'code':RETCODE.SESSIONERR ,'errmsg':'商品已達購買上限'})
-            pl = redis_conn.pipeline()
-            #增量計算保存商品購買量
-            pl.hincrby('carts_%s' %user.id ,sku_id ,count )
-            pl.hget('carts_%s' %user.id ,sku_id )
-            if selected:
-                pl.sadd('selected_%s' %user.id ,sku_id )
-            pl.execute()
-            return JsonResponse({'code':RETCODE.OK ,'errmsg':'OK' })
+            elif origin_count+count > sku.stock:
+                return JsonResponse({'code':RETCODE.STOCKERR ,'errmsg':'商品庫存不足'})
+            else:
+                pl = redis_conn.pipeline()
+                #增量計算保存商品購買量
+                pl.hincrby('carts_%s' %user.id ,sku_id ,count )
+                pl.hget('carts_%s' %user.id ,sku_id )
+                if selected:
+                    pl.sadd('selected_%s' %user.id ,sku_id )
+                pl.execute()
+                return JsonResponse({'code':RETCODE.OK ,'errmsg':'OK' })
 
     def put(self ,request ):
         """修改購物車數據"""
         #接收並校驗參數
-        sku_id, count, selected = check_params(request)
+        sku_id, count, selected ,sku = check_params(request)
         #判斷用戶是否登錄
         try:
             user = User.objects.get(id=request.user.id)
@@ -168,10 +180,11 @@ class CartsView(View):
                 cart_dict = get_cookie_cart_dict(cart_str)
             else:
                 cart_dict = {}
-            #前端傳來數據覆蓋寫入
-            cart_dict[sku_id]['count'] = count
-            cart_dict[sku_id]['selected'] = selected
-            cart_str = get_cookie_cart_str(cart_dict)
+            #商品原購買數量
+            if sku_id in cart_dict:
+                origin_count = cart_dict[sku_id]['count']
+            else:
+                origin_count = 0
             #構造響應數據
             sku = SKU.objects.get(id=sku_id)
             cart_sku = {
@@ -183,32 +196,60 @@ class CartsView(View):
                 'price': sku.price,
                 'amount': sku.price * count,
             }
-            response = JsonResponse({'code':RETCODE.OK ,'errmsg':'OK' ,'cart_sku':cart_sku})
+            #需求:單品購買量最多5件且小於當前商品庫存量，否則購物車數據不變
+            if count > 5:
+                count = origin_count
+                cart_sku['count'] = count
+                response = JsonResponse({'code':RETCODE.SESSIONERR ,'errmsg':'商品已達購買上限', 'cart_sku': cart_sku})
+            elif count > sku.stock:
+                count = origin_count
+                cart_sku['count'] = count
+                response = JsonResponse({'code':RETCODE.STOCKERR ,'errmsg':'商品庫存不足', 'cart_sku': cart_sku})
+            else:
+                response = JsonResponse({'code': RETCODE.OK, 'errmsg': 'OK', 'cart_sku': cart_sku})
+            #前端傳來數據覆蓋寫入
+            cart_dict[sku_id]['count'] = count
+            cart_dict[sku_id]['selected'] = selected
+            cart_str = get_cookie_cart_str(cart_dict)
             response.set_cookie('carts' ,cart_str )
             return response
         else:
             #用戶已登入操作redis
-            #前端傳來數據覆蓋寫入
             redis_conn = get_redis_connection('cart')
-            pl = redis_conn.pipeline()
-            pl.hset('carts_%s' %user.id ,sku_id ,count )
-            if selected:
-                pl.sadd('selected_%s' %user.id ,sku_id )
-            else:
-                pl.srem('selected_%s' %user.id ,sku_id )
-            pl.execute()
+            # 商品原購買數量
+            try:
+                origin_count = int(redis_conn.hget('carts_%s' % user.id, sku_id))
+            except:
+                origin_count = 0
             #構造響應數據
             sku = SKU.objects.get(id=sku_id)
             cart_sku = {
-                'id': sku.id ,
-                'name': sku.name ,
-                'count': count ,
-                'selected': selected ,
-                'default_image_url': sku.default_image_url ,
-                'price': sku.price ,
-                'amount': sku.price * count ,
+                'id': sku.id,
+                'name': sku.name,
+                'count': count,
+                'selected': selected,
+                'default_image_url': sku.default_image_url,
+                'price': sku.price,
+                'amount': sku.price * count,
             }
-            return JsonResponse({'code':RETCODE.OK ,'errmsg':'OK' ,'cart_sku':cart_sku })
+            #需求:單品購買量最多5件且小於當前商品庫存量，否則購物車數據不變
+            if count > 5:
+                cart_sku['count'] = origin_count
+                return JsonResponse({'code': RETCODE.SESSIONERR, 'errmsg': '商品已達購買上限' ,'cart_sku':cart_sku })
+            elif count > sku.stock:
+                cart_sku['count'] = origin_count
+                return JsonResponse({'code': RETCODE.STOCKERR, 'errmsg': '商品庫存不足' ,'cart_sku':cart_sku })
+            else:
+                #前端傳來數據覆蓋寫入
+                pl = redis_conn.pipeline()
+                pl.hset('carts_%s' %user.id ,sku_id ,count )
+                if selected:
+                    pl.sadd('selected_%s' %user.id ,sku_id )
+                else:
+                    pl.srem('selected_%s' %user.id ,sku_id )
+                pl.execute()
+
+                return JsonResponse({'code':RETCODE.OK ,'errmsg':'OK' ,'cart_sku':cart_sku })
 
     def delete(self,request ):
         """删除購物車數據"""

@@ -1,0 +1,86 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+	<title>RockeT|物超所值配送最快</title>
+	<link rel="stylesheet" type="text/css" href="{{ static('css/reset.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ static('css/main.css') }}">
+    <script type="text/javascript" src="{{ static('js/vue-2.6.12.js') }}"></script>
+    <script type="text/javascript" src="{{ static('js/axios-0.18.0.min.js') }}"></script>
+</head>
+<body>
+	<div id="app" v-cloak>
+        <div class="header_con">
+		<div class="header" v-cloak>
+            <div class="welcome fl">歡迎光臨RockeT</div>
+            <div class="fr">
+                <div v-if="username" class="login_btn fl">
+                    <em>[[ username ]]</em>
+                    <span>|</span>
+                    <a href="{{ url('users:logout') }}" class="quit">登出</a>
+                </div>
+                <div v-else class="login_btn fl">
+                    <a href="{{ url('users:login') }}">登入</a>
+                    <span>|</span>
+                    <a href="{{ url('users:register') }}">註冊</a>
+                </div>
+                <div class="user_link fl">
+                    <span>|</span>
+                    <a href="{{ url('users:info') }}">用戶中心</a>
+                    <span>|</span>
+                    <a href="{{ url('carts:info') }}">我的購物車</a>
+                    <span>|</span>
+                    <a href="{{ url('orders:info') }}">我的訂單</a>
+                </div>
+            </div>
+        </div>
+	</div>
+
+        <div class="search_bar clearfix">
+		<a href="index.html" class="logo fl"><img src="{{ static('') }}images/logo.png"></a>
+		<div class="search_wrap fl">
+			<form method="get" action="/search/" class="search_con">
+                <input type="text" class="input_text fl" name="q" placeholder="搜索商品">
+                <input type="submit" class="input_btn fr" name="" value="搜索">
+            </form>
+			<ul class="search_suggest fl">
+                <li><a href="#">造型悠遊卡</a></li>
+                <li><a href="#">懶人沙發</a></li>
+                <li><a href="#">碎花洋裝</a></li>
+                <li><a href="#">人氣月餅禮盒</a></li>
+            </ul>
+		</div>
+	</div>
+
+        <div class="common_list_con clearfix">
+            <div class="order_success">
+                <p><b>提交訂單成功，總付款金額&emsp;<em>$[[ payment_amount ]]</em></b></p>
+                <p>您的訂單已成功生成，訂單編號為[[ order_id ]]</p>
+                <p><a href="{{ url('users:info') }}">您可以在【用戶中心】->【我的訂單】查看該訂單資訊</a></p>
+            </div>
+        </div>
+
+        <div class="order_submit clearfix">
+            <a v-if="pay_method==1" href="{{ url('users:info') }}">繼續逛</a>
+            <a v-else href="pay_success.html">買單去</a>
+        </div>
+
+        <div class="footer">
+            <div class="foot_link">
+                <a href="#">客服中心</a>
+                <span>|</span>
+                <a href="#">關於羅奇</a>
+                <span>|</span>
+                <a href="#">人才招募</a>
+                <span>|</span>
+                <a href="#">物流合作</a>
+            </div>
+            <p>CopyRight © 2020 RockeT. All Rights Reserved</p>
+            <p>電話：02-****6666    台北市*******66號</p>
+        </div>
+    </div>
+	<script type="text/javascript" src="{{ static('js/api.js') }}"></script>
+	<script type="text/javascript" src="{{ static('js/common.js') }}"></script>
+	<script type="text/javascript" src="{{ static('js/order_success.js') }}"></script>
+</body>
+</html>

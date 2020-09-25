@@ -4,20 +4,21 @@ let vm = new Vue({
     data:{
 
         username: '',
+        mobile: '',
         access_token: access_token,
         picture: picture,
         allow: true,
 
         error_username: false,
+        error_mobile: false,
         error_allow: false,
         error_username_tip: '',
+        error_mobile_tip: '',
 
         default_username: '用戶名稱',
+        default_mobile: '建議使用常用手機號碼',
 
         api: api,
-    },
-    mounted(){
-      //頁面刷新時，生成圖形驗證碼
     },
     methods:{
         check_username(){
@@ -44,6 +45,30 @@ let vm = new Vue({
                 })
             }
         },
+        check_mobile(){
+            let re = /^09\d{8}$/;
+            if (re.test(this.mobile)){
+                this.error_mobile = false;
+            } else {
+                this.error_mobile_tip = '您輸入的手機號碼格式不正確';
+                this.error_mobile = true;
+            }
+            if (this.error_mobile === false){
+                let url = this.api.MobilecountUrl + this.mobile + '/';
+                axios.get(url ,{
+                    responseType: 'json'
+                }).then(response=>{
+                    if (response.data.count === 1){
+                        this.error_mobile_tip = '手機號碼已被註冊過';
+                        this.error_mobile = true;
+                    } else {
+                        this.error_mobile = false;
+                    }
+                }).catch(error=>{
+                    console.log(error.response);
+                })
+            }
+        },
         check_allow(){
             if (!this.allow){
                 this.error_allow = true;
@@ -53,9 +78,11 @@ let vm = new Vue({
         },
         on_submit(){
             this.check_username();
+            this.check_mobile();
             this.check_allow();
             if (
-                this.error_username === true || this.error_allow === true
+                this.error_username === true || this.error_mobile === true ||
+                this.error_allow === true
             ){
                window.event.returnValue = false;
             }

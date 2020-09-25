@@ -33,7 +33,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1','192.168.126.130','www.rocketmall.gq']
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -51,6 +50,7 @@ INSTALLED_APPS = [
     'goods', # 商品模塊
     'haystack', # haystack
     'carts' , # 購物車模塊
+    'orders' , # 訂單模塊
 ]
 
 MIDDLEWARE = [
@@ -248,10 +248,10 @@ AUTHENTICATION_BACKENDS = ['users.utils.LoginBackend']
 #判斷用戶是否登入後，指定未登入用戶重定向的地址
 LOGIN_URL = '/api/login_info/'
 
-#line專案app的ChannelID
+#Line專案app的ChannelID
 Line_ChannelID = '1654901419'
 
-#line專案app的Channel_secret
+#Line專案app的Channel_secret
 Line_Channel_secret = '73639c8afde4343fbcdcf782f04be2a7'
 
 #郵件參數

@@ -33,6 +33,10 @@
 						<input type="text" name="username" v-model="username" @keyup="check_username" @blur="check_username" :placeholder="default_username" id="user_name">
 						<span v-show="error_username" class="error_tip">[[ error_username_tip ]]</span>
 					</li>
+                    <li>
+						<input type="text" name="mobile" v-model="mobile" @keyup="check_mobile" @blur="check_mobile" :placeholder="default_mobile" id="phone">
+						<span v-show="error_mobile" class="error_tip">[[ error_mobile_tip ]]</span>
+					</li>
 					<li class="agreement">
 						<input type="checkbox" name="allow" v-model="allow" @change="check_allow" id="allow_agreement" checked="checked">
 						<label>同意「RockeT使用合約」</label>

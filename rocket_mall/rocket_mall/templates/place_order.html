@@ -1,0 +1,131 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+	<title>RockeT|物超所值配送最快</title>
+	<link rel="stylesheet" type="text/css" href="{{ static('css/reset.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ static('css/main.css') }}">
+    <script type="text/javascript" src="{{ static('js/vue-2.6.12.js') }}"></script>
+    <script type="text/javascript" src="{{ static('js/axios-0.18.0.min.js') }}"></script>
+</head>
+<body>
+	<div id="app" v-cloak>
+        <div class="header_con">
+		<div class="header" v-cloak>
+            <div class="welcome fl">歡迎光臨RockeT</div>
+            <div class="fr">
+                <div v-if="username" class="login_btn fl">
+                    <em>[[ username ]]</em>
+                    <span>|</span>
+                    <a href="{{ url('users:logout') }}" class="quit">登出</a>
+                </div>
+                <div v-else class="login_btn fl">
+                    <a href="{{ url('users:login') }}">登入</a>
+                    <span>|</span>
+                    <a href="{{ url('users:register') }}">註冊</a>
+                </div>
+                <div class="user_link fl">
+                    <span>|</span>
+                    <a href="{{ url('users:info') }}">用戶中心</a>
+                    <span>|</span>
+                    <a href="{{ url('carts:info') }}">我的購物車</a>
+                    <span>|</span>
+                    <a href="{{ url('orders:info') }}">我的訂單</a>
+                </div>
+            </div>
+        </div>
+	</div>
+
+        <div class="search_bar clearfix">
+		<a href="index.html" class="logo fl"><img src="{{ static('') }}images/logo.png"></a>
+		<div class="search_wrap fl">
+			<form method="get" action="/search/" class="search_con">
+                <input type="text" class="input_text fl" name="q" placeholder="搜索商品">
+                <input type="submit" class="input_btn fr" name="" value="搜索">
+            </form>
+			<ul class="search_suggest fl">
+                <li><a href="#">造型悠遊卡</a></li>
+                <li><a href="#">懶人沙發</a></li>
+                <li><a href="#">碎花洋裝</a></li>
+                <li><a href="#">人氣月餅禮盒</a></li>
+            </ul>
+		</div>
+	</div>
+
+        <h3 class="common_title">確認收貨地址</h3>
+
+        <div class="common_list_con clearfix" id="get_site">
+		<dl>
+			<dt>寄送資訊</dt>
+			<dd v-for="(address ,index ) in addresses">
+                <input type="radio" name="address_id" value="" @change="set_default(index)" :checked="address.id==default_address_id">[[ mobile ]]&emsp;[[ address.area ]][[ address.city ]][[ address.district ]][[ address.place ]]
+            </dd>
+		</dl>
+		<a href="{{ url('users:address') }}" class="edit_site">編輯收貨地址</a>
+	</div>
+
+        <h3 class="common_title">付款方式</h3>
+        <div class="common_list_con clearfix">
+            <div class="pay_style_con clearfix">
+                <input type="radio" v-model="pay_method" name="pay_method" value="1">
+                <label class="cash">貨到付款</label>
+                <input type="radio" v-model="pay_method" name="pay_method" value="2">
+                <label class="zhifubao"></label>
+            </div>
+        </div>
+
+        <h3 class="common_title">商品列表</h3>
+
+        <div class="common_list_con clearfix">
+            <ul class="goods_list_th clearfix">
+                <li class="col01">商品名稱</li>
+                <li class="col02">單位</li>
+                <li class="col03">單價</li>
+                <li class="col04">數量</li>
+                <li class="col05">總價</li>
+            </ul>
+            <ul v-for="(sku ,index ) in skus" class="goods_list_td clearfix">
+                <li class="col01">[[ index+1 ]]</li>
+                <li class="col02"><img :src="sku.default_image_url"></li>
+                <li class="col03">[[ sku.name ]]</li>
+                <li class="col04">台</li>
+                <li class="col05">[[ sku.price ]]元</li>
+                <li class="col06">[[ sku.count ]]</li>
+                <li class="col07">[[ sku.amount ]]元</li>
+            </ul>
+        </div>
+
+        <h3 class="common_title">訂單結算</h3>
+
+        <div class="common_list_con clearfix">
+            <div class="settle_con">
+                <div class="total_goods_count">商品總金額(<em>[[ total_count ]]</em>商品)&emsp;&emsp;&emsp;<b>$[[ total_amount ]]</b></div>
+                <div class="transit">運費總金額&emsp;&emsp;&emsp;&emsp;&emsp; <b>$[[ freight ]]</b></div>
+                <div class="total_pay">總付款金額&emsp;&emsp;&emsp;<b>$[[ total_payment ]]</b></div>
+            </div>
+        </div>
+
+        <div class="order_submit clearfix">
+		<a @click="on_order_submit" id="order_btn">提交訂單</a>
+
+	</div>
+
+        <div class="footer">
+        <div class="foot_link">
+            <a href="#">客服中心</a>
+            <span>|</span>
+            <a href="#">關於羅奇</a>
+            <span>|</span>
+            <a href="#">人才招募</a>
+            <span>|</span>
+            <a href="#">物流合作</a>
+        </div>
+        <p>CopyRight © 2020 RockeT. All Rights Reserved</p>
+        <p>電話：02-****6666    台北市*******66號</p>
+    </div>
+    </div>
+    <script type="text/javascript" src="{{ static('js/api.js') }}"></script>
+    <script type="text/javascript" src="{{ static('js/common.js') }}"></script>
+    <script type="text/javascript" src="{{ static('js/place_order.js') }}"></script>
+</body>
+</html>

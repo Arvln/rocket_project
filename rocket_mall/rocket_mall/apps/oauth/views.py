@@ -75,7 +75,7 @@ class LineRegisterView(View):
             response.set_cookie('photo_url' ,oauth_line_user.photo_url ,constants.LOGIN_COOKIE_EXPIRES )
 
             #用戶登錄成功後，同樣商品將cookies購物車數據覆蓋寫入redis
-            response = merge_carts_cookies_redis(request, oauth_line_user, response)
+            response = merge_carts_cookies_redis(request, oauth_line_user.user, response)
             #返回響應
             return response
 
@@ -83,17 +83,20 @@ class LineRegisterView(View):
         """line登入用戶註冊"""
         #提取參數
         username = request.POST.get('username')
+        mobile = request.POST.get('mobile')
         allow = request.POST.get('allow')
         access_token = request.POST.get('access_token')
         user_messages_dict = check_access_token(access_token)
         #校驗參數
-        if not all([username ,allow ,access_token ]):
+        if not all([username ,mobile ,allow ,access_token ]):
             return HttpResponseForbidden('缺少必傳參數')
         if not re.match('^[a-zA-Z0-9_-]{5,20}$' ,username ):
             return HttpResponseForbidden('請輸入5~20個字符的用戶名稱')
         count = User.objects.filter(username=username).count()
         if count == 1:
             return HttpResponseForbidden('該用戶名稱已存在')
+        if not re.match('^09\d{8}$' ,mobile ):
+            return HttpResponseForbidden('您輸入的手機號碼格式不正確')
         if allow != 'on':
             return HttpResponseForbidden('請勾選同意RockeT使用合約')
         if not user_messages_dict:
@@ -105,7 +108,7 @@ class LineRegisterView(View):
         state = user_messages_dict.get('state')
         try:
             #用戶不存在，創建新用戶
-            user = User.objects.create_user(username=username)
+            user = User.objects.create_user(username=username ,mobile=mobile )
             #寫入用戶line登入資訊
             OAuthLineUser.objects.create(user=user ,name=name ,photo_url=photo_url ,userid=userid )
         except Exception as e:

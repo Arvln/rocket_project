@@ -35,4 +35,6 @@ urlpatterns = [
     url(r'^search/', include(('haystack.urls'))),
     # 購物車模塊
     url(r'^', include(('carts.urls', 'carts') ,namespace='carts')),
+    # 訂單模塊
+    url(r'^' ,include(('orders.urls' ,'orders') ,namespace='orders')),
 ]
