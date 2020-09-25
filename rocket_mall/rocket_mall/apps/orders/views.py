@@ -159,17 +159,17 @@ class OrderSubmitView(LoginRequiredJsonMixin ,View):
             #明顯地提交一次事務
             transaction.savepoint_commit(save_id)
 
-        return JsonResponse({'code':RETCODE.OK ,'errmsg':'OK' })
+        return JsonResponse({'code':RETCODE.OK ,'errmsg':'OK' ,'order_id':order_id })
 
 class OrderSeccessView(LoginRequiredMixin ,View):
     """提交訂單成功頁面"""
     def get(self ,request ):
         """提供提交訂單成功頁面或訂單數據"""
 
-        #獲取登錄用戶
-        user = request.user
+        #獲取成功生成的訂單ID
+        order_id = request.GET.get('order_id')
         #構造響應數據
-        order = OrderInfo.objects.get(user=user)
+        order = OrderInfo.objects.get(order_id=order_id)
         orders = {}
         orders['order_id'] = order.order_id
         orders['payment_amount'] = order.total_amount
@@ -178,4 +178,4 @@ class OrderSeccessView(LoginRequiredMixin ,View):
         if request.GET.get('orders') is not None:
             return JsonResponse({'code':RETCODE.OK ,'errmsg':'OK' ,'orders':orders })
 
-        return render(request ,'order_seccess.html' )
+        return render(request ,'order_seccess.html' ,{'order_id':order_id})

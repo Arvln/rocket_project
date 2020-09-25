@@ -78,7 +78,7 @@ let vm = new Vue({
                 responseType: 'json' ,
             }).then(response=>{
                 if (response.data.code === '0'){
-                    location.href = this.api.OrderSeccessUrl ;
+                    location.href = this.api.OrderSeccessUrl + '?order_id=' + response.data.order_id ;
                 } else if (response.data.code === '5007'){
                     alert(response.data.errmsg) ;
                     location.href = this.api.CartsUrl ;

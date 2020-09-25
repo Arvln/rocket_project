@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'haystack', # haystack
     'carts' , # 購物車模塊
     'orders' , # 訂單模塊
+    'payment' , # 支付模塊
 ]
 
 MIDDLEWARE = [
@@ -287,3 +288,9 @@ HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
 
 #haystack分頁每頁條數
 HAYSTACK_SEARCH_RESULTS_PER_PAGE = 5
+
+#支付寶SDK參數
+ALIPAY_APPID = '2021000120607159'
+ALIPAY_DEBUG = True
+ALIPAY_URL = 'https://openapi.alipaydev.com/gateway.do' #dev環境URL
+ALIPAY_RETURN_URL = 'http://192.168.126.130:8000/api/payment/status/'

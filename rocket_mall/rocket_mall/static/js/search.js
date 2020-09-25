@@ -4,10 +4,4 @@ let vm = new Vue({
     data:{
         username:getCookie('username') ,
     } ,
-    mounted(){
-
-    },
-    methods:{
-
-    }
 });

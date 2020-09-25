@@ -5,7 +5,7 @@ let vm = new Vue({
     data: {
         username: getCookie('username') ,
 
-        order_id: '' ,
+        order_id: order_id ,
         payment_amount: '' ,
         pay_method: '' ,
 
@@ -22,6 +22,7 @@ let vm = new Vue({
             axios.get(url ,{
                 params: {
                    orders: 'orders' ,
+                   order_id: this.order_id ,
                 },
                 responseType: 'json' ,
             }).then(response=>{
@@ -34,23 +35,18 @@ let vm = new Vue({
         },
         //支付訂單
         order_payment(){
-            var order_id = get_query_string('order_id');
-            var url = '/payment/' + order_id + '/';
+            let url = this.api.PaymentUrl + this.order_id + '/';
             axios.get(url, {
                     responseType: 'json'
-                })
-                .then(response => {
+                }).then(response => {
                     if (response.data.code == '0') {
-                        //跳轉到支付寶
+                        //跳轉到支付寶支付登錄頁
                         location.href = response.data.alipay_url;
-                    } else if (response.data.code == '4101') {
-                        location.href = '/login/?next=/orders/info/1/';
                     } else {
                         console.log(response.data);
                         alert(response.data.errmsg);
                     }
-                })
-                .catch(error => {
+                }).catch(error => {
                     console.log(error.response);
                 })
         },

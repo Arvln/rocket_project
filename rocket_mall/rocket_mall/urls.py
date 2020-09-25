@@ -37,4 +37,6 @@ urlpatterns = [
     url(r'^', include(('carts.urls', 'carts') ,namespace='carts')),
     # 訂單模塊
     url(r'^' ,include(('orders.urls' ,'orders') ,namespace='orders')),
+    # 支付模塊
+    url(r'^' ,include(('payment.urls' ,'payment') ,namespace='payment')),
 ]

@@ -809,6 +809,7 @@ html,body{height:100%}
 .pay_style_con .zhifubao{background:url(../images/pay_icons.png) 12px -72px no-repeat #fff;width:50px;height:16px}
 
 .pay_style_con .bank{background:url(../images/pay_icons.png) 6px -108px no-repeat #fff;}
+.linepay{background:url(../images/linepay.png) no-repeat;width:52px;height:17px;}
 
 
 .goods_list_th{height:40px;border-bottom:1px solid #ccc}
