@@ -176,6 +176,9 @@ class OrderSeccessView(LoginRequiredMixin ,View):
         orders['pay_method'] = order.pay_method
 
         if request.GET.get('orders') is not None:
-            return JsonResponse({'code':RETCODE.OK ,'errmsg':'OK' ,'orders':orders })
+            if request.user.is_authenticated:
+                return JsonResponse({'code':RETCODE.OK ,'errmsg':'OK' ,'orders':orders })
+            else:
+                return JsonResponse({'code':RETCODE.SESSIONERR ,'errmsg':'請登錄後再試' })
 
         return render(request ,'order_seccess.html' ,{'order_id':order_id})

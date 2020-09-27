@@ -3,6 +3,7 @@ from collections import OrderedDict
 from goods.models import GoodsChannel
 
 
+#需求:準備jinja2做SSR渲染所需的商品分類數據
 def get_categories():
     """獲取商品分類"""
 
@@ -12,13 +13,12 @@ def get_categories():
     #查詢所有頻道對象並按照1-11組順序排
     channels = GoodsChannel.objects.order_by('group_id', 'sequence')
     for channel in channels:
-        group_id = channel.group_id  # 37個重複頻道組id
+        group_id = channel.group_id  #37個重複頻道組id
         if group_id not in categories:
             #構造11個頻道劃分的數據結構
             categories[group_id] = {'channels': [], 'sub_cats': []}
         #插入一級數據:從頻道對象的外鍵點出一級數據對象
         cat1 = channel.category
-        cat1.url = ''
         cat1.url = channel.url
         categories[group_id]['channels'].append(cat1)
         #查詢二級和三級類別對象

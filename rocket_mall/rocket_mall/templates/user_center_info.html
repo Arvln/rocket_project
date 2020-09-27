@@ -10,7 +10,7 @@
 </head>
 <body>
 <div id="app" v-cloak>
-<div class="header_con">
+    <div class="header_con">
         <div class="header">
             <div class="welcome fl">歡迎光臨RockeT</div>
             <div class="fr">
@@ -45,9 +45,9 @@
             <h3>用戶中心</h3>
             <ul>
                 <li><a class="active">· 個人資訊</a></li>
-                <li><a href="user_center_order.html">· 我的訂單</a></li>
+                <li><a href="{{ url('users:order' ,args=(1,)) }}">· 我的訂單</a></li>
                 <li><a href="{{ url('users:address') }}">· 收貨地址</a></li>
-                <li><a href="user_center_pass.html">· 修改密碼</a></li>
+                <li><a href="{{ url('users:password') }}">· 修改密碼</a></li>
             </ul>
         </div>
         <div class="right_content clearfix">

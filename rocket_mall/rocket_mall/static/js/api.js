@@ -26,4 +26,5 @@ const api = {
     OrderSubmitUrl: ApiRootUrl +'orders/submission/' , //提交訂單的接口
     OrderSeccessUrl: ApiRootUrl + 'orders/seccess/' , //提交訂單成功頁面或查詢訂單數據的接口
     PaymentUrl: ApiRootUrl + 'payment/' , //訂單支付的接口
+    UserOrderInfoUrl: ApiRootUrl + 'orders/get/' , //返回用戶訂單頁面的接口
 }

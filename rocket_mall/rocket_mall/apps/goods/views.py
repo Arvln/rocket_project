@@ -16,7 +16,7 @@ from utils.response_code import RETCODE
 class ListView(View):
     """查詢商品分類數據接口"""
 
-    #為提高SEO效率，首頁採用jinja2做SSR
+    #需求:為提高SEO效率，首頁採用jinja2做SSR
     def get(self, request, category_id, page_num):
         #校驗category_id
         try:
@@ -25,10 +25,8 @@ class ListView(View):
             return HttpResponseForbidden('商品類別不存在')
         #獲取商品分類
         categories = get_categories()
-
         #查詢麵包屑導航
         breadcrumb = get_breadcrumb(category)
-
         #分頁和排序查詢
         #獲取並判斷排序規則
         sort = request.GET.get('sort', 'default')
@@ -63,11 +61,10 @@ class ListView(View):
 
 class HotGoodsView(View):
     """暢銷商品"""
-
     def get(self, request, category_id):
 
         #校驗參數
-        #查詢銷量最高的前兩個上架商品
+        #查詢當前類別銷量最高的前兩個上架商品
         try:
             skus = SKU.objects.filter(category_id=category_id, is_launched=True).order_by('-sales')[:2]
         except Exception:
@@ -78,11 +75,11 @@ class HotGoodsView(View):
         hot_skus = []
         for sku in skus:
             hot_skus.append({
-                'id': sku.id ,
-                'default_image_url': sku.default_image_url ,
-                'name': sku.name ,
-                'price': sku.price ,
-                'comments': sku.comments ,
+                'id': sku.id,
+                'default_image_url': sku.default_image_url,
+                'name': sku.name,
+                'price': sku.price,
+                'comments': sku.comments,
             })
         return JsonResponse({'code': RETCODE.OK, 'errmsg': 'OK', 'hot_skus': hot_skus})
 
@@ -94,9 +91,9 @@ class DetailView(View):
 
         #接收並校驗參數
         try:
-            sku = SKU.objects.get(id=sku_id ,is_launched=True )
+            sku = SKU.objects.get(id=sku_id, is_launched=True)
         except Exception:
-            return render(request ,'404.html' )
+            return render(request, '404.html')
         #查詢商品分類
         categories = get_categories()
         #查詢麵包屑導航
@@ -105,23 +102,23 @@ class DetailView(View):
         goods = sku.goods
         #建立當前商品規格鍵
         sku_specs = sku.skuspecification_set.order_by('spec_id')
-        sku_key = [] #[規格1,規格2,..]
+        sku_key = []  # [規格1,規格2,..]
         for spec in sku_specs:
             sku_key.append(spec.option_id)
         #取出當前商品所有規格鍵和對應sku_id建立字典
         skus = sku.goods.sku_set.all()
         key_sku_map = {}
         for s in skus:
-            s.specs = s.skuspecification_set.order_by('spec_id')
+            s_specs = s.skuspecification_set.order_by('spec_id')
             key = []
-            for spec in s.specs:
+            for spec in s_specs:
                 key.append(spec.option_id)
-                key_sku_map[tuple(key)] = spec.sku_id #{(規格1,規格2,..):sku_id,..)
+            key_sku_map[tuple(key)] = s.id  # {(規格1,規格2,..):sku_id,..)
         #獲取當前商品規格對象
         goods_specs = goods.goodsspecification_set.order_by('id')
-        for index ,spec in enumerate(goods_specs):
+        for index, spec in enumerate(goods_specs):
             #複製當前規格鍵
-            key=sku_key[:]
+            key = sku_key[:]
             options = spec.specificationoption_set.all()
             for option in options:
                 #查出當前商品對應的規格對象
@@ -129,6 +126,7 @@ class DetailView(View):
                 #從字典找出sku_id賦值
                 option.sku_id = key_sku_map.get(tuple(key))
             spec.spec_options = options
+
         #構造響應數據
         context = {
             'categories':categories ,

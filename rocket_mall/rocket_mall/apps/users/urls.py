@@ -32,4 +32,8 @@ urlpatterns = [
     url(r'^api/addresses/title/put/(?P<address_id>\d+)/$' ,views.UpdateAddressTitleView.as_view() ),
     #保存用戶商品瀏覽紀錄的後端接口
     url(r'^api/browse_histories/$' ,views.UserBrowseHistory.as_view() ),
+    #返回用戶訂單頁面的後端接口
+    url(r'^api/orders/get/(?P<page_num>\d+)/$' ,views.UserOrderInfoView.as_view() ,name='order' ),
+    #修改密碼的後端接口
+    url(r'^api/password/$' ,views.ChangePasswordView.as_view() ,name='password') ,
 ]

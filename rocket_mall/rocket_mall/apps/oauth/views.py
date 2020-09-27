@@ -41,9 +41,12 @@ class LineRegisterView(View):
         if error:
             return redirect(reverse('users:login'))
         try:
-            # 請求line接口獲取id_token
+            #請求line接口獲取id_token
             id_token = get_id_token(code)
-            # 請求line接口驗證並解碼id_token
+            #判斷是否成功授權，若授權失敗，立即中止註冊
+            if not id_token:
+                return redirect(reverse('contents:index'))
+            #請求line接口驗證並解碼id_token
             picture ,userid ,user_messages_dict = get_profile_information(id_token ,state )
         except Exception as e:
             logger.error(e)
@@ -130,3 +133,4 @@ class LineRegisterView(View):
         response = merge_carts_cookies_redis(request, user, response)
         #返回響應
         return response
+

@@ -637,7 +637,7 @@ html,body{height:100%}
 /* 登录页 */
 .login_top{width:960px;height:130px;margin:0 auto;}
 .login_logo{display:block;width:193px;height:76px;margin-top:30px;}
-.login_form_bg{height:480px;background-color:#810101}
+.login_form_bg{height:480px;background-color:#ba0808}
 .no-mp{margin-top:0px;}
 .login_form_wrap{width:1000px;height:480px;margin:0 auto;}
 .login_banner{width:500px;height:386px;background:url(../images/login_banner.png) no-repeat;margin-top:40px;}
@@ -866,8 +866,7 @@ html,body{height:100%}
 .order_goods_list li{float:left; height:80px;line-height:80px;}
 .order_goods_list .col01{width:20%}
 .order_goods_list .col01 img{width:60px;height:60px;border:1px solid #ddd;margin:10px auto;}
-.order_goods_list .col02{width:50%;text-align:left;}
-.order_goods_list .col02 em{color:#999;margin-left:10px}
+.order_goods_list .col02{width:50%;text-align:left;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;}
 .order_goods_list .col03{width:10%}
 .order_goods_list .col04{width:20%}
 

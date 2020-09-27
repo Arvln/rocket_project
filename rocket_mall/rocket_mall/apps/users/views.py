@@ -6,6 +6,7 @@ from django.views import View
 from django.db import DatabaseError
 from django.http import HttpResponseForbidden ,JsonResponse ,HttpResponseBadRequest ,HttpResponseServerError
 import re ,json ,logging
+from django.core.paginator import Paginator ,EmptyPage
 
 from users.models import User ,Address
 from utils.response_code import RETCODE
@@ -16,6 +17,7 @@ from . import constants
 from celery_tasks.email.tasks import send_verify_mail
 from goods.models import SKU
 from carts.utils import merge_carts_cookies_redis
+from orders.models import OrderInfo
 
 # Create your views here.
 
@@ -448,3 +450,91 @@ class UserBrowseHistory(LoginRequiredJsonMixin ,View):
         pl.execute()
         #返回響應
         return JsonResponse({'code':RETCODE.OK ,'errmsg':'OK' })
+
+class UserOrderInfoView(LoginRequiredMixin ,View):
+    """返回用戶訂單頁面"""
+    def get(self ,request ,page_num ):
+
+        #查詢所有訂單
+        orders = OrderInfo.objects.filter(user=request.user).order_by('create_time')
+        #獲取訂單數據
+        user_orders = []
+        for order in orders:
+            skus = []
+            for order_good in order.skus.all():
+                sku = order_good.sku
+                sku_dict = {
+                    'id':sku.id ,
+                    'name':sku.name ,
+                    'price':sku.price ,
+                    'count':order_good.count ,
+                    'amount':sku.price * order_good.count ,
+                    'default_image_url':sku.default_image_url ,
+                }
+                skus.append(sku_dict)
+            user_order = {
+                'update_time': order.update_time ,
+                'order_id': order.order_id ,
+                'skus': skus ,
+                'freight': order.freight ,
+                'total_amount': order.total_amount ,
+                'pay_method': OrderInfo.PAY_METHOD_CHOICES[order.pay_method - 1][1],
+                'status': OrderInfo.ORDER_STATUS_CHOICES[order.status - 1][1] ,
+            }
+            user_orders.append(user_order)
+        #訂單分頁
+        paginator = Paginator(user_orders, 2)
+        #當前頁面的訂單
+        try:
+            page_orders = paginator.page(page_num)
+        except EmptyPage:
+            return HttpResponseForbidden('頁面不存在')
+        #總頁數
+        total_page = paginator.num_pages
+        #構造響應數據
+        context = {
+            'page_orders':page_orders ,
+            'page_num':page_num ,
+            'total_page':total_page ,
+        }
+        return render(request, 'user_center_order.html' ,context)
+
+class ChangePasswordView(LoginRequiredMixin ,View ):
+
+    def get(self ,request ):
+        """提供修改密碼頁面"""
+        return render(request ,'user_center_password.html' )
+
+    def post(self ,request ):
+        """修改密碼"""
+
+        #提取參數
+        user = request.user
+        old_pwd = request.POST.get('old_pwd')
+        new_pwd = request.POST.get('new_pwd')
+        new_pwd2 = request.POST.get('new_pwd2')
+        #校驗參數
+        if not all([old_pwd ,new_pwd ,new_pwd2 ]):
+            return HttpResponseForbidden('缺少必傳參數')
+        if not re.match('^[a-zA-Z0-9_-]{8,12}$', old_pwd):
+            return HttpResponseForbidden('請輸入8位到12位的密碼')
+        if not request.user.check_password(old_pwd):
+            return render(request ,'user_center_password.html' ,{'password_errmsg':'密碼錯誤'})
+        if not re.match('^[a-zA-Z0-9_-]{8,12}$', new_pwd):
+            return HttpResponseForbidden('請輸入8位到12位的新密碼')
+        if old_pwd == new_pwd:
+            return render(request ,'user_center_password.html' ,{'password_errmsg':'新密碼不能和原密碼相同'})
+        if new_pwd != new_pwd2:
+            return HttpResponseForbidden('檢查與原先輸入的新密碼是否相符')
+        #修改密碼
+        try:
+            user.set_password(new_pwd)
+            user.save()
+        except Exception as e:
+            logger.error(e)
+            return render(request ,'user_center_password.html' ,{'password_errmsg':'修改密碼失敗'})
+        #登出用戶
+        logout(request)
+        response = redirect('users:login')
+        response.delete_cookie('username')
+        return response

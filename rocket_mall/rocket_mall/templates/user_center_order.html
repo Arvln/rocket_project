@@ -1,0 +1,165 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+	<title>RockeT|物超所值配送最快</title>
+	<link rel="stylesheet" type="text/css" href="{{ static('css/jquery.pagination.css') }}">
+	<link rel="stylesheet" type="text/css" href="{{ static('css/reset.css') }}">
+	<link rel="stylesheet" type="text/css" href="{{ static('css/main.css') }}">
+	<script type="text/javascript" src="{{ static('js/vue-2.6.12.js') }}"></script>
+    <script type="text/javascript" src="{{ static('js/axios-0.18.0.min.js') }}"></script>
+    <script type="text/javascript" src="{{ static('js/jquery-1.12.4.min.js') }}"></script>
+</head>
+<body>
+	<div id="app" v-cloak>
+	<div class="header_con">
+        <div class="header">
+            <div class="welcome fl">歡迎光臨RockeT</div>
+            <div class="fr">
+                <div v-if="username" class="login_btn fl">
+                    <em>[[ username ]]</em>
+                    <span>|</span>
+                    <a href="{{ url('users:logout') }}">登出</a>
+                </div>
+                <div v-else class="login_btn fl">
+                    <a href="{{ url('users:login') }}">登入</a>
+                    <span>|</span>
+                    <a href="{{ url('users:register') }}">註冊</a>
+                </div>
+                <div class="user_link fl">
+                    <span>|</span>
+                    <a href="{{ url('users:info') }}">用戶中心</a>
+                    <span>|</span>
+                    <a href="cart.html">我的購物車</a>
+                    <span>|</span>
+                    <a href="#">我的訂單</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+	<div class="search_bar clearfix">
+        <a href="{{ url('contents:index') }}" class="logo fl"><img src="{{ static('images/logo.png') }}"></a>
+        <div class="search_wrap fl">
+{#            haystack搜索表單#}
+            <form method="get" action="/search/" class="search_con">
+                <input type="text" class="input_text fl" name="q" placeholder="搜索商品">
+                <input type="submit" class="input_btn fr" name="" value="搜索">
+            </form>
+            <ul class="search_suggest fl">
+                <li><a href="#">造型悠遊卡</a></li>
+                <li><a href="#">懶人沙發</a></li>
+                <li><a href="#">碎花洋裝</a></li>
+                <li><a href="#">人氣月餅禮盒</a></li>
+            </ul>
+        </div>
+
+        <div class="guest_cart fr">
+            <a href="#" class="cart_name fl">我的購物車</a>
+            <div class="goods_count fl" id="show_count">15</div>
+
+            <ul class="cart_goods_show">
+                <li>
+                    <img src="{{ static('images/goods/goods001.jpg') }}" alt="商品图片">
+                    <h4>商品名称手机</h4>
+                    <div>4</div>
+                </li>
+                <li>
+                    <img :src="photo_url" alt="商品图片">
+                    <h4>商品名称手机</h4>
+                    <div>5</div>
+                </li>
+                <li>
+                    <img src="{{ static('images/goods/goods003.jpg') }}" alt="商品图片">
+                    <h4>商品名称手机</h4>
+                    <div>6</div>
+                </li>
+                <li>
+                    <img src="{{ static('images/goods/goods003.jpg') }}" alt="商品图片">
+                    <h4>商品名称手机</h4>
+                    <div>6</div>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+	<div class="main_con clearfix">
+		<div class="left_menu_con clearfix">
+            <h3>用戶中心</h3>
+            <ul>
+                <li><a href="{{ url('users:info') }}">· 個人資訊</a></li>
+                <li><a class="active">· 我的訂單</a></li>
+                <li><a href="{{ url('users:address') }}">· 收貨地址</a></li>
+                <li><a href="user_center_pass.html">· 修改密碼</a></li>
+            </ul>
+        </div>
+		<div class="right_content clearfix">
+
+			<h3 class="common_title2">全部订单</h3>
+            {% for order in page_orders %}
+                <ul class="order_list_th w978 clearfix">
+                    <li class="col01">{{ order.update_time.strftime('%Y-%m-%d %H:%M:%S') }}</li>
+                    <li class="col02">{{ order.order_id }}</li>
+                </ul>
+
+                <table class="order_list_table w980">
+				<tbody>
+					<tr>
+						<td width="55%">
+                            {% for sku in order.skus %}
+                                <ul class="order_goods_list clearfix">
+                                    <li class="col01"><img src="{{ sku.default_image_url }}"></li>
+                                    <li class="col02">{{ sku.name }}</li>
+                                    <li class="col03">{{ sku.count }}</li>
+                                    <li class="col04">{{ sku.price }}元</li>
+                                </ul>
+                            {% endfor %}
+						</td>
+						<td width="15%">{{ order.total_amount }}元<br>含运费：{{ order.freight }}元</td>
+						<td width="15%">{{ order.pay_method }}</td>
+						<td width="15%"><a href="goods_judge.html" class="oper_btn">{{ order.status }}</a></td>
+					</tr>
+				</tbody>
+			</table>
+            {% endfor %}
+
+		    <div class="pagenation">
+		        <div id="pagination" class="page"></div>
+    		</div>
+
+		</div>
+	</div>
+
+	<div class="footer">
+		<div class="foot_link">
+			<a href="#">客服中心</a>
+			<span>|</span>
+			<a href="#">關於羅奇</a>
+			<span>|</span>
+			<a href="#">人才招募</a>
+			<span>|</span>
+			<a href="#">物流合作</a>
+		</div>
+		<p>CopyRight © 2020 RockeT. All Rights Reserved</p>
+		<p>電話：02-****6666    台北市*******66號</p>
+	</div>
+	</div>
+    <script type="text/javascript" src="{{ static('js/api.js') }}"></script>
+    <script type="text/javascript" src="{{ static('js/common.js') }}"></script>
+	<script type="text/javascript" src="{{ static('js/jquery.pagination.min.js') }}"></script>
+	<script type="text/javascript" src="{{ static('js/user_center_order.js') }}"></script>
+	<script>
+        $(function () {
+            $('#pagination').pagination({
+                currentPage: {{ page_num }} ,
+                totalPage: {{ total_page }} ,
+                callback:function (current) {
+                    // location.href = '/orders/info/' + current + '/';
+                    location.href = '/api/orders/get/' + current + '/' ;
+                }
+            })
+        });
+    </script>
+
+</body>
+</html>
