@@ -34,21 +34,32 @@ class LoginBackend(ModelBackend):
     """自定義用戶認證後端"""
     def authenticate(self, request, username=None, password=None, **kwargs):
         """重寫用戶認證方法"""
-        # 是否能查詢到用戶
-        res = get_user_by_account(request ,username )
-        if type(res) == User:
-            user = res
-        else:
-            return res
-        # 查詢到用戶後，校驗密碼是否正確
-        if user and user.check_password(password):
-            # 返回user
-            return user
-        else:
-            if request.method == 'GET':
-                return JsonResponse({'code': RETCODE.PWDERR, 'errmsg': '請確認用戶名或密碼是否正確'})
+        if request is None:
+            #後臺登錄
+            try:
+                #判斷用戶是否可以登錄後臺
+                user = User.objects.get(username=username ,is_superuser=True )
+            except:
+                user = None
             else:
-                return render(request, 'login.html', {'errmsg': '請確認用戶名稱或密碼是否正確'})
+                if user.check_password(password):
+                    return user
+        else:
+            # 是否能查詢到用戶
+            res = get_user_by_account(request ,username )
+            if type(res) == User:
+                user = res
+            else:
+                return res
+            # 查詢到用戶後，校驗密碼是否正確
+            if user and user.check_password(password):
+                # 返回user
+                return user
+            else:
+                if request.method == 'GET':
+                    return JsonResponse({'code': RETCODE.PWDERR, 'errmsg': '請確認用戶名或密碼是否正確'})
+                else:
+                    return render(request, 'login.html', {'errmsg': '請確認用戶名稱或密碼是否正確'})
 
 def generate_verify_email_url(user):
     """生成商城郵箱認證連結"""

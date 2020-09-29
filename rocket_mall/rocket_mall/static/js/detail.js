@@ -31,6 +31,8 @@ let vm = new Vue({
         //獲取購物車數據
         this.get_carts();
 
+        //統計分類商品訪問量
+        this.detail_visit();
     },
     watch: {
         //監聽商品數據變化
@@ -95,8 +97,6 @@ let vm = new Vue({
                 for (let i = 0; i < this.hot_skus.length; i++) {
                     this.hot_skus[i].url = '/detail/' + this.hot_skus[i].id + '/' ;
                 }
-                //統計分類商品訪問量
-                this.detail_visit();
             }).catch(error => {
                 console.log(error.response);
             })

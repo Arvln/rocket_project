@@ -15,6 +15,7 @@ from pathlib import Path
 import sys
 from django.shortcuts import redirect
 from django.urls import reverse
+import datetime
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
@@ -52,9 +53,12 @@ INSTALLED_APPS = [
     'carts' , # 購物車模塊
     'orders' , # 訂單模塊
     'payment' , # 支付模塊
+    'rocket_admin' , # 後臺模塊
+    'corsheaders' , # 跨域模塊
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -294,3 +298,34 @@ ALIPAY_APPID = '2021000120607159'
 ALIPAY_DEBUG = True
 ALIPAY_URL = 'https://openapi.alipaydev.com/gateway.do' #dev環境URL
 ALIPAY_RETURN_URL = 'http://192.168.126.130:8000/api/payment/status/'
+
+#CORS跨域請求白名單:允許向當前API服務器發起跨域請求
+CORS_ORIGIN_WHITELIST = (
+    'http://192.168.126.130:8080' ,
+    'http://192.168.126.130:8000' ,
+    'http://localhost:8080' ,
+    'http://www.rocketmall.gq:8000' ,
+    'http://api.rocketmall.gq:8080' ,
+)
+
+#可攜帶cookie
+CORS_ALLOW_CREDENTIALS = True
+
+#drf
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        #jwt認證
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+    ),
+}
+
+#JWT配置
+JWT_AUTH = {
+    #有效期
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=1),
+    #JWT返回結果
+    'JWT_RESPONSE_PAYLOAD_HANDLER':
+        'rocket_admin.utils.jwt_response_payload_handler',
+}

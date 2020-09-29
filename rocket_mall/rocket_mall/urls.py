@@ -39,4 +39,6 @@ urlpatterns = [
     url(r'^' ,include(('orders.urls' ,'orders') ,namespace='orders')),
     # 支付模塊
     url(r'^' ,include(('payment.urls' ,'payment') ,namespace='payment')),
+    # 後臺模塊
+    url(r'^rocket_admin/' ,include('rocket_admin.urls')),
 ]

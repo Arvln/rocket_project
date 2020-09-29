@@ -69,8 +69,6 @@ class HotGoodsView(View):
             skus = SKU.objects.filter(category_id=category_id, is_launched=True).order_by('-sales')[:2]
         except Exception:
             return HttpResponseForbidden('商品類別不存在')
-        #網頁訪問不須登入，所以設置csrftoken
-        token = get_token(request)
         #構造響應數據
         hot_skus = []
         for sku in skus:
@@ -126,7 +124,8 @@ class DetailView(View):
                 #從字典找出sku_id賦值
                 option.sku_id = key_sku_map.get(tuple(key))
             spec.spec_options = options
-
+        #網頁訪問不須登入，所以設置csrftoken
+        get_token(request)
         #構造響應數據
         context = {
             'categories':categories ,
@@ -143,7 +142,7 @@ class DetailVisitView(View):
 
         #接收並校驗參數
         try:
-            category = GoodsCategory.objects.get(id=category_id)
+            GoodsCategory.objects.get(id=category_id)
         except Exception:
             return HttpResponseForbidden('商品類別不存在')
         #獲取當天日期
