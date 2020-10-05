@@ -30,9 +30,9 @@
                     <span>|</span>
                     <a href="{{ url('users:info') }}">用戶中心</a>
                     <span>|</span>
-                    <a href="cart.html">我的購物車</a>
+                    <a href="{{ url('carts:info') }}">我的購物車</a>
                     <span>|</span>
-                    <a href="#">我的訂單</a>
+                    <a href="{{ url('users:order' ,args=(1,)) }}">我的訂單</a>
                 </div>
             </div>
         </div>

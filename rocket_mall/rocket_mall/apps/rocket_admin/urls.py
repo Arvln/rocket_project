@@ -1,6 +1,7 @@
 from django.conf.urls import url
 from rest_framework_jwt.views import obtain_jwt_token
-from .views import statistical ,users
+from rest_framework.routers import DefaultRouter
+from .views import statistical ,users ,specs ,images ,skus ,orders
 
 urlpatterns = [
     #後臺登錄
@@ -22,5 +23,33 @@ urlpatterns = [
     url(r'^api/statistical/categories/daily_views/$' ,statistical.CategoriesDailyVisitView.as_view()),
 
     #獲取用戶數據
-    url(r'^api/users/(?P<username>[a-zA-Z0-9_-]{1,20})||None/$' ,users.UserView.as_view()),
+    url(r'^api/users/$' ,users.UserView.as_view()),
+    #獲取SPU規格表數據
+    url(r'^api/goods/simple/$' ,specs.SpecView.as_view({'get':'simple'})),
+    #獲取SKU規格表數據
+    url(r'^api/skus/simple/$', images.ImageView.as_view({'get':'simple'})),
+    #獲取SPU商品規格資訊
+    url(r'^api/goods/(?P<pk>\d+)/specs/$', skus.SKUView.as_view({'get':'specs'}))
 ]
+
+#ViewSet自動生成路由
+#SPU規格表
+router = DefaultRouter()
+router.register('api/goods/specs', specs.SpecView, basename='specs')
+urlpatterns += router.urls
+
+#圖片表
+router = DefaultRouter()
+router.register('api/skus/images', images.ImageView, basename='images')
+urlpatterns += router.urls
+
+#SKU表
+router = DefaultRouter()
+router.register('api/skus', skus.SKUView, basename='skus')
+urlpatterns += router.urls
+
+#Order
+router = DefaultRouter()
+router.register('api/orders', orders.OrderView, basename='orders')
+print(router.urls)
+urlpatterns += router.urls

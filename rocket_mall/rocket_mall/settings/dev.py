@@ -329,3 +329,6 @@ JWT_AUTH = {
     'JWT_RESPONSE_PAYLOAD_HANDLER':
         'rocket_admin.utils.jwt_response_payload_handler',
 }
+
+#fastdfs
+FASTDFS_PATH = str(BASE_DIR / 'utils/fastdfs/client.conf')

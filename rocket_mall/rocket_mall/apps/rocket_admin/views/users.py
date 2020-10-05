@@ -11,16 +11,15 @@ class UserView(ListCreateAPIView):
     :return:user(s)
     """
     #指定查詢集
-    #queryset =
+    # queryset =
     #建立序列化器
     serializer_class = UserSerializer
     #指定分頁器
     pagination_class = PageNum
     #重寫指定查詢集數據的方法
     def get_queryset(self):
-
-        if self.kwargs.get('username') is None:
+        if self.request.query_params.get('username') is None:
             return User.objects.all()
         else:
-            #模糊查詢
-            return User.objects.filter(username__contains=self.kwargs.get('username'))
+            # 模糊查詢
+            return User.objects.filter(username__contains=self.request.query_params.get('username'))

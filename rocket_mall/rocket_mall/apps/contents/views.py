@@ -9,7 +9,6 @@ from contents.utils import get_categories
 
 class IndexView(View):
     """首頁廣告"""
-
     #需求:為提高SEO效率，首頁採用jinja2做SSR
     def get(self ,request ):
         """提供首頁廣告頁面"""
