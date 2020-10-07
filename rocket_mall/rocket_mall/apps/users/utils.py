@@ -38,7 +38,7 @@ class LoginBackend(ModelBackend):
             #後臺登錄
             try:
                 #判斷用戶是否可以登錄後臺
-                user = User.objects.get(username=username ,is_superuser=True )
+                user = User.objects.get(username=username ,is_staff=True )
             except:
                 user = None
             else:

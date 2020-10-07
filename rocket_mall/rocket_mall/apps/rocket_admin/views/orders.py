@@ -10,7 +10,7 @@ from rocket_admin.serializers.orders import OrderInfoSerializer
 
 class OrderView(ReadOnlyModelViewSet):
     """
-    訂單表增刪改
+    訂單表增查改
     使用只能查詢、新增的擴展類:ReadOnlyModelViewSet
     """
     permission_classes = [IsAdminUser]

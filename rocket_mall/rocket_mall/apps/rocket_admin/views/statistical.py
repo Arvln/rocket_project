@@ -73,7 +73,7 @@ class UserMonthGrouthView(APIView):
         date_list = []
         for i in range(30):
             begin_date = first_date + timedelta(days=i)
-            next_date = begin_date + timedelta(days=i+1)
+            next_date = begin_date + timedelta(days=1)
             count = User.objects.filter(date_joined__gte=begin_date, date_joined__lte=next_date).count()
             date_dict = {
                 'date':begin_date ,

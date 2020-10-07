@@ -5,6 +5,8 @@ from django.db import models
 from utils.models import BaseModel
 
 # Create your models here.
+
+#通過模型類建表需要寫完整字段約束，如果數據庫中已建好表，則只需要建立模型類和數據庫的映射關係
 class User(AbstractUser):
     """加入需求的手機號碼字段"""
     mobile = models.CharField(max_length=10 ,unique=True ,blank=True ,verbose_name='手機號碼')
