@@ -5,7 +5,6 @@ from decimal import Decimal
 
 class User(BaseModel):
     id : int
-    password : str
     last_login : datetime = None #模型類默認可為空，返回的數據類型也應指定可為空
     is_superuser : bool
     username : str

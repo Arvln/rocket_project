@@ -19,11 +19,11 @@ class Goods(BaseModel):
     class Config:
         orm_mode = True
 #請求體結構
-class GoodsSpecBase(BaseModel):
+class GoodsSpecRequestBody(BaseModel):
     name: str
     goods_id: int
 
-class GoodsSpecification(GoodsSpecBase):
+class GoodsSpecification(GoodsSpecRequestBody):
     id:int
     goods:List[Goods] = []
     class Config:

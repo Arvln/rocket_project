@@ -34,7 +34,7 @@ def get_goods_specs(db:Session = Depends(get_db)):
     return JSONResponse(status_code=200, content=lists)
 #新增SPU規格表數據
 @app.post('/api/goods/specs/')
-def create_goods_spec(spec:schemas.GoodsSpecBase, db:Session = Depends(get_db)):
+def create_goods_spec(spec:schemas.GoodsSpecRequestBody, db:Session = Depends(get_db)):
     good_spec = crud.create_spec(db=db, spec=spec)
     good_spec_dict = {
         'id':good_spec.id ,
@@ -56,7 +56,7 @@ def get_goods_spec(pk:int, db:Session = Depends(get_db)):
     return JSONResponse(status_code=200, content=good_spec_dict)
 #更新SPU規格表數據
 @app.put('/api/goods/specs/{pk}/')
-def update_goods_spec(pk:int, spec:schemas.GoodsSpecBase, db:Session = Depends(get_db)):
+def update_goods_spec(pk:int, spec:schemas.GoodsSpecRequestBody, db:Session = Depends(get_db)):
     good_spec = crud.update_spec(pk=pk, spec=spec, db=db)
     good_spec_dict = {
         'id': good_spec.id,
