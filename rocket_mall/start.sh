@@ -5,7 +5,7 @@ python manage.py collectstatic --noinput&&
 python manage.py makemigrations&&
 python manage.py migrate&&
 #elasticsearch建立索引
-python manage.py rebuild_index&&
+echo y|python manage.py rebuild_index&&
 #修改日誌文件權限
 chmod 666 logs/rocket.log&&
 #uwsgi啟動django服務

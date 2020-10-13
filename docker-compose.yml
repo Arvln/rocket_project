@@ -44,6 +44,8 @@ services:
       - rocket_db_slave_vol:/var/lib/mysql
       - ./compose/mysql/slave/my.cnf:/etc/mysql/my.cnf
       - ./compose/mysql/init:/docker-entrypoint-initdb.d/
+    depends_on:
+      - db_master
     ports:
       - "3308:3306"
     restart: always
