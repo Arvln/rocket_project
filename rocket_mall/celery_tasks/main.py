@@ -7,7 +7,7 @@ from celery import Celery
 #celery環境配置，讀取django配置文件dev.py
 import os
 if not os.getenv('DJANGO_SETTINGS_MODULE'):
-    os.environ['DJANGO_SETTINGS_MODULE'] = 'rocket_mall.settings.dev'
+    os.environ['DJANGO_SETTINGS_MODULE'] = 'rocket_mall.settings'
 
 #創建Celery實例
 celery_app = Celery('rocket')

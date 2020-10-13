@@ -1,0 +1,126 @@
+version: "3"
+
+volumes:
+  rocket_db_master_vol:
+  rocket_db_slave_vol:
+  rocket_redis_vol:
+
+services:
+  redis:
+    image: redis:5
+    command: redis-server /etc/redis/redis.conf
+    volumes:
+    - rocket_redis_vol:/data
+    - ./compose/redis/redis.conf:/etc/redis/redis.conf
+    ports:
+    - "6380:6379"
+    restart: always
+    networks:
+      - redis_net
+  db_master:
+    image: mysql:5.7
+    environment:
+      - MYSQL_ROOT_PASSWORD=123456
+      - MYSQL_DATABASE=rocket_mall
+      - MYSQL_USER=rocket_it
+      - MYSQL_PASSWORD=123456
+    volumes:
+    - rocket_db_master_vol:/var/lib/mysql
+    - ./compose/mysql/master/my.cnf:/etc/mysql/my.cnf
+    - ./compose/mysql/init:/docker-entrypoint-initdb.d/
+    ports:
+    - "3307:3306"
+    restart: always
+    networks:
+      - mysql_net
+  db_slave:
+    image: mysql:5.7
+    environment:
+      - MYSQL_ROOT_PASSWORD=123456
+      - MYSQL_DATABASE=rocket_mall
+      - MYSQL_USER=rocket_it
+      - MYSQL_PASSWORD=123456
+    volumes:
+      - rocket_db_slave_vol:/var/lib/mysql
+      - ./compose/mysql/slave/my.cnf:/etc/mysql/my.cnf
+      - ./compose/mysql/init:/docker-entrypoint-initdb.d/
+    ports:
+      - "3308:3306"
+    restart: always
+    networks:
+      - mysql_net
+  elasticsearch:
+    build: ./compose/elasticsearch
+    ports:
+    - "9200:9200"
+    - "9300:9300"
+    volumes:
+    - ./compose/elasticsearch/data:/usr/share/elasticsearch/data
+    - ./compose/elasticsearch/logs:/usr/share/elasticsearch/logs
+    - ./compose/elasticsearch/config:/usr/share/elasticsearch/config/scripts
+    environment:
+      - "ES_JAVA_OPTS=-Xms256m -Xmx256m"
+    restart: always
+    networks:
+      - elasticsearch_net
+  web:
+    build: ./rocket_mall
+    expose:
+      - "8000"
+    volumes:
+    - ./rocket_mall:/var/www/html/rocket_mall
+    - ./compose/uwsgi:/tmp
+    depends_on:
+      - db_master
+      - db_slave
+      - redis
+      - elasticsearch
+    environment:
+      - DEBUG=False
+    restart: always
+    networks:
+      - mysql_net
+      - redis_net
+      - default
+      - elasticsearch_net
+    tty: true
+    stdin_open: true
+  nginx:
+    build: ./compose/nginx
+    ports:
+    - "80:80"
+    - "443:443"
+    expose:
+      - "80"
+    volumes:
+    - ./rocket_mall/rocket_mall/statics:/usr/share/nginx/html/static
+    - ./compose/nginx/log:/var/log/nginx
+    depends_on:
+      - web
+    restart: always
+
+networks:
+  mysql_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.18.0.0/16
+          gateway: 172.18.0.1
+  redis_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.19.0.0/16
+          gateway: 172.19.0.1
+  fastdfs_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+          gateway: 172.20.0.1
+  elasticsearch_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.21.0.0/16
+          gateway: 172.21.0.1

@@ -1,5 +1,5 @@
 from django.core.files.storage import Storage
-from settings.dev import FASTDFS_BASE_URL
+from settings import FASTDFS_BASE_URL
 
 class FastdfsStorage(Storage):
     """自定義文件存儲類"""

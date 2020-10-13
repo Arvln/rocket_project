@@ -1,4 +1,4 @@
-const ApiRootUrl = 'http://192.168.126.130:8000/api/';
+const ApiRootUrl = 'http://127.0.0.1/api/';
 
 const api = {
     UsernamecountUrl: ApiRootUrl + 'usernames/get/', //用戶名數量查詢接口

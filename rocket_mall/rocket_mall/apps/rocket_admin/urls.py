@@ -55,7 +55,6 @@ urlpatterns += router.urls
 #Order
 router = DefaultRouter()
 router.register('api/orders', orders.OrderView, basename='orders')
-print(router.urls)
 urlpatterns += router.urls
 
 #Premission

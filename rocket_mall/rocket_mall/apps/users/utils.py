@@ -6,7 +6,7 @@ import re
 from users.models import User
 from utils.response_code import RETCODE
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
-from settings.dev import SECRET_KEY ,EMAIL_VERIFY_URL
+from settings import SECRET_KEY ,EMAIL_VERIFY_URL
 from . import constants
 
 def get_user_by_account(request ,account ):

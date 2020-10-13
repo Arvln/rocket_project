@@ -3,7 +3,7 @@ from rest_framework.response import Response
 
 from goods.models import SKUImage ,SKU
 from fdfs_client.client import Fdfs_client
-from settings import dev
+import settings
 
 
 class ImageSerializer(serializers.ModelSerializer):
@@ -16,7 +16,7 @@ class ImageSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         """新增圖片"""
         #建立Fastdfs客戶端
-        client = Fdfs_client(dev.FASTDFS_PATH)
+        client = Fdfs_client(settings.FASTDFS_PATH)
         file = self.context['request'].Files.get('image')
         #上傳圖片
         res = client.upload_by_file(file.read())
@@ -30,7 +30,7 @@ class ImageSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         """更新圖片"""
         #建立Fastdfs客戶端
-        client = Fdfs_client(dev.FASTDFS_PATH)
+        client = Fdfs_client(settings.FASTDFS_PATH)
         file = self.context['request'].Files.get('image')
         #上傳圖片
         res = client.upload_by_file(file.read())

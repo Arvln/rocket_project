@@ -32,12 +32,32 @@
     </div>
 
     <div class="search_bar clearfix">
-        <a href="{{ url('contents:index') }}" class="logo fl"><img src="{{ static('images/logo.png') }}"></a>
-        <div class="sub_page_name fl">|&nbsp;&nbsp;&nbsp;&nbsp;用戶中心</div>
-        <form method="get" action="/search.html" class="search_con fr mt40">
-            <input type="text" class="input_text fl" name="q" placeholder="搜尋商品">
-            <input type="submit" class="input_btn fr" name="" value="搜尋">
-        </form>
+        <a href="{{ url('contents:index') }}" class="logo fl"><img src="{{ static('images/logo.jpeg') }}"></a>
+        <div class="search_wrap fl">
+{#            haystack搜索表單#}
+            <form method="get" action="/search/" class="search_con">
+                <input type="text" class="input_text fl" name="q" placeholder="搜索商品">
+                <input type="submit" class="input_btn fr" name="" value="搜索">
+            </form>
+            <ul class="search_suggest fl">
+                <li><a href="#">造型悠遊卡</a></li>
+                <li><a href="#">懶人沙發</a></li>
+                <li><a href="#">碎花洋裝</a></li>
+                <li><a href="#">人氣月餅禮盒</a></li>
+            </ul>
+        </div>
+
+        <div class="guest_cart fr">
+            <a @click="get_carts" class="cart_name fl">我的購物車</a>
+            <div class="goods_count fl" id="show_count">[[ cart_total_count ]]</div>
+            <ul class="cart_goods_show">
+                <li v-for="cart in carts">
+                    <img :src="cart.default_image_url" alt="商品图片">
+                    <h4>[[ cart.name ]]</h4>
+                    <div>[[ cart.count ]]</div>
+                </li>
+            </ul>
+		</div>
     </div>
 
     <div class="main_con clearfix">

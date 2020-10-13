@@ -3,7 +3,7 @@ from django.shortcuts import render ,redirect
 from django.urls import reverse
 from django.http import JsonResponse ,HttpResponseServerError ,HttpResponseForbidden
 from django.views import View
-from settings.dev import Line_ChannelID
+from settings import Line_ChannelID
 import logging ,re
 
 from oauth.utils import get_id_token ,get_profile_information ,generate_access_token ,check_access_token

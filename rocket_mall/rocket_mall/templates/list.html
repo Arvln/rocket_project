@@ -39,7 +39,7 @@
     </div>
 
 	<div class="search_bar clearfix">
-        <a href="{{ url('contents:index') }}" class="logo fl"><img src="{{ static('images/logo.png') }}"></a>
+        <a href="{{ url('contents:index') }}" class="logo fl"><img src="{{ static('images/logo.jpeg') }}"></a>
         <div class="search_wrap fl">
 {#            haystack搜索表單#}
             <form method="get" action="/search/" class="search_con">
@@ -55,32 +55,16 @@
         </div>
 
         <div class="guest_cart fr">
-            <a href="#" class="cart_name fl">我的購物車</a>
-            <div class="goods_count fl" id="show_count">15</div>
-
+            <a @click="get_carts" class="cart_name fl">我的購物車</a>
+            <div class="goods_count fl" id="show_count">[[ cart_total_count ]]</div>
             <ul class="cart_goods_show">
-                <li>
-                    <img src="{{ static('images/goods/goods001.jpg') }}" alt="商品图片">
-                    <h4>商品名称手机</h4>
-                    <div>4</div>
-                </li>
-                <li>
-                    <img :src="photo_url" alt="商品图片">
-                    <h4>商品名称手机</h4>
-                    <div>5</div>
-                </li>
-                <li>
-                    <img src="{{ static('images/goods/goods003.jpg') }}" alt="商品图片">
-                    <h4>商品名称手机</h4>
-                    <div>6</div>
-                </li>
-                <li>
-                    <img src="{{ static('images/goods/goods003.jpg') }}" alt="商品图片">
-                    <h4>商品名称手机</h4>
-                    <div>6</div>
+                <li v-for="cart in carts">
+                    <img :src="cart.default_image_url" alt="商品图片">
+                    <h4>[[ cart.name ]]</h4>
+                    <div>[[ cart.count ]]</div>
                 </li>
             </ul>
-        </div>
+		</div>
     </div>
 
 	<div class="navbar_con">

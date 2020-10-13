@@ -5,7 +5,7 @@ from django.http import JsonResponse ,HttpResponseForbidden
 from utils.views import LoginRequiredJsonMixin
 from alipay import AliPay
 from alipay.utils import AliPayConfig
-from settings import dev
+import settings
 from orders.models import OrderInfo
 from utils.response_code import RETCODE
 from payment.keys.app_private_key import app_private_key_string
@@ -17,7 +17,7 @@ from payment.models import Payment
 
 #創建對接支付寶的SDK對象
 alipay = AliPay(
-            appid=dev.ALIPAY_APPID ,
+            appid=settings.ALIPAY_APPID ,
             #默認回調URL:異步通知
             app_notify_url=None ,
             #商城加密私鑰
@@ -25,7 +25,7 @@ alipay = AliPay(
             alipay_public_key_string=alipay_public_key_string ,
             #解密支付寶數據的支付寶公鑰
             sign_type="RSA2" ,
-            debug = dev.ALIPAY_DEBUG ,
+            debug = settings.ALIPAY_DEBUG ,
             #請求超時時間
             config = AliPayConfig(timeout=15) ,
         )
@@ -69,8 +69,8 @@ class PaymentView(LoginRequiredJsonMixin ,View):
             out_trade_no=order_id ,
             total_amount=str(order.total_amount) ,
             subject='RockeT%s' % order_id ,
-            return_url=dev.ALIPAY_RETURN_URL ,
+            return_url=settings.ALIPAY_RETURN_URL ,
         )
         #拼接支付寶登錄頁URL
-        alipay_url = dev.ALIPAY_URL + '?' + order_string
+        alipay_url = settings.ALIPAY_URL + '?' + order_string
         return JsonResponse({'code':RETCODE.OK ,'errmsg':'OK' ,'alipay_url':alipay_url })

@@ -1,7 +1,6 @@
 from django.urls import reverse
-from django.shortcuts import redirect
 
-from settings.dev import SECRET_KEY ,Line_ChannelID ,Line_Channel_secret
+from settings import SECRET_KEY ,Line_ChannelID ,Line_Channel_secret
 import requests ,json
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer ,BadData
 from . import constants

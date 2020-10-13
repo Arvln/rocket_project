@@ -1,0 +1,1800 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+	<title>RockeT|物超所值配送最快</title>
+	<link rel="stylesheet" type="text/css" href="/static/css/reset.css">
+	<link rel="stylesheet" type="text/css" href="/static/css/main.css">
+	<script type="text/javascript" src="/static/js/vue-2.6.12.js"></script>
+    <script type="text/javascript" src="/static/js/axios-0.18.0.min.js"></script>
+</head>
+<body>
+	<div id="app" v-cloak>
+	<div class="header_con">
+		<div class="header">
+            <div class="welcome fl">歡迎光臨RockeT</div>
+            <div class="fr">
+                <div v-if="username" class="login_btn fl">
+                    <em>[[ username ]]</em>
+                    <span>|</span>
+                    <a href="/api/logout/" class="quit">登出</a>
+                </div>
+                <div v-else class="login_btn fl">
+                    <a href="/api/login_info/">登入</a>
+                    <span>|</span>
+                    <a href="/api/register_info/post/">註冊</a>
+                </div>
+                <div class="user_link fl">
+                    <span>|</span>
+                    <a href="/api/user_center_info/get/">用戶中心</a>
+                    <span>|</span>
+                    <a href="/api/carts/">我的購物車</a>
+                    <span>|</span>
+                    <a href="/api/orders/get/1/">我的訂單</a>
+                </div>
+            </div>
+        </div>
+	</div>
+
+	<div class="search_bar clearfix">
+		<a href="/" class="logo fl"><img src="/static/images/logo.jpeg"></a>
+		<div class="search_wrap fl">
+            <form method="get" action="/search/" class="search_con">
+                <input type="text" class="input_text fl" name="q" placeholder="搜索商品">
+                <input type="submit" class="input_btn fr" name="" value="搜索">
+            </form>
+            <ul class="search_suggest fl">
+                <li><a href="#">造型悠遊卡</a></li>
+                <li><a href="#">懶人沙發</a></li>
+                <li><a href="#">碎花洋裝</a></li>
+                <li><a href="#">人氣月餅禮盒</a></li>
+            </ul>
+        </div>
+
+		<div class="guest_cart fr">
+            <a @click="get_carts" class="cart_name fl">我的購物車</a>
+            <div class="goods_count fl" id="show_count">[[ cart_total_count ]]</div>
+            <ul class="cart_goods_show">
+                <li v-for="cart in carts">
+                    <img :src="cart.default_image_url" alt="商品图片">
+                    <h4>[[ cart.name ]]</h4>
+                    <div>[[ cart.count ]]</div>
+                </li>
+            </ul>
+		</div>
+	</div>
+
+	<div class="navbar_con">
+		<div class="navbar">
+			<div class="sub_menu_con fl">
+				<h1 class="fl">商品分類</h1>
+				<ul class="sub_menu">
+                    
+                        <li>
+                            <div class="level1">
+                                
+                                    <a href="http://www.rocketmall.gq">手機</a>
+                                
+                                    <a href="http://www.rocketmall.gq">相機</a>
+                                
+                                    <a href="http://www.rocketmall.gq">數碼</a>
+                                
+                            </div>
+                            <div class="level2">
+                                
+                                    <div class="list_group">
+                                        <div class="group_name fl">手機通訊 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                                <a href="/api/list/115/1/">5G手機</a>
+                                            
+                                                <a href="/api/list/116/1/">遊戲手機</a>
+                                            
+                                                <a href="/api/list/117/1/">拍照手機</a>
+                                            
+                                                <a href="/api/list/118/1/">老人推薦</a>
+                                            
+                                        </div>
+                                    </div>
+                                
+                                    <div class="list_group">
+                                        <div class="group_name fl">手機配件 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                                <a href="/api/list/119/1/">手機殼</a>
+                                            
+                                                <a href="/api/list/120/1/">保護貼</a>
+                                            
+                                                <a href="/api/list/121/1/">手機記憶卡</a>
+                                            
+                                                <a href="/api/list/122/1/">數據線</a>
+                                            
+                                                <a href="/api/list/123/1/">充電器</a>
+                                            
+                                                <a href="/api/list/124/1/">Qi無線充電器</a>
+                                            
+                                                <a href="/api/list/125/1/">手機耳機</a>
+                                            
+                                                <a href="/api/list/126/1/">行動電源</a>
+                                            
+                                                <a href="/api/list/127/1/">手機支架</a>
+                                            
+                                        </div>
+                                    </div>
+                                
+                                    <div class="list_group">
+                                        <div class="group_name fl">攝影攝像 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                                <a href="/api/list/128/1/">數位相機</a>
+                                            
+                                                <a href="/api/list/129/1/">微單眼相機</a>
+                                            
+                                                <a href="/api/list/130/1/">單眼反光相機</a>
+                                            
+                                                <a href="/api/list/131/1/">拍立得</a>
+                                            
+                                                <a href="/api/list/132/1/">運動相機</a>
+                                            
+                                                <a href="/api/list/133/1/">攝影機</a>
+                                            
+                                                <a href="/api/list/134/1/">鏡頭</a>
+                                            
+                                                <a href="/api/list/135/1/">數位相框</a>
+                                            
+                                        </div>
+                                    </div>
+                                
+                                    <div class="list_group">
+                                        <div class="group_name fl">數碼配件 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                                <a href="/api/list/136/1/">記憶卡</a>
+                                            
+                                                <a href="/api/list/137/1/">三腳架</a>
+                                            
+                                                <a href="/api/list/138/1/">閃光燈</a>
+                                            
+                                                <a href="/api/list/139/1/">電池充電器</a>
+                                            
+                                                <a href="/api/list/140/1/">讀卡機</a>
+                                            
+                                        </div>
+                                    </div>
+                                
+                                    <div class="list_group">
+                                        <div class="group_name fl">影音娛樂 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                                <a href="/api/list/141/1/">耳機耳麥</a>
+                                            
+                                                <a href="/api/list/142/1/">音箱音響</a>
+                                            
+                                                <a href="/api/list/143/1/">音源線</a>
+                                            
+                                                <a href="/api/list/144/1/">收音機</a>
+                                            
+                                                <a href="/api/list/145/1/">麥克風</a>
+                                            
+                                                <a href="/api/list/146/1/">專業音響</a>
+                                            
+                                        </div>
+                                    </div>
+                                
+                                    <div class="list_group">
+                                        <div class="group_name fl">智能配備 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                                <a href="/api/list/147/1/">智能手環</a>
+                                            
+                                                <a href="/api/list/148/1/">智能手表</a>
+                                            
+                                                <a href="/api/list/149/1/">VR&amp;AR</a>
+                                            
+                                                <a href="/api/list/150/1/">智能家居</a>
+                                            
+                                                <a href="/api/list/151/1/">無人機</a>
+                                            
+                                        </div>
+                                    </div>
+                                
+                                    <div class="list_group">
+                                        <div class="group_name fl">電子教具 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                                <a href="/api/list/152/1/">學生平板</a>
+                                            
+                                                <a href="/api/list/153/1/">點讀機</a>
+                                            
+                                                <a href="/api/list/154/1/">翻譯機</a>
+                                            
+                                                <a href="/api/list/155/1/">電子書</a>
+                                            
+                                                <a href="/api/list/156/1/">電子詞典</a>
+                                            
+                                        </div>
+                                    </div>
+                                
+                            </div>
+                        </li>
+                    
+                        <li>
+                            <div class="level1">
+                                
+                                    <a href="http://www.rocketmall.gq">電腦</a>
+                                
+                                    <a href="http://www.rocketmall.gq">辦公</a>
+                                
+                                    <a href="http://www.rocketmall.gq">家用電器</a>
+                                
+                            </div>
+                            <div class="level2">
+                                
+                                    <div class="list_group">
+                                        <div class="group_name fl">電腦 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                                <a href="/api/list/157/1/">筆記型電腦</a>
+                                            
+                                                <a href="/api/list/158/1/">電競專機</a>
+                                            
+                                                <a href="/api/list/159/1/">平板電腦</a>
+                                            
+                                                <a href="/api/list/160/1/">桌上型電腦</a>
+                                            
+                                                <a href="/api/list/161/1/">桌電套組</a>
+                                            
+                                                <a href="/api/list/162/1/">行動工作站</a>
+                                            
+                                        </div>
+                                    </div>
+                                
+                                    <div class="list_group">
+                                        <div class="group_name fl">電腦零件 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                                <a href="/api/list/163/1/">顯示器</a>
+                                            
+                                                <a href="/api/list/164/1/">CPU</a>
+                                            
+                                                <a href="/api/list/165/1/">主機板</a>
+                                            
+                                                <a href="/api/list/166/1/">顯卡</a>
+                                            
+                                                <a href="/api/list/167/1/">硬碟</a>
+                                            
+                                                <a href="/api/list/168/1/">記憶體</a>
+                                            
+                                                <a href="/api/list/169/1/">機箱</a>
+                                            
+                                                <a href="/api/list/170/1/">電源</a>
+                                            
+                                                <a href="/api/list/171/1/">散熱器</a>
+                                            
+                                        </div>
+                                    </div>
+                                
+                                    <div class="list_group">
+                                        <div class="group_name fl">電腦配件 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                                <a href="/api/list/172/1/">滑鼠</a>
+                                            
+                                                <a href="/api/list/173/1/">鍵盤</a>
+                                            
+                                                <a href="/api/list/174/1/">配件套組 </a>
+                                            
+                                                <a href="/api/list/175/1/">USB</a>
+                                            
+                                                <a href="/api/list/176/1/">行動硬碟</a>
+                                            
+                                                <a href="/api/list/177/1/">滑鼠墊</a>
+                                            
+                                                <a href="/api/list/178/1/">網路攝影機</a>
+                                            
+                                                <a href="/api/list/179/1/">電纜</a>
+                                            
+                                                <a href="/api/list/180/1/">手寫板</a>
+                                            
+                                        </div>
+                                    </div>
+                                
+                                    <div class="list_group">
+                                        <div class="group_name fl">辦公配備 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                                <a href="/api/list/181/1/">投影機</a>
+                                            
+                                                <a href="/api/list/182/1/">投影配件</a>
+                                            
+                                                <a href="/api/list/183/1/">多功能桌機</a>
+                                            
+                                                <a href="/api/list/184/1/">影印機</a>
+                                            
+                                        </div>
+                                    </div>
+                                
+                                    <div class="list_group">
+                                        <div class="group_name fl">文具 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                                <a href="/api/list/185/1/">墨粉</a>
+                                            
+                                                <a href="/api/list/186/1/">墨水匣</a>
+                                            
+                                                <a href="/api/list/187/1/">色帶</a>
+                                            
+                                                <a href="/api/list/188/1/">紙類</a>
+                                            
+                                                <a href="/api/list/189/1/">辦公文具</a>
+                                            
+                                                <a href="/api/list/190/1/">文件收納</a>
+                                            
+                                                <a href="/api/list/191/1/">計算機</a>
+                                            
+                                                <a href="/api/list/192/1/">筆類</a>
+                                            
+                                        </div>
+                                    </div>
+                                
+                                    <div class="list_group">
+                                        <div class="group_name fl">冷氣 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                                <a href="/api/list/197/1/">壁掛式空調</a>
+                                            
+                                                <a href="/api/list/198/1/">櫃式空調</a>
+                                            
+                                                <a href="/api/list/199/1/">變頻空調</a>
+                                            
+                                                <a href="/api/list/200/1/">節能空調</a>
+                                            
+                                                <a href="/api/list/201/1/">智能空調</a>
+                                            
+                                        </div>
+                                    </div>
+                                
+                                    <div class="list_group">
+                                        <div class="group_name fl">洗衣機 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                                <a href="/api/list/202/1/">滾筒洗衣機</a>
+                                            
+                                                <a href="/api/list/203/1/">洗烘一體機</a>
+                                            
+                                                <a href="/api/list/204/1/">波輪洗衣機</a>
+                                            
+                                                <a href="/api/list/205/1/">迷你洗衣機</a>
+                                            
+                                        </div>
+                                    </div>
+                                
+                                    <div class="list_group">
+                                        <div class="group_name fl">冰箱 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                                <a href="/api/list/206/1/">多門</a>
+                                            
+                                                <a href="/api/list/207/1/">對開門</a>
+                                            
+                                                <a href="/api/list/208/1/">三門</a>
+                                            
+                                                <a href="/api/list/209/1/">雙門</a>
+                                            
+                                        </div>
+                                    </div>
+                                
+                                    <div class="list_group">
+                                        <div class="group_name fl">生活電器 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                                <a href="/api/list/215/1/">空氣清淨機</a>
+                                            
+                                                <a href="/api/list/216/1/">電風扇</a>
+                                            
+                                                <a href="/api/list/217/1/">掃地機器人</a>
+                                            
+                                                <a href="/api/list/218/1/">拖地機</a>
+                                            
+                                                <a href="/api/list/219/1/">烘衣機</a>
+                                            
+                                                <a href="/api/list/220/1/">電話</a>
+                                            
+                                        </div>
+                                    </div>
+                                
+                            </div>
+                        </li>
+                    
+                        <li>
+                            <div class="level1">
+                                
+                                    <a href="http://www.rocketmall.gq">家居</a>
+                                
+                                    <a href="http://www.rocketmall.gq">家具</a>
+                                
+                                    <a href="http://www.rocketmall.gq">家裝</a>
+                                
+                                    <a href="http://www.rocketmall.gq">廚具</a>
+                                
+                            </div>
+                            <div class="level2">
+                                
+                                    <div class="list_group">
+                                        <div class="group_name fl">日常用品 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                                <a href="/api/list/221/1/">收納用品</a>
+                                            
+                                                <a href="/api/list/222/1/">雨傘雨具</a>
+                                            
+                                                <a href="/api/list/223/1/">清潔除味</a>
+                                            
+                                                <a href="/api/list/224/1/">浴室用品</a>
+                                            
+                                                <a href="/api/list/225/1/">縫紉針織</a>
+                                            
+                                        </div>
+                                    </div>
+                                
+                                    <div class="list_group">
+                                        <div class="group_name fl">紡織品 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                                <a href="/api/list/226/1/">床被套件</a>
+                                            
+                                                <a href="/api/list/227/1/">被子</a>
+                                            
+                                                <a href="/api/list/228/1/">枕芯</a>
+                                            
+                                                <a href="/api/list/229/1/">蚊帳</a>
+                                            
+                                                <a href="/api/list/230/1/">涼席</a>
+                                            
+                                                <a href="/api/list/231/1/">毛巾浴巾</a>
+                                            
+                                        </div>
+                                    </div>
+                                
+                                    <div class="list_group">
+                                        <div class="group_name fl">燈具 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                                <a href="/api/list/232/1/">吸頂燈</a>
+                                            
+                                                <a href="/api/list/233/1/">吊燈</a>
+                                            
+                                                <a href="/api/list/234/1/">檯燈</a>
+                                            
+                                                <a href="/api/list/235/1/">筒燈射燈</a>
+                                            
+                                                <a href="/api/list/236/1/">裝飾燈</a>
+                                            
+                                        </div>
+                                    </div>
+                                
+                                    <div class="list_group">
+                                        <div class="group_name fl">傢俱 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                                <a href="/api/list/237/1/">臥室傢俱</a>
+                                            
+                                                <a href="/api/list/238/1/">客廳傢俱</a>
+                                            
+                                                <a href="/api/list/239/1/">餐廳傢俱</a>
+                                            
+                                                <a href="/api/list/240/1/">書房傢俱</a>
+                                            
+                                                <a href="/api/list/241/1/">兒童傢俱</a>
+                                            
+                                        </div>
+                                    </div>
+                                
+                                    <div class="list_group">
+                                        <div class="group_name fl">居家布置 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                                <a href="/api/list/242/1/">裝飾字畫</a>
+                                            
+                                                <a href="/api/list/243/1/">裝飾擺設</a>
+                                            
+                                                <a href="/api/list/244/1/">十字繡</a>
+                                            
+                                                <a href="/api/list/245/1/">牆貼</a>
+                                            
+                                        </div>
+                                    </div>
+                                
+                                    <div class="list_group">
+                                        <div class="group_name fl">家裝材料 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                                <a href="/api/list/246/1/">瓷磚</a>
+                                            
+                                                <a href="/api/list/247/1/">地板</a>
+                                            
+                                                <a href="/api/list/248/1/">油漆塗料</a>
+                                            
+                                                <a href="/api/list/249/1/">壁紙</a>
+                                            
+                                        </div>
+                                    </div>
+                                
+                                    <div class="list_group">
+                                        <div class="group_name fl">五金用品 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                                <a href="/api/list/250/1/">鎖具</a>
+                                            
+                                                <a href="/api/list/251/1/">電動工具</a>
+                                            
+                                                <a href="/api/list/252/1/">手動工具</a>
+                                            
+                                                <a href="/api/list/253/1/">測量工具</a>
+                                            
+                                                <a href="/api/list/254/1/">勞防用品</a>
+                                            
+                                        </div>
+                                    </div>
+                                
+                                    <div class="list_group">
+                                        <div class="group_name fl">廚具 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                                <a href="/api/list/255/1/">杯具酒具</a>
+                                            
+                                                <a href="/api/list/256/1/">烹飪鍋具</a>
+                                            
+                                                <a href="/api/list/257/1/">餐具</a>
+                                            
+                                                <a href="/api/list/258/1/">廚房配件</a>
+                                            
+                                                <a href="/api/list/259/1/">菜板剪刀 </a>
+                                            
+                                                <a href="/api/list/260/1/">鍋具套裝</a>
+                                            
+                                        </div>
+                                    </div>
+                                
+                                    <div class="list_group">
+                                        <div class="group_name fl">廚房衛浴 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                                <a href="/api/list/261/1/">水槽</a>
+                                            
+                                                <a href="/api/list/262/1/">龍頭組</a>
+                                            
+                                                <a href="/api/list/263/1/">淋浴花灑</a>
+                                            
+                                                <a href="/api/list/264/1/">馬桶</a>
+                                            
+                                                <a href="/api/list/265/1/">廚衛掛件</a>
+                                            
+                                                <a href="/api/list/266/1/">浴室櫃</a>
+                                            
+                                        </div>
+                                    </div>
+                                
+                            </div>
+                        </li>
+                    
+                        <li>
+                            <div class="level1">
+                                
+                                    <a href="http://www.rocketmall.gq">男裝</a>
+                                
+                                    <a href="http://www.rocketmall.gq">女裝</a>
+                                
+                                    <a href="http://www.rocketmall.gq">童裝</a>
+                                
+                                    <a href="http://www.rocketmall.gq">內衣</a>
+                                
+                            </div>
+                            <div class="level2">
+                                
+                                    <div class="list_group">
+                                        <div class="group_name fl">男裝 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                                <a href="/api/list/267/1/">T恤</a>
+                                            
+                                                <a href="/api/list/268/1/">牛仔褲</a>
+                                            
+                                                <a href="/api/list/269/1/">襯衫</a>
+                                            
+                                                <a href="/api/list/270/1/">運動短褲</a>
+                                            
+                                                <a href="/api/list/271/1/">羽絨衣</a>
+                                            
+                                                <a href="/api/list/272/1/">吊帶背心</a>
+                                            
+                                                <a href="/api/list/273/1/">西服套裝</a>
+                                            
+                                        </div>
+                                    </div>
+                                
+                                    <div class="list_group">
+                                        <div class="group_name fl">女裝 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                                <a href="/api/list/274/1/">襯衫</a>
+                                            
+                                                <a href="/api/list/275/1/">雪紡衫</a>
+                                            
+                                                <a href="/api/list/276/1/">針織衫</a>
+                                            
+                                                <a href="/api/list/277/1/">設計師潮牌</a>
+                                            
+                                                <a href="/api/list/278/1/">半身裙</a>
+                                            
+                                                <a href="/api/list/279/1/">牛仔褲</a>
+                                            
+                                                <a href="/api/list/280/1/"> T恤</a>
+                                            
+                                        </div>
+                                    </div>
+                                
+                                    <div class="list_group">
+                                        <div class="group_name fl">童裝 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                                <a href="/api/list/281/1/">內衣褲</a>
+                                            
+                                                <a href="/api/list/282/1/">親子裝</a>
+                                            
+                                                <a href="/api/list/283/1/">褲子</a>
+                                            
+                                                <a href="/api/list/284/1/">外套</a>
+                                            
+                                                <a href="/api/list/285/1/">羽絨衣</a>
+                                            
+                                                <a href="/api/list/286/1/">棉服</a>
+                                            
+                                                <a href="/api/list/287/1/"> T恤</a>
+                                            
+                                        </div>
+                                    </div>
+                                
+                                    <div class="list_group">
+                                        <div class="group_name fl">童鞋 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                                <a href="/api/list/288/1/">運動鞋</a>
+                                            
+                                                <a href="/api/list/289/1/">靴子</a>
+                                            
+                                                <a href="/api/list/290/1/">帆布鞋</a>
+                                            
+                                                <a href="/api/list/291/1/">棉鞋</a>
+                                            
+                                        </div>
+                                    </div>
+                                
+                                    <div class="list_group">
+                                        <div class="group_name fl">內衣 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                                <a href="/api/list/292/1/">睡衣</a>
+                                            
+                                                <a href="/api/list/293/1/">連身褲襪</a>
+                                            
+                                                <a href="/api/list/294/1/">女士內衣</a>
+                                            
+                                                <a href="/api/list/295/1/">男士內衣</a>
+                                            
+                                                <a href="/api/list/296/1/">男士內褲</a>
+                                            
+                                                <a href="/api/list/297/1/">女士內褲</a>
+                                            
+                                        </div>
+                                    </div>
+                                
+                                    <div class="list_group">
+                                        <div class="group_name fl">隨身衣物 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                                <a href="/api/list/298/1/">披肩</a>
+                                            
+                                                <a href="/api/list/299/1/">圍巾</a>
+                                            
+                                                <a href="/api/list/300/1/">遮陽帽</a>
+                                            
+                                                <a href="/api/list/301/1/">太陽眼鏡</a>
+                                            
+                                                <a href="/api/list/302/1/">毛帽</a>
+                                            
+                                                <a href="/api/list/303/1/">禮帽</a>
+                                            
+                                                <a href="/api/list/304/1/">口罩</a>
+                                            
+                                        </div>
+                                    </div>
+                                
+                            </div>
+                        </li>
+                    
+                        <li>
+                            <div class="level1">
+                                
+                                    <a href="http://www.rocketmall.gq">女鞋</a>
+                                
+                                    <a href="http://www.rocketmall.gq">箱包</a>
+                                
+                                    <a href="http://www.rocketmall.gq">鐘表</a>
+                                
+                                    <a href="http://www.rocketmall.gq">珠寶</a>
+                                
+                            </div>
+                            <div class="level2">
+                                
+                                    <div class="list_group">
+                                        <div class="group_name fl">時尚女鞋 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                                <a href="/api/list/305/1/">馬丁靴</a>
+                                            
+                                                <a href="/api/list/306/1/">休閒鞋</a>
+                                            
+                                                <a href="/api/list/307/1/">內增高</a>
+                                            
+                                                <a href="/api/list/308/1/">帆布鞋</a>
+                                            
+                                                <a href="/api/list/309/1/">女靴</a>
+                                            
+                                                <a href="/api/list/310/1/">高跟鞋</a>
+                                            
+                                                <a href="/api/list/311/1/">雪靴</a>
+                                            
+                                        </div>
+                                    </div>
+                                
+                                    <div class="list_group">
+                                        <div class="group_name fl">潮流女包 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                                <a href="/api/list/312/1/">單肩包</a>
+                                            
+                                                <a href="/api/list/313/1/">雙肩包</a>
+                                            
+                                                <a href="/api/list/314/1/">手提包</a>
+                                            
+                                                <a href="/api/list/315/1/">側背包</a>
+                                            
+                                                <a href="/api/list/316/1/">復古背包</a>
+                                            
+                                                <a href="/api/list/317/1/">錢包</a>
+                                            
+                                        </div>
+                                    </div>
+                                
+                                    <div class="list_group">
+                                        <div class="group_name fl">精品男包 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                                <a href="/api/list/318/1/">雙肩包</a>
+                                            
+                                                <a href="/api/list/319/1/">單肩包</a>
+                                            
+                                                <a href="/api/list/320/1/">手提包</a>
+                                            
+                                                <a href="/api/list/321/1/">側背包</a>
+                                            
+                                                <a href="/api/list/322/1/">錢包</a>
+                                            
+                                        </div>
+                                    </div>
+                                
+                                    <div class="list_group">
+                                        <div class="group_name fl">隨身箱包 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                                <a href="/api/list/323/1/">旅行箱</a>
+                                            
+                                                <a href="/api/list/324/1/">拉桿包</a>
+                                            
+                                                <a href="/api/list/325/1/">旅行包</a>
+                                            
+                                                <a href="/api/list/326/1/">電腦包</a>
+                                            
+                                                <a href="/api/list/327/1/">休閒背包</a>
+                                            
+                                                <a href="/api/list/328/1/">書包</a>
+                                            
+                                                <a href="/api/list/329/1/">登山背包</a>
+                                            
+                                        </div>
+                                    </div>
+                                
+                                    <div class="list_group">
+                                        <div class="group_name fl">鐘表 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                                <a href="/api/list/330/1/">日韓錶</a>
+                                            
+                                                <a href="/api/list/331/1/">歐美錶</a>
+                                            
+                                                <a href="/api/list/332/1/">瑞士錶</a>
+                                            
+                                                <a href="/api/list/333/1/">德國錶</a>
+                                            
+                                                <a href="/api/list/334/1/">鬧鐘</a>
+                                            
+                                                <a href="/api/list/335/1/">兒童手錶</a>
+                                            
+                                                <a href="/api/list/336/1/">智能手錶</a>
+                                            
+                                        </div>
+                                    </div>
+                                
+                                    <div class="list_group">
+                                        <div class="group_name fl">首飾 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                                <a href="/api/list/337/1/">銀手鐲 </a>
+                                            
+                                                <a href="/api/list/338/1/">項鍊</a>
+                                            
+                                                <a href="/api/list/339/1/">胸針</a>
+                                            
+                                                <a href="/api/list/340/1/">鑽戒</a>
+                                            
+                                                <a href="/api/list/341/1/">情侶對戒</a>
+                                            
+                                                <a href="/api/list/342/1/">寶寶金飾</a>
+                                            
+                                                <a href="/api/list/343/1/">手鍊</a>
+                                            
+                                        </div>
+                                    </div>
+                                
+                            </div>
+                        </li>
+                    
+                        <li>
+                            <div class="level1">
+                                
+                                    <a href="http://www.rocketmall.gq">男鞋</a>
+                                
+                                    <a href="http://www.rocketmall.gq">運動</a>
+                                
+                            </div>
+                            <div class="level2">
+                                
+                                    <div class="list_group">
+                                        <div class="group_name fl">流行男鞋 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                                <a href="/api/list/344/1/">休閒鞋</a>
+                                            
+                                                <a href="/api/list/345/1/">籃球鞋</a>
+                                            
+                                                <a href="/api/list/346/1/">皮鞋</a>
+                                            
+                                                <a href="/api/list/347/1/">皮靴</a>
+                                            
+                                                <a href="/api/list/348/1/">設計潮牌</a>
+                                            
+                                                <a href="/api/list/352/1/">帆布鞋</a>
+                                            
+                                                <a href="/api/list/353/1/">跑步鞋</a>
+                                            
+                                        </div>
+                                    </div>
+                                
+                                    <div class="list_group">
+                                        <div class="group_name fl">運動鞋包 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                                <a href="/api/list/349/1/">跑步鞋</a>
+                                            
+                                                <a href="/api/list/350/1/">休閒鞋</a>
+                                            
+                                                <a href="/api/list/351/1/">籃球鞋</a>
+                                            
+                                                <a href="/api/list/354/1/">帆布鞋</a>
+                                            
+                                                <a href="/api/list/355/1/">運動背包</a>
+                                            
+                                                <a href="/api/list/356/1/">足球鞋</a>
+                                            
+                                        </div>
+                                    </div>
+                                
+                                    <div class="list_group">
+                                        <div class="group_name fl">運動服飾 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                                <a href="/api/list/357/1/">T恤</a>
+                                            
+                                                <a href="/api/list/358/1/">運動套裝</a>
+                                            
+                                                <a href="/api/list/359/1/">運動褲</a>
+                                            
+                                                <a href="/api/list/360/1/">登山鞋</a>
+                                            
+                                                <a href="/api/list/361/1/">夾克</a>
+                                            
+                                                <a href="/api/list/362/1/">排汗衣</a>
+                                            
+                                        </div>
+                                    </div>
+                                
+                                    <div class="list_group">
+                                        <div class="group_name fl">健身愛用 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                                <a href="/api/list/363/1/">跑步機</a>
+                                            
+                                                <a href="/api/list/364/1/">收腹機 </a>
+                                            
+                                                <a href="/api/list/365/1/">啞鈴</a>
+                                            
+                                                <a href="/api/list/366/1/">舞蹈用品</a>
+                                            
+                                                <a href="/api/list/367/1/">瑜珈用品</a>
+                                            
+                                                <a href="/api/list/368/1/">健身護具</a>
+                                            
+                                                <a href="/api/list/369/1/">甩脂機</a>
+                                            
+                                        </div>
+                                    </div>
+                                
+                                    <div class="list_group">
+                                        <div class="group_name fl">運動必備 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                                <a href="/api/list/370/1/">山地車</a>
+                                            
+                                                <a href="/api/list/371/1/">公路車</a>
+                                            
+                                                <a href="/api/list/372/1/">折疊車</a>
+                                            
+                                                <a href="/api/list/373/1/">騎行衣</a>
+                                            
+                                                <a href="/api/list/374/1/">電動車</a>
+                                            
+                                                <a href="/api/list/375/1/">電動滑板車</a>
+                                            
+                                                <a href="/api/list/377/1/">羽毛球</a>
+                                            
+                                        </div>
+                                    </div>
+                                
+                                    <div class="list_group">
+                                        <div class="group_name fl">體育用品 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                                <a href="/api/list/376/1/">乒乓球</a>
+                                            
+                                                <a href="/api/list/378/1/">籃球</a>
+                                            
+                                                <a href="/api/list/379/1/">足球</a>
+                                            
+                                                <a href="/api/list/380/1/">輪滑滑板</a>
+                                            
+                                                <a href="/api/list/381/1/">網球</a>
+                                            
+                                                <a href="/api/list/382/1/">高爾夫</a>
+                                            
+                                        </div>
+                                    </div>
+                                
+                                    <div class="list_group">
+                                        <div class="group_name fl">戶外衣鞋 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                                <a href="/api/list/383/1/">室外風衣</a>
+                                            
+                                                <a href="/api/list/384/1/">步鞋</a>
+                                            
+                                                <a href="/api/list/385/1/">T恤</a>
+                                            
+                                                <a href="/api/list/386/1/">登山裝 </a>
+                                            
+                                                <a href="/api/list/387/1/">排汗衣褲</a>
+                                            
+                                                <a href="/api/list/388/1/">越野跑鞋</a>
+                                            
+                                                <a href="/api/list/389/1/">滑雪衣</a>
+                                            
+                                        </div>
+                                    </div>
+                                
+                                    <div class="list_group">
+                                        <div class="group_name fl">野戰專區 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                                <a href="/api/list/390/1/">背包</a>
+                                            
+                                                <a href="/api/list/391/1/">帳篷</a>
+                                            
+                                                <a href="/api/list/392/1/">望遠鏡</a>
+                                            
+                                                <a href="/api/list/393/1/">燒烤用具</a>
+                                            
+                                                <a href="/api/list/394/1/">釣具</a>
+                                            
+                                                <a href="/api/list/395/1/">戶外配飾</a>
+                                            
+                                                <a href="/api/list/396/1/">迷彩用品</a>
+                                            
+                                        </div>
+                                    </div>
+                                
+                            </div>
+                        </li>
+                    
+                        <li>
+                            <div class="level1">
+                                
+                                    <a href="http://www.rocketmall.gq">個人護理</a>
+                                
+                                    <a href="http://www.rocketmall.gq">情趣</a>
+                                
+                                    <a href="http://www.rocketmall.gq">美妝</a>
+                                
+                            </div>
+                            <div class="level2">
+                                
+                                    <div class="list_group">
+                                        <div class="group_name fl">口腔護理 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                                <a href="/api/list/402/1/">牙間刷</a>
+                                            
+                                                <a href="/api/list/403/1/">牙刷</a>
+                                            
+                                                <a href="/api/list/404/1/">牙線</a>
+                                            
+                                                <a href="/api/list/405/1/">美白牙貼</a>
+                                            
+                                                <a href="/api/list/406/1/">牙膏</a>
+                                            
+                                        </div>
+                                    </div>
+                                
+                                    <div class="list_group">
+                                        <div class="group_name fl">女性護理 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                                <a href="/api/list/414/1/">衛生棉</a>
+                                            
+                                                <a href="/api/list/415/1/">化妝棉</a>
+                                            
+                                                <a href="/api/list/416/1/">衛生護墊</a>
+                                            
+                                                <a href="/api/list/417/1/">化妝刷</a>
+                                            
+                                                <a href="/api/list/418/1/">面膜</a>
+                                            
+                                                <a href="/api/list/419/1/">美妝蛋</a>
+                                            
+                                                <a href="/api/list/420/1/">女性護理套組</a>
+                                            
+                                        </div>
+                                    </div>
+                                
+                                    <div class="list_group">
+                                        <div class="group_name fl">情趣用品 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                                <a href="/api/list/421/1/">飛機杯</a>
+                                            
+                                                <a href="/api/list/422/1/">倒模</a>
+                                            
+                                                <a href="/api/list/423/1/">衛生套</a>
+                                            
+                                                <a href="/api/list/424/1/">跳蛋</a>
+                                            
+                                                <a href="/api/list/425/1/">模擬陽具</a>
+                                            
+                                                <a href="/api/list/426/1/">驗孕排卵</a>
+                                            
+                                                <a href="/api/list/427/1/">震動棒</a>
+                                            
+                                        </div>
+                                    </div>
+                                
+                                    <div class="list_group">
+                                        <div class="group_name fl">美妝用品 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                                <a href="/api/list/397/1/">髮圈</a>
+                                            
+                                                <a href="/api/list/398/1/">髮夾髮套</a>
+                                            
+                                                <a href="/api/list/399/1/">假髮</a>
+                                            
+                                                <a href="/api/list/400/1/">化妝工具</a>
+                                            
+                                                <a href="/api/list/401/1/">美髮工具</a>
+                                            
+                                        </div>
+                                    </div>
+                                
+                            </div>
+                        </li>
+                    
+                        <li>
+                            <div class="level1">
+                                
+                                    <a href="http://www.rocketmall.gq">婦幼</a>
+                                
+                                    <a href="http://www.rocketmall.gq">玩具樂器</a>
+                                
+                                    <a href="http://www.rocketmall.gq">家庭清潔</a>
+                                
+                            </div>
+                            <div class="level2">
+                                
+                                    <div class="list_group">
+                                        <div class="group_name fl">媽媽專區 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                                <a href="/api/list/434/1/">孕婦裝</a>
+                                            
+                                                <a href="/api/list/435/1/">防溢乳墊</a>
+                                            
+                                                <a href="/api/list/436/1/">待產護理</a>
+                                            
+                                                <a href="/api/list/437/1/">月子裝</a>
+                                            
+                                                <a href="/api/list/438/1/">產後塑身</a>
+                                            
+                                                <a href="/api/list/439/1/">背嬰袋</a>
+                                            
+                                        </div>
+                                    </div>
+                                
+                                    <div class="list_group">
+                                        <div class="group_name fl">餵養用品 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                                <a href="/api/list/440/1/">吸奶器</a>
+                                            
+                                                <a href="/api/list/441/1/">暖奶消毒</a>
+                                            
+                                                <a href="/api/list/442/1/">奶瓶奶嘴</a>
+                                            
+                                                <a href="/api/list/443/1/">兒童餐具</a>
+                                            
+                                                <a href="/api/list/444/1/">輔食料理機</a>
+                                            
+                                        </div>
+                                    </div>
+                                
+                                    <div class="list_group">
+                                        <div class="group_name fl">尿褲濕巾 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                                <a href="/api/list/445/1/">紙尿褲NB</a>
+                                            
+                                                <a href="/api/list/446/1/">紙尿褲S</a>
+                                            
+                                                <a href="/api/list/447/1/">紙尿褲M</a>
+                                            
+                                                <a href="/api/list/448/1/">紙尿褲L</a>
+                                            
+                                                <a href="/api/list/449/1/">紙尿褲XL</a>
+                                            
+                                                <a href="/api/list/450/1/">紙尿褲XXL</a>
+                                            
+                                                <a href="/api/list/451/1/">嬰兒紙尿片</a>
+                                            
+                                        </div>
+                                    </div>
+                                
+                                    <div class="list_group">
+                                        <div class="group_name fl">玩具 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                                <a href="/api/list/452/1/">絨毛娃娃</a>
+                                            
+                                                <a href="/api/list/453/1/">益智玩具</a>
+                                            
+                                                <a href="/api/list/454/1/">積木玩具</a>
+                                            
+                                                <a href="/api/list/455/1/">模型玩具</a>
+                                            
+                                                <a href="/api/list/456/1/">親子DIY</a>
+                                            
+                                        </div>
+                                    </div>
+                                
+                                    <div class="list_group">
+                                        <div class="group_name fl">樂器 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                                <a href="/api/list/457/1/">鍵盤樂器</a>
+                                            
+                                                <a href="/api/list/458/1/">吹奏樂器</a>
+                                            
+                                                <a href="/api/list/459/1/">打擊樂器</a>
+                                            
+                                                <a href="/api/list/460/1/">管樂器</a>
+                                            
+                                                <a href="/api/list/461/1/">音樂配件</a>
+                                            
+                                        </div>
+                                    </div>
+                                
+                                    <div class="list_group">
+                                        <div class="group_name fl">清潔用具 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                                <a href="/api/list/407/1/">垃圾袋</a>
+                                            
+                                                <a href="/api/list/408/1/">臉盆水桶</a>
+                                            
+                                                <a href="/api/list/409/1/">清潔刷具</a>
+                                            
+                                                <a href="/api/list/410/1/">手套圍裙</a>
+                                            
+                                                <a href="/api/list/411/1/">拖把掃把</a>
+                                            
+                                                <a href="/api/list/412/1/">抹布</a>
+                                            
+                                                <a href="/api/list/413/1/">一次性清潔用品</a>
+                                            
+                                        </div>
+                                    </div>
+                                
+                                    <div class="list_group">
+                                        <div class="group_name fl">清潔紙品 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                                <a href="/api/list/428/1/">抽取式衛生紙</a>
+                                            
+                                                <a href="/api/list/429/1/">滾筒式衛生紙</a>
+                                            
+                                                <a href="/api/list/430/1/">紙手帕</a>
+                                            
+                                                <a href="/api/list/431/1/">廚房紙巾</a>
+                                            
+                                                <a href="/api/list/432/1/">紙面膜</a>
+                                            
+                                                <a href="/api/list/433/1/">吸油面紙</a>
+                                            
+                                        </div>
+                                    </div>
+                                
+                            </div>
+                        </li>
+                    
+                        <li>
+                            <div class="level1">
+                                
+                                    <a href="http://www.rocketmall.gq">食品</a>
+                                
+                                    <a href="http://www.rocketmall.gq">酒類</a>
+                                
+                                    <a href="http://www.rocketmall.gq">生鮮</a>
+                                
+                                    <a href="http://www.rocketmall.gq">特產</a>
+                                
+                            </div>
+                            <div class="level2">
+                                
+                                    <div class="list_group">
+                                        <div class="group_name fl">新鮮水果 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                                <a href="/api/list/462/1/">蘋果</a>
+                                            
+                                                <a href="/api/list/463/1/">香蕉</a>
+                                            
+                                                <a href="/api/list/464/1/">梨</a>
+                                            
+                                                <a href="/api/list/465/1/">柳橙</a>
+                                            
+                                                <a href="/api/list/466/1/">奇異果</a>
+                                            
+                                                <a href="/api/list/467/1/">火龍果</a>
+                                            
+                                        </div>
+                                    </div>
+                                
+                                    <div class="list_group">
+                                        <div class="group_name fl">蔬菜蛋品 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                                <a href="/api/list/468/1/">蛋品</a>
+                                            
+                                                <a href="/api/list/469/1/">葉菜類</a>
+                                            
+                                                <a href="/api/list/470/1/">根莖類</a>
+                                            
+                                                <a href="/api/list/471/1/">蔥薑蒜椒</a>
+                                            
+                                        </div>
+                                    </div>
+                                
+                                    <div class="list_group">
+                                        <div class="group_name fl">精選肉類 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                                <a href="/api/list/472/1/">豬肉</a>
+                                            
+                                                <a href="/api/list/473/1/">牛肉</a>
+                                            
+                                                <a href="/api/list/474/1/">羊肉</a>
+                                            
+                                                <a href="/api/list/475/1/">雞肉</a>
+                                            
+                                                <a href="/api/list/476/1/">鴨肉</a>
+                                            
+                                        </div>
+                                    </div>
+                                
+                                    <div class="list_group">
+                                        <div class="group_name fl">精選佳釀 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                                <a href="/api/list/477/1/">白酒</a>
+                                            
+                                                <a href="/api/list/478/1/">葡萄酒</a>
+                                            
+                                                <a href="/api/list/479/1/">洋酒</a>
+                                            
+                                                <a href="/api/list/480/1/">啤酒</a>
+                                            
+                                                <a href="/api/list/481/1/">威士忌</a>
+                                            
+                                        </div>
+                                    </div>
+                                
+                                    <div class="list_group">
+                                        <div class="group_name fl">海鮮水產 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                                <a href="/api/list/482/1/">魚類</a>
+                                            
+                                                <a href="/api/list/483/1/">蝦類</a>
+                                            
+                                                <a href="/api/list/484/1/">蟹類</a>
+                                            
+                                                <a href="/api/list/485/1/">貝類</a>
+                                            
+                                                <a href="/api/list/486/1/">海參</a>
+                                            
+                                                <a href="/api/list/487/1/">魷魚</a>
+                                            
+                                        </div>
+                                    </div>
+                                
+                                    <div class="list_group">
+                                        <div class="group_name fl">冷凍即食 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                                <a href="/api/list/488/1/">水餃</a>
+                                            
+                                                <a href="/api/list/489/1/">湯圓</a>
+                                            
+                                                <a href="/api/list/490/1/">麵點</a>
+                                            
+                                                <a href="/api/list/491/1/">烘培半成品</a>
+                                            
+                                                <a href="/api/list/492/1/">冷凍調理包</a>
+                                            
+                                        </div>
+                                    </div>
+                                
+                                    <div class="list_group">
+                                        <div class="group_name fl">地方特產 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                                <a href="/api/list/493/1/">太陽餅</a>
+                                            
+                                                <a href="/api/list/494/1/">花蓮麻糬</a>
+                                            
+                                                <a href="/api/list/495/1/">方塊酥</a>
+                                            
+                                                <a href="/api/list/496/1/">新竹米粉</a>
+                                            
+                                                <a href="/api/list/497/1/">鳳梨酥</a>
+                                            
+                                                <a href="/api/list/498/1/">金門貢糖</a>
+                                            
+                                                <a href="/api/list/499/1/">鴨賞</a>
+                                            
+                                        </div>
+                                    </div>
+                                
+                            </div>
+                        </li>
+                    
+                        <li>
+                            <div class="level1">
+                                
+                                    <a href="http://www.rocketmall.gq">圖書</a>
+                                
+                                    <a href="http://www.rocketmall.gq">音像</a>
+                                
+                                    <a href="http://www.rocketmall.gq">電子書</a>
+                                
+                            </div>
+                            <div class="level2">
+                                
+                                    <div class="list_group">
+                                        <div class="group_name fl">青少幼兒 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                                <a href="/api/list/500/1/">0-2歲</a>
+                                            
+                                                <a href="/api/list/501/1/">3-6歲</a>
+                                            
+                                                <a href="/api/list/502/1/">7-10歲</a>
+                                            
+                                                <a href="/api/list/503/1/">11-14歲</a>
+                                            
+                                                <a href="/api/list/504/1/">兒童文藝</a>
+                                            
+                                                <a href="/api/list/505/1/">童話繪本</a>
+                                            
+                                                <a href="/api/list/506/1/">科普讀物</a>
+                                            
+                                        </div>
+                                    </div>
+                                
+                                    <div class="list_group">
+                                        <div class="group_name fl">教育 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                                <a href="/api/list/507/1/">教科書</a>
+                                            
+                                                <a href="/api/list/508/1/">中小學參考書</a>
+                                            
+                                                <a href="/api/list/509/1/">公職考試</a>
+                                            
+                                                <a href="/api/list/510/1/">外語學習</a>
+                                            
+                                                <a href="/api/list/511/1/">字典詞典</a>
+                                            
+                                        </div>
+                                    </div>
+                                
+                                    <div class="list_group">
+                                        <div class="group_name fl">文藝 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                                <a href="/api/list/512/1/">小說</a>
+                                            
+                                                <a href="/api/list/513/1/">經典文學</a>
+                                            
+                                                <a href="/api/list/514/1/">青春文學</a>
+                                            
+                                                <a href="/api/list/515/1/">傳記</a>
+                                            
+                                                <a href="/api/list/516/1/">輕小說</a>
+                                            
+                                                <a href="/api/list/517/1/">藝術</a>
+                                            
+                                        </div>
+                                    </div>
+                                
+                                    <div class="list_group">
+                                        <div class="group_name fl">科技 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                                <a href="/api/list/526/1/">計算機與網路</a>
+                                            
+                                                <a href="/api/list/527/1/">科普</a>
+                                            
+                                                <a href="/api/list/528/1/">建築</a>
+                                            
+                                                <a href="/api/list/529/1/">工業技術</a>
+                                            
+                                                <a href="/api/list/530/1/">電子通信</a>
+                                            
+                                                <a href="/api/list/531/1/">醫學</a>
+                                            
+                                                <a href="/api/list/532/1/">農林漁</a>
+                                            
+                                        </div>
+                                    </div>
+                                
+                                    <div class="list_group">
+                                        <div class="group_name fl">影音遊戲 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                                <a href="/api/list/518/1/">音樂</a>
+                                            
+                                                <a href="/api/list/519/1/">影視</a>
+                                            
+                                                <a href="/api/list/520/1/">教育</a>
+                                            
+                                                <a href="/api/list/521/1/">遊戲</a>
+                                            
+                                        </div>
+                                    </div>
+                                
+                                    <div class="list_group">
+                                        <div class="group_name fl">電子書 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                                <a href="/api/list/522/1/">領導力</a>
+                                            
+                                                <a href="/api/list/523/1/">勵志與成功</a>
+                                            
+                                                <a href="/api/list/524/1/">經濟金融</a>
+                                            
+                                                <a href="/api/list/525/1/">管理</a>
+                                            
+                                        </div>
+                                    </div>
+                                
+                            </div>
+                        </li>
+                    
+                        <li>
+                            <div class="level1">
+                                
+                                    <a href="http://www.rocketmall.gq">機票</a>
+                                
+                                    <a href="http://www.rocketmall.gq">飯店</a>
+                                
+                                    <a href="http://www.rocketmall.gq">旅遊</a>
+                                
+                                    <a href="http://www.rocketmall.gq">生活</a>
+                                
+                            </div>
+                            <div class="level2">
+                                
+                                    <div class="list_group">
+                                        <div class="group_name fl">交通出遊 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                                <a href="/api/list/533/1/">國內機票</a>
+                                            
+                                                <a href="/api/list/534/1/">國際機票</a>
+                                            
+                                                <a href="/api/list/535/1/">火車票</a>
+                                            
+                                                <a href="/api/list/536/1/">機場服務</a>
+                                            
+                                        </div>
+                                    </div>
+                                
+                                    <div class="list_group">
+                                        <div class="group_name fl">飯店預訂 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                                <a href="/api/list/537/1/">國內飯店民宿</a>
+                                            
+                                                <a href="/api/list/538/1/">國際飯店</a>
+                                            
+                                                <a href="/api/list/539/1/">精選飯店民宿</a>
+                                            
+                                        </div>
+                                    </div>
+                                
+                                    <div class="list_group">
+                                        <div class="group_name fl">旅遊度假 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                                <a href="/api/list/540/1/">國內旅遊</a>
+                                            
+                                                <a href="/api/list/541/1/">境外旅遊</a>
+                                            
+                                                <a href="/api/list/542/1/">景點門票</a>
+                                            
+                                        </div>
+                                    </div>
+                                
+                                    <div class="list_group">
+                                        <div class="group_name fl">門票 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                                <a href="/api/list/543/1/">電影劃位</a>
+                                            
+                                                <a href="/api/list/544/1/">演唱會</a>
+                                            
+                                                <a href="/api/list/545/1/">音樂會</a>
+                                            
+                                                <a href="/api/list/546/1/">話劇歌劇</a>
+                                            
+                                                <a href="/api/list/547/1/">體育賽事</a>
+                                            
+                                        </div>
+                                    </div>
+                                
+                                    <div class="list_group">
+                                        <div class="group_name fl">生活繳費 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                                <a href="/api/list/548/1/">水費</a>
+                                            
+                                                <a href="/api/list/549/1/">電費</a>
+                                            
+                                                <a href="/api/list/550/1/">瓦斯費</a>
+                                            
+                                                <a href="/api/list/551/1/">通話費</a>
+                                            
+                                        </div>
+                                    </div>
+                                
+                                    <div class="list_group">
+                                        <div class="group_name fl">生活服務 &gt;</div>
+                                        <div class="group_detail fl">
+                                            
+                                                <a href="/api/list/552/1/">居家清潔</a>
+                                            
+                                                <a href="/api/list/553/1/">攝影寫真</a>
+                                            
+                                                <a href="/api/list/554/1/">養生</a>
+                                            
+                                                <a href="/api/list/555/1/">代理代辦</a>
+                                            
+                                        </div>
+                                    </div>
+                                
+                            </div>
+                        </li>
+                    
+				</ul>
+			</div>
+			<ul class="navlist fl">
+				<li><a href="">現領購物金</a></li>
+				<li class="interval">|</li>
+				<li><a href="">免運省荷包</a></li>
+				<li class="interval">|</li>
+				<li><a href="">羅奇團購趣</a></li>
+			</ul>
+		</div>
+	</div>
+
+	<div class="breadcrumb">
+		<a href="javascript:;">電腦</a>
+		<span>></span>
+		<a href="javascript:;">電腦</a>
+		<span>></span>
+		<a href="javascript:;">筆記型電腦</a>
+	</div>
+
+	<div class="goods_detail_con clearfix">
+		<div class="goods_detail_pic fl"><img src="http://172.20.0.3:8888/group1/M00/00/00/rBQAA19klgSALTceAAArw5MamIk905.jpg"></div>
+		<div class="goods_detail_list fr">
+			<h3>戴爾DELL XPS15-9500 15.6英寸 Intel i7 2020新款防藍光全螢幕設計筆記本電腦(十代標壓i7-10750H 16G 512G GTX1650Ti 4G獨顯)防藍光 白 送兩年螢幕保</h3>
+			<p>第十代intel標壓處理器，92.9%超大屏占比，GTX1650Ti顯卡，支持64G記憶體+4TB硬碟，碳聚高分子風扇+Gore隔熱膜散熱升級</p>
+			<div class="price_bar">
+				<span class="show_pirce">$<em>67200.00</em></span>
+				<a href="javascript:;" class="goods_judge">1400則評論</a>
+			</div>
+			<div class="goods_num clearfix">
+				<div class="num_name fl">數 量</div>
+				<div class="num_add fl">
+					<input type="text" class="num_show fl" v-model="sku_count" @keyup="edit_sku_count" @blur="check_sku_count" :value="sku_count">
+					<a @click="on_addition" class="add fr">+</a>
+					<a @click="on_minus" class="minus fr">-</a>
+				</div>
+			</div>
+            
+                <div class="type_select">
+                    <label>顏色:</label>
+                    
+                        
+                            <a href="/api/detail/15/">銀色</a>
+                        
+
+                    
+                        
+                            <a href="javascript:;" class="select">白色</a>
+                        
+
+                    
+                        
+                            <a href="/api/detail/16/">黑色</a>
+                        
+
+                    
+                </div>
+            
+                <div class="type_select">
+                    <label>版本:</label>
+                    
+                        
+                            <a href="/api/detail/10/">送兩年螢幕保</a>
+                        
+
+                    
+                        
+                            <a href="/api/detail/17/">4K螢幕 送兩年螢幕保</a>
+                        
+
+                    
+                        
+                            <a href="javascript:;" class="select">防藍光 送兩年螢幕保</a>
+                        
+
+                    
+                </div>
+            
+			<div class="total">總 價&emsp;&emsp;<em>$[[ sku_amount ]]</em></div>
+			<div class="operate_btn">
+				<a @click="add_carts" class="add_cart" id="add_cart">加入購物車</a>
+			</div>
+		</div>
+	</div>
+
+	<div class="main_wrap clearfix">
+		<div class="l_wrap fl clearfix">
+			<div class="new_goods">
+				<h3>暢銷商品</h3>
+				<ul>
+					<li v-for="sku in hot_skus">
+						<a :href="sku.url"><img :src="sku.default_image_url"></a>
+						<h4><a :href="sku.url">[[ sku.name ]]</a></h4>
+						<div class="price">$[[ sku.price ]]</div>
+                        <span>[[ sku.comments ]]則評論</span>
+					</li>
+				</ul>
+			</div>
+		</div>
+
+		<div class="r_wrap fr clearfix">
+			<ul class="detail_tab clearfix">
+				<li @click="on_tab_content('detail')" :class="tab_content.detail?'active':''">商品詳情</li>
+				<li @click="on_tab_content('pack')" :class="tab_content.pack?'active':''">規格與包裝</li>
+				<li @click="on_tab_content('comment')" :class="tab_content.comment?'active':''">商品評價</li>
+				<li @click="on_tab_content('service')" :class="tab_content.service?'active':''">售後服務</li>
+			</ul>
+			<div :class="tab_content.detail?'tab_content current':'tab_content'">
+				<dl>
+					<dt>商品詳情</dt>
+					<dd><h1 style=\"text-align:center\">臻於完美的設計</h1><p>搭配選購的 4K Ultra HD 觸控顯示器及強大的處理器，超過 8 百萬像素的驚人畫質，帶給您超震撼的視覺饗宴。</p><p><img alt=\"\" src=\"http://172.20.0.3:8888/group1/M00/00/02/CtM3BVrRb2yAJ0cWADV9oDHhgG06294506\" style=\"height:10460px; width:750px\" /></p></dd>
+				</dl>
+			</div>
+			<div :class="tab_content.pack?'tab_content current':'tab_content'">
+				<dl>
+					<dt>規格與包裝</dt>
+					<dd><h3>包裝清單</h3><p>手機（含內置電池） x 1、大電流華為SuperCharge充電器 x 1、 USB數據線 x 1、半入耳式線控耳機 x 1、快速指南 x 1、憑證 x 1、取卡針 x 1、保護殼 x 1</p></dd>
+				</dl>
+			</div>
+			<div :class="tab_content.comment?'tab_content current':'tab_content'">
+				<ul class="judge_list_con">
+					<li class="judge_list fl">
+						<div class="user_info fl">
+							<img src="/static/images/cat.jpg">
+							<b>r***01</b>
+						</div>
+						<div class="judge_info fl">
+							<div class="stars_five"></div>
+							<div class="judge_detail">這次一樣選購的是太空灰，這個顏色真的很耐看！</div>
+						</div>
+					</li>
+				</ul>
+			</div>
+			<div :class="tab_content.service?'tab_content current':'tab_content'">
+				<dl>
+					<dt>售後服務</dt>
+					<dd><p>&nbsp;<strong>廠家服務</strong></p><p>本產品全國維修，享受服務，保固為：一年保固<br />如因品質問題或故障，憑廠商維修中心或特約維修點的品質檢測證明，享受7日內退貨，15日內換貨，15日以上在保固內享受免費保固等服務！<br />(注:如廠家在商品介紹中有售後保障的說明,則此商品按照廠家說明執行售後保障服務。) 您可以查詢本品牌在各地售後服務中心的聯絡方式，<a href="https://www.dell.com/zh-tw/" target=\"_blank\">請點擊查詢......</a><br /><br />品牌官方網站：<a href="https://www.dell.com/zh-tw/" target=\"_blank\">https://www.dell.com/zh-tw/</a><br />售後服務電話：02-777777777</p><p>&nbsp;<strong>羅奇承諾</strong></p><p>羅奇平台賣家銷售並发貨的商品，由平台賣家提供發票和相應的售後服務。請您放心購買！<br />注：因廠家會在沒有任何提前通知的情況下更改產品包裝、產地或者一些附件，本司不能確保客戶收到的貨物與商城圖片、產地、附件說明完全一致。只能確保為原廠正貨！並且保證與當時市場上同樣主流新品一致。若本商城沒有及時更新，請大家諒解！</p><p><strong>正品</strong></p><p>羅奇商城向您保證所售商品均為正品，羅奇商品開具紙本發票或電子發票。</p><p><strong>全國維修</strong></p><p>憑保固證書及羅奇商城發票，可享受全國維修服務（奢侈品、鐘表除外；奢侈品、鐘表由羅奇聯絡保固，享受法定售後服務），與您親臨商場選購的商品享受相同的保固品質。羅奇商城還為您提供具有競爭力的商品價格和<a href="http://www.rocketmall.gq" target=\"_blank\">運費政策</a>，請您放心購買！&nbsp;<br /><br />注：因廠家會在沒有任何提前通知的情況下更改產品包裝、產地或者一些附件，本司不能確保客戶收到的貨物與商城圖片、產地、附件說明完全一致。只能確保為原廠正貨！並且保證與當時市場上同樣主流新品一致。若本商城沒有及時更新，請大家諒解！</p></dd>
+				</dl>
+			</div>
+		</div>
+	</div>
+
+	<div class="footer">
+		<div class="foot_link">
+			<a href="#">客服中心</a>
+			<span>|</span>
+			<a href="#">關於羅奇</a>
+			<span>|</span>
+			<a href="#">人才招募</a>
+			<span>|</span>
+			<a href="#">物流合作</a>
+		</div>
+		<p>CopyRight © 2020 RockeT. All Rights Reserved</p>
+		<p>電話：02-****6666    台北市*******66號</p>
+	</div>
+	</div>
+	<script>
+        let sku_price = "67200.00";
+        let category_id = 157;
+        let sku_id = "12";
+    </script>
+    <script type="text/javascript" src="/static/js/api.js"></script>
+	<script type="text/javascript" src="/static/js/common.js"></script>
+	<script type="text/javascript" src="/static/js/detail.js"></script>
+</body>
+</html>

@@ -1,6 +1,6 @@
 from django.core.mail import send_mail
 
-from settings.dev import EMAIL_FROM
+from settings import EMAIL_FROM
 from celery_tasks.main import celery_app
 
 @celery_app.task(bind=True ,name='send_verify_mail' ,retry_backoff=2 )
