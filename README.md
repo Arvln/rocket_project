@@ -15,6 +15,16 @@ mv ./compose/fastdfs/ /tmp/
 sudo docker run -dit --name tracker --network=rocket_project_fastdfs_net -v /tmp/fastdfs/tracker:/var/fdfs delron/fastdfs tracker<br>
 sudo docker run -dit --name storage --network=rocket_project_fastdfs_net -e TRACKER_SERVER=192.168.126.130:22122 -v /tmp/fastdfs/storage:/var/fdfs delron/fastdfs storage
 
+* 配置MySQL主從服務，進入rocket_project_db_master_1容器，執行master.sh內的命令完成MySQL主機配置<br>
+cat ./compose/mysql/master/master.sh<br>
+sudo docker exec -ti rocket_project_db_master_1 bash
+
+* 記下File和Position兩個參數並退出主機容器
+
+* 進入rocket_project_db_slave_1容器，修改slave.sh中master_log_file和master_log_pos為主機內的File和Position並執行命令完成MySQL從機配置，若Slave_IO_Running和Slave_SQL_Running都是Yes代表配置成功<br>
+cat ./compose/mysql/slave/slave.sh<br>
+sudo docker exec -ti rocket_project_db_slave_1 bash
+
 * 啟動商城容器組服務<br>
 sudo docker exec -ti rocket_project_web_1 /bin/bash start.sh&<br>
 
@@ -24,7 +34,7 @@ http://127.0.0.1:80
 ## 體驗前注意事項
 * Nginx服務運行在本機80和443端口，若您正在運行Apache、Nginx或其他服務請先關閉
 
-* 若您想完整體驗註冊流程，需到Twilio申請試用帳號，再到rocket_project/rocket_mall/celery_tasks/sms目錄下，修改sms.py中的account_sid、auth_token、from_三個參數為您的帳戶配置<br>
+* 若您想完整體驗註冊流程，需到Twilio申請試用帳號，再到rocket_project/rocket_mall/celery_tasks/sms目錄下，修改sms.py中的account_sid、auth_token、from_三個參數為您的Twilio帳戶配置<br>
 
   Twilio註冊網址:https://www.twilio.com/try-twilio
 
