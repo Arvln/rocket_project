@@ -13,7 +13,7 @@ services:
     - rocket_redis_vol:/data
     - ./compose/redis/redis.conf:/etc/redis/redis.conf
     ports:
-    - "6380:6379"
+    - "6379:6379"
     restart: always
     networks:
       - redis_net

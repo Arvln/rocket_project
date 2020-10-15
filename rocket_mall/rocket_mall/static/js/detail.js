@@ -95,7 +95,7 @@ let vm = new Vue({
             }).then(response => {
                 this.hot_skus = response.data.hot_skus ;
                 for (let i = 0; i < this.hot_skus.length; i++) {
-                    this.hot_skus[i].url = '/detail/' + this.hot_skus[i].id + '/' ;
+                    this.hot_skus[i].url = '/api/detail/' + this.hot_skus[i].id + '/' ;
                 }
             }).catch(error => {
                 console.log(error.response);
