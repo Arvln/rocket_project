@@ -1,0 +1,5 @@
+mysql -uroot -p123456
+RESET MASTER;
+GRANT REPLICATION SLAVE ON *.* TO 'slave'@'%' identified by 'slave';
+FLUSH PRIVILEGES;
+SHOW MASTER STATUS;
