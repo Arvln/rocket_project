@@ -10,10 +10,10 @@ services:
     image: redis:5
     command: redis-server /etc/redis/redis.conf
     volumes:
-    - rocket_redis_vol:/data
-    - ./compose/redis/redis.conf:/etc/redis/redis.conf
+      - rocket_redis_vol:/data
+      - ./compose/redis/redis.conf:/etc/redis/redis.conf
     ports:
-    - "6379:6379"
+    - "6381:6379"
     restart: always
     networks:
       - redis_net
@@ -25,11 +25,11 @@ services:
       - MYSQL_USER=rocket_it
       - MYSQL_PASSWORD=123456
     volumes:
-    - rocket_db_master_vol:/var/lib/mysql
-    - ./compose/mysql/master/my.cnf:/etc/mysql/my.cnf
-    - ./compose/mysql/init:/docker-entrypoint-initdb.d/
+      - rocket_db_master_vol:/var/lib/mysql
+      - ./compose/mysql/master/my.cnf:/etc/mysql/my.cnf
+      - ./compose/mysql/init:/docker-entrypoint-initdb.d/
     ports:
-    - "3307:3306"
+    - "3311:3306"
     restart: always
     networks:
       - mysql_net
@@ -47,19 +47,19 @@ services:
     depends_on:
       - db_master
     ports:
-      - "3308:3306"
+      - "3312:3306"
     restart: always
     networks:
       - mysql_net
   elasticsearch:
     build: ./compose/elasticsearch
     ports:
-    - "9200:9200"
-    - "9300:9300"
+    - "9201:9200"
+    - "9301:9300"
     volumes:
-    - ./compose/elasticsearch/data:/usr/share/elasticsearch/data
-    - ./compose/elasticsearch/logs:/usr/share/elasticsearch/logs
-    - ./compose/elasticsearch/config:/usr/share/elasticsearch/config/scripts
+      - ./compose/elasticsearch/data:/usr/share/elasticsearch/data
+      - ./compose/elasticsearch/logs:/usr/share/elasticsearch/logs
+      - ./compose/elasticsearch/config:/usr/share/elasticsearch/config/scripts
     environment:
       - "ES_JAVA_OPTS=-Xms256m -Xmx256m"
     restart: always
@@ -70,8 +70,10 @@ services:
     expose:
       - "8000"
     volumes:
-    - ./rocket_mall:/var/www/html/rocket_mall
-    - ./compose/uwsgi:/tmp
+      - ./rocket_mall:/var/www/html/rocket_mall
+      - ./compose/uwsgi:/tmp
+    command:
+      /bin/bash start.sh
     depends_on:
       - db_master
       - db_slave
@@ -79,11 +81,13 @@ services:
       - elasticsearch
     environment:
       - DEBUG=False
+    extra_hosts:
+      - "nginxhost:172.20.0.3"
     restart: always
     networks:
       - mysql_net
       - redis_net
-      - default
+      - web_net
       - elasticsearch_net
     tty: true
     stdin_open: true
@@ -100,6 +104,8 @@ services:
     depends_on:
       - web
     restart: always
+    networks:
+      - web_net
 
 networks:
   mysql_net:
@@ -114,7 +120,7 @@ networks:
       config:
         - subnet: 172.19.0.0/16
           gateway: 172.19.0.1
-  fastdfs_net:
+  web_net:
     driver: bridge
     ipam:
       config:
