@@ -8,26 +8,6 @@ git clone https://github.com/Arvln/rocket_project.git
 * 進到項目中rocket_project目錄下，找到docker-compose.yml<br>
 sudo docker-compose up -d
 
-* 準備商城圖片數據<br>
-mv ./compose/fastdfs/ /tmp/
-
-* 創建文件存儲容器，指定當前Tracker Server的ip地址(EX:192.168.126.130，不可用127.0.0.1)<br>
-sudo docker run -dit --name tracker --network=rocket_project_fastdfs_net -v /tmp/fastdfs/tracker:/var/fdfs delron/fastdfs tracker<br>
-sudo docker run -dit --name storage --network=rocket_project_fastdfs_net -e TRACKER_SERVER=192.168.126.130:22122 -v /tmp/fastdfs/storage:/var/fdfs delron/fastdfs storage
-
-* 配置MySQL主從服務，進入rocket_project_db_master_1容器，執行master.sh內的命令完成MySQL主機配置<br>
-cat ./compose/mysql/master/master.sh<br>
-sudo docker exec -ti rocket_project_db_master_1 bash
-
-* 記下File和Position兩個參數並退出主機容器
-
-* 進入rocket_project_db_slave_1容器，修改slave.sh中master_log_file和master_log_pos為主機內的File和Position並執行命令完成MySQL從機配置，若Slave_IO_Running和Slave_SQL_Running都是Yes代表配置成功<br>
-cat ./compose/mysql/slave/slave.sh<br>
-sudo docker exec -ti rocket_project_db_slave_1 bash
-
-* 啟動商城容器組服務<br>
-sudo docker exec -ti rocket_project_web_1 /bin/bash start.sh&<br>
-
 * 打開瀏覽器訪問網站<br>
 http://127.0.0.1:80
 
