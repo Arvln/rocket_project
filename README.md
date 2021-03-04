@@ -6,7 +6,7 @@
 * 資料結合快取服務Redis / 資料庫服務MySQL / Django ORM操作<br>
 * 使用Elasticsearch建構商品搜索服務<br>
 * 串接LINE登入和支付寶支付服務<br>
-* 前端採用Jinja2和Vue.js渲染<br>
+* 前端採用Jinja2和Vue.js選染<br>
 
 ## 運行項目步驟
 
